@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+  <asset name="stylesheet" path="css.css"/>
+   <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!id:编号:id,!name:标题:name,=status,=adapterType,=creatorId,=modifierId,!modifyTime:最后修改时间:modifyTime,!delete:删除:delete,!validate:维护:validate"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="20"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentObject"/>
+  </component>
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  <component id="deleteColumnValue" type="Block"/>
+  <component id="deleteLink" type="DirectLink">
+    <binding name="listener" value="listener:onDelete"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  
+ 
+   <component id="validateColumnValue" type="Block"/>
+   <component id="validateLink" type="DirectLink">
+    <binding name="listener" value="listener:onEdit"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+   
+   <component id="nameColumnValue" type="Block"/>
+  <component id="nameLink" type="DirectLink">
+    <binding name="listener" value="listener:showAdapterRuleList"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  
+  <component id="channelName" type="Insert">
+    <binding name="value" value="components.tableFormRows.tableRow.name"/>
+  </component>
+  
+   <component id="statuspublish" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.Constants@STATUS_PUBLISH"/>
+  </component>
+  <component id="statusdisabled" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.Constants@STATUS_WAITCHECK"/>
+  </component>
+   
+
+</page-specification>
