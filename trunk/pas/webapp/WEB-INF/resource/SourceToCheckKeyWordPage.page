@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+ <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+ <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  <set name="features">
+		'scrollbars=no,width=800,height=600'
+  </set>
+	</bean>
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!id:编号:id, !cpId:CPID:cpId,!name:图书名称:name,!tomeName:卷名称:tomeName, !chapterName:所在章节:chapterName,!detailList:敏感词章节中出现的位置:detailList,!detail:查看详情:detail,!editChapter:维护章节:editChapter"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="50"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentProduct"/>
+  </component>
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+ 
+ <component id="detailListColumnValue" type="Block"/>
+ 
+  <component id="detailList" type="For">
+    <binding name="source" value="detailList"/>
+    <binding name="value" value="currentDetailField"/>
+  </component>
+    <component id="insertTitle" type="Insert">
+    <binding name="value" value="currentDetailField.title"/>
+  </component>
+  <component id="insertValue" type="InsertText">
+    <binding name="value" value="currentDetailField.value"/>
+    <binding name="raw" value="true"/>
+  </component>
+  
+ 
+  <component id="detailColumnValue" type="Block"/>
+  <component id="detailLink" type="DirectLink">
+     <binding name="listener" value="listener:onDetail"/>
+     <binding name="parameters" value="{components.tableFormRows.tableRow.id,components.tableFormRows.tableRow.chapterId}"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+ 
+   <component id="editChapterColumnValue" type="Block"/>
+  <component id="editChapterLink" type="DirectLink">
+     <binding name="listener" value="listener:onEditChapter"/>
+     <binding name="parameters" value="{components.tableFormRows.tableRow.id,components.tableFormRows.tableRow.chapterId}"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+  
+  <component id="addReCheckLink" type="DirectLink">
+     <binding name="listener" value="listener:addReCheckMsg"/>
+     <binding name="parameters" value="resourceIds"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+  
+</page-specification>    
