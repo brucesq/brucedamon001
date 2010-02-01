@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+   <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+   
+   <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  <set name="features">
+		'scrollbars=no,width=400,height=450'
+  </set>
+	</bean>
+   
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!id:计费ID:id,!name:名称:name,!feeTypeName:计费类型:feeTypeName,!statusName:状态:statusName,=providerName,!portallink:入口URL:portallink,!feelink:计费URL:feelink,!actionlink:确认URL:actionlink,!delete:删除:delete,!validate:维护:validate,!detail:详情:detail"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="20"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentObject"/>
+  </component>
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  <component id="deleteColumnValue" type="Block"/>
+  <component id="deleteLink" type="DirectLink">
+    <binding name="listener" value="listener:onDelete"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  
+ <component id="portallinkColumnValue" type="Block"/>
+ <component id="feelinkColumnValue" type="Block"/>
+ <component id="actionlinkColumnValue" type="Block"/>
+ 
+   <component id="validateColumnValue" type="Block"/>
+   <component id="validateLink" type="DirectLink">
+    <binding name="listener" value="listener:onEdit"/>
+    <binding name="parameters" value="{components.tableFormRows.tableRow,provider}"/>
+   </component>
+   
+    <component id="statusbussiness" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="1"/>
+  </component>
+   <component id="statussuspend" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="0"/>
+  </component>
+   
+      <component id="detailColumnValue" type="Block"/>
+  <component id="detailLink" type="DirectLink">
+     <binding name="listener" value="listener:onDetail"/>
+     <binding name="parameters" value="components.tableFormRows.tableRow"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+   
+   
+</page-specification>    

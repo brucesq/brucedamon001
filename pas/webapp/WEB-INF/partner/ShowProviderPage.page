@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+   <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+    <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  	<set name="features">
+		'scrollbars=no,width=400,height=450'
+  	</set>
+	</bean>
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!id:提供商ID:id,!providerId:SPID/CPID:providerId,!providerTypeName:类型:providerTypeName,!chName:公司中文名称:chName,!statusName:状态:statusName,!contactName:接口人姓名:contactName,!validate:维护:validate,!detail:详情:detail"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="20"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentObject"/>
+  </component>
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+ 
+  
+ 
+   <component id="validateColumnValue" type="Block"/>
+   <component id="validateLink" type="DirectLink">
+    <binding name="listener" value="listener:onEdit"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+   
+   <component id="statuscontent" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.partner.Provider@STATUS_AUDIT_CONTENT"/>
+  </component>
+   <component id="statusbussiness" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.partner.Provider@STATUS_BUSSINESS"/>
+  </component>
+   <component id="statussuspend" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.partner.Provider@STATUS_SUSPEND"/>
+  </component>
+  <component id="statusoff" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.partner.Provider@STATUS_OFF"/>
+  </component>
+  
+  <component id="idColumnValue" type="Block"/>
+  <component id="nameLink" type="DirectLink">
+    <binding name="listener" value="listener:showFee"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  <component id="channelID" type="Insert">
+    <binding name="value" value="components.tableFormRows.tableRow.id"/>
+  </component>
+  
+  <component id="detailColumnValue" type="Block"/>
+  <component id="detailLink" type="DirectLink">
+     <binding name="listener" value="listener:onDetail"/>
+     <binding name="parameters" value="components.tableFormRows.tableRow"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+   
+</page-specification>    
