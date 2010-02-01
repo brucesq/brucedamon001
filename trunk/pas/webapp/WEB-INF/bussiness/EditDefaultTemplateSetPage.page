@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+ <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+ 
+   <component id="pageType" type="PropertySelection">
+   	 <binding name="model" value="pageTypelist"/> 
+    <binding name="value" value="templateType"/> 
+    <binding name="onChange" value="literal:tapestry.form.submit(this.form)"/>
+  </component>
+
+   <component id="wapType" type="PropertySelection">
+   	 <binding name="model" value="wapTypelist"/> 
+    <binding name="value" value="wapType"/> 
+    <binding name="onChange" value="literal:tapestry.form.submit(this.form)"/>
+  </component>
+  
+ <component id="template" type="PropertySelection">
+   	 <binding name="model" value="templatelist"/> 
+    <binding name="value" value="template"/> 
+  </component>
+  
+</page-specification>
