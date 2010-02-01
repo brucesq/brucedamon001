@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+   <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+    <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  <set name="features">
+		'scrollbars=no,width=500,height=560'
+  </set>
+	</bean>
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!id:ID:id,!name:名称:name,=displayPack,!statusName:状态:statusName,=resourceCount,=displayColTemplate,=displayModifier,=columnType,!showModifyTimeName:修改日期:showModifyTimeName,!orderTypeName:排序规则:orderTypeName,!execOrder:排序:execOrder,!link:预览链接:link,!view:预览:view,!right:赋权:right,!delete:隐藏:delete,!validate:维护:validate,!detail:详情:detail"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="tablePageSize"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentObject"/>
+  </component>
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  <component id="deleteColumnValue" type="Block"/>
+  
+   
+	<component id="detailColumnValue" type="Block"/>  
+    <component id="detailLink" type="DirectLink">
+     <binding name="listener" value="listener:onDetail"/>
+     <binding name="parameters" value="components.tableFormRows.tableRow"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+  
+  <component id="deleteLink" type="DirectLink">
+    <binding name="listener" value="listener:onDelete"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  
+  <component id="viewLink" type="DirectLink">
+    <binding name="listener" value="listener:onView"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+ 
+   <component id="validateColumnValue" type="Block"/>
+   <component id="validateLink" type="DirectLink">
+    <binding name="listener" value="listener:onEdit"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+   
+    <component id="statusbussiness" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="1"/>
+  </component>
+   <component id="statussuspend" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="2"/>
+  </component>
+    <component id="nameColumnValue" type="Block"/>
+  <component id="nameLink" type="DirectLink">
+    <binding name="listener" value="listener:showChildColumn"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  <component id="channelID" type="Insert">
+    <binding name="value" value="components.tableFormRows.tableRow.name"/>
+  </component>
+  
+   <component id="rightColumnValue" type="Block"/>
+  <component id="rightImg" type="Image">
+    <binding name="image" value="asset:rightIcon"/>
+  </component>
+  <asset name="rightIcon" path="img/icon_04.png"/>
+  
+    <component id="viewColumnValue" type="Block"/>
+ <component id="viewImg" type="Image">
+    <binding name="image" value="asset:rightIcon"/>
+  </component>
+  
+   <component id="linkColumnValue" type="Block"/>
+ 
+  <component id="orderColumnValue" type="Block"/>
+  <component id="orderValueLink" type="TextField">
+    <binding name="value" value="components.tableFormRows.tableRow.order"/>
+  </component>
+  
+   <component id="changeOrder" type="LinkSubmit">
+    <binding name="action" value="listener:onBatchChangeOrder"/>
+  </component>
+  
+    <component id="execOrderColumnValue" type="Block"/>
+    
+     <component id="topLink" type="DirectLink">
+    <binding name="listener" value="listener:top"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+    <component id="upLink" type="DirectLink">
+    <binding name="listener" value="listener:up"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+      <component id="downLink" type="DirectLink">
+    <binding name="listener" value="listener:down"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+   <component id="buttomLink" type="DirectLink">
+    <binding name="listener" value="listener:buttom"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+</page-specification>    
