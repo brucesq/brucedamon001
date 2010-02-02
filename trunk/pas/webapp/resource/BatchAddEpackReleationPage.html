@@ -1,0 +1,131 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="图书列表"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<title>无标题文档</title>
+</head>
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<form jwcid="productForm@Form"  clientValidationEnabled="true">
+<span jwcid="pack@Hidden" value="ognl:pack" />
+<span jwcid="showColumn@Hidden" value="ognl:showColumn" />
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_014.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@DirectLink" listener="listener:returnEpackReleation" parameters="ognl:pack">返回批价包资源列表</a></td>
+					
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">		
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" jwcid="table" >
+						<tr>
+							<td style="padding:5px 10px;">
+								<table  width="100%" border="0" cellpadding="0" cellspacing="2" class="search_bg" >
+										<tr>
+											<td style="color:#622f04; padding:5px;">
+											
+											类别：
+											<select jwcid="resourcetype@PropertySelection" model="ognl:resourceTypeList" value="ognl:resourceType" ></select>									
+											&nbsp;	
+											资源名称：<input name="name" type="text" size="8" jwcid="name@TextField" value="ognl:name" />
+											&nbsp;
+											资源ID：<input name="nameId" type="text" size="15" jwcid="nameID@TextField" value="ognl:resourceIds" />
+											分类：
+											<select jwcid="sortList@PropertySelection" model="ognl:sortList" value="ognl:sortId"></select>
+											<!-- &nbsp;
+											分类（反）：
+											<select jwcid="sortList1@PropertySelection" model="ognl:sortList" value="ognl:sortId1"></select>-->
+											&nbsp;反选分类：
+											<select jwcid="tof@PropertySelection" model="ognl:toflist" value="ognl:tof"></select>	
+											作者：
+											<select jwcid="author@PropertySelection" model="ognl:authorList" value="ognl:authorId"></select>
+										    上传人：
+											<select jwcid="creator@PropertySelection" model="ognl:userList" value="ognl:creator"></select>
+											
+											SP/CP：
+											<select jwcid="spcp" ></select>		
+	
+											<input name="Submit3" type="submit" class="button-search" value="搜 索" jwcid="searchS@Submit" listener="listener:search"/>
+										    <br/>
+										
+											<span jwcid="@If" condition="ognl:needFee">
+											
+																		
+											&nbsp;	
+											计费代码：<select jwcid="feelist" ></select>		
+											&nbsp;
+											
+											起始计费章节：<input name="name" type="text" size="3" translator="translator:integer" jwcid="feeStrat@TextField" value="ognl:feeStrat" />
+											
+											&nbsp;
+											</span>
+											
+											<!--  排序:	<input name="textfield" type="text" size="5"   jwcid="order@TextField" value="ognl:order" translator="translator:integer"/>
+											 &nbsp;-->
+											 插入位置:
+																	<select jwcid="insertPlace@PropertySelection" model="ognl:placeList" value="ognl:place"></select>
+																&nbsp;
+											<input name="Submit3" type="submit" class="button-search" value="提  交" jwcid="addrel@Submit" action="listener:submitResource" onclick="return showConfirmation('提交');" />
+										
+										 </td>				
+										</tr>
+
+									</table>
+							</td>
+						</tr>
+						
+					
+						
+						<tr>
+							<td height="26" align="right" valign="bottom"><span jwcid="customPages"/>&nbsp;</td>
+						</tr>
+						<tr>
+							<td valign="top" style="padding:10px;">
+							    <span jwcid="checkboxGroup">
+								<table id="box1" width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#d5d9dc"  style="border-collapse:collapse;">
+									<tr>									
+										<td align="center" bgcolor="#DFDFDF"><span  jwcid="controlCheckbox"/></td>  
+										<td jwcid="@contrib:TableColumns" class="title"/>
+									</tr>
+									<tr align="center" jwcid="tableFormRows" class="ognl:beans.evenOdd.next">
+                                      	 <td><span jwcid="delete"/></td>
+                                          <td jwcid="@contrib:TableValues"/>
+									</tr> 	
+								</table>
+                                </span>
+							</td>
+						</tr>
+						<tr>
+							<td height="22" align="right"><span jwcid="customPagesDown"/>&nbsp;</td>
+						</tr>
+					</table>
+			</div>
+		</td>
+	</tr>
+</table>
+
+     <span jwcid="detailColumnValue">
+                       <a href jwcid="detailLink" >
+                     <img src="../img/icon_03.png" width="16" height="16" align="absmiddle" />
+                      </a>
+     </span>
+    
+</form>
+
+
+
+
+</body>
+
+</html>

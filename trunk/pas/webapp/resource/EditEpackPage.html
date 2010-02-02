@@ -1,0 +1,124 @@
+<html jwcid="@Shell"   title="添加批价包"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<script type="text/javascript">
+	function checkFeeType(){
+		var feetype = document.getElementById("feeType").value;
+		if(feetype == 2){
+			document.getElementById("checkType").style.display="block";
+		}else{
+			document.getElementById("checkType").style.display="none";
+		}
+		
+		if(feetype == 4 || feetype == 0){
+			document.getElementById("checkFee").style.display="none";	
+		}else{
+			document.getElementById("checkFee").style.display="block";
+		}
+	}
+</script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body" onload="checkFeeType()">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#" jwcid="sysUserList@DirectLink" listener="listener:cancel">批价包列表</a>－》新增批价包</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+			  <tr >
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;新增批价包</td>					
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">
+				<form jwcid="userForm@Form" clientValidationEnabled="true">	
+				<input type="hidden" jwcid="model@Hidden" value="ognl:model" />
+					<br>
+					<br>
+					<table width="100%" border="0" cellspacing="6" cellpadding="0">
+					 <tr>
+												<td width="15%" align="right">批价包名称：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="feePackName@TextField" validators="validators:required" displayName="literal:批价包名称" value="ognl:model.name"/>
+												</td>
+											</tr>
+											<span jwcid="@If" condition="ognl:modelNew">
+											<tr>
+											<td width="15%" align="right">计费类型：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain" jwcid="feeType@PropertySelection" model="ognl:feeTypeList"  value="ognl:model.type" validators="validators:required" displayName="literal:选择计费类型" onclick="checkFeeType()"/>
+												</td>												
+											</tr>
+											</span>
+											<tr id="checkType" style="display:none">
+											<td width="15%" align="right">选择几个：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain"   jwcid="choice@TextField" value="ognl:model.choice" />
+												
+												</td>												
+											</tr>
+											<tbody id="checkFee" style="display:none">
+											<tr>
+											<td width="15%" align="right">计费ID：<br>
+												</td>
+												<td width="85%">
+												<input type="hidden" jwcid="spid@Hidden" value="ognl:model.spid" />
+												<!-- <input type="hidden" jwcid="feeCode@Hidden" value="ognl:model.code"/>-->
+												<input name="textfield" type="text" class="inputMain"    jwcid="feeId@TextField"  value="ognl:model.feeId" validators="validators:minLength=12,maxLength=12" displayName="literal:计费ID"/>
+													&nbsp;&nbsp; 
+													<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择计费" onClick="ognl:feeURL"/>
+												</td>												
+											</tr>	
+											<tr>
+											<td width="15%" align="right">此计费名称：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain"   jwcid="feeName@TextField" value="ognl:feeName" />
+												
+												</td>												
+											</tr>	<tr>
+											<td width="15%" align="right">计费价格：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain"   jwcid="feeCode@TextField" value="ognl:model.code" readonly="true"/>
+												
+												</td>												
+											</tr>		
+					                    	</tbody>																						
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" class="buttonMain" value="确  定" jwcid="submitEpack@Submit" listener="listener:saveAndReturn" />
+													
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="Submit2" type="Reset" class="buttonMain"  value="重  置">
+													
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+					</table>	
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,15 @@
+tr.odd {background-color: white}
+tr.even {background-color: #f0f0f2}
+th.title {background-color: #DFDFDF}
+
+.ToolbarLine {
+	background-image: url(img/ToolbarLine.png);
+	background-repeat: no-repeat;
+	background-position: right;
+	padding:0px 15px;
+}
+.inputGO {
+	height: 18px;
+	width: 36px;
+	border: 1px solid #a9a9a9;
+}
