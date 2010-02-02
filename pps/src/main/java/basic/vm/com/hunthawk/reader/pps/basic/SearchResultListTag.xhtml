@@ -1,0 +1,10 @@
+搜索到${totalCount}条结果.<br/>
+#foreach(${obj} in ${objs})
+<a href="$!{obj.get("url")}">$!{obj.get("title")}</a>
+#if(${velocityCount}<${objs.size()})
+<br/>
+#end
+#end
+#if(${objs.size()}<1)
+对不起,您搜索的内容暂时无法提供,请重新搜索。
+#end

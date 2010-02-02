@@ -1,0 +1,31 @@
+
+#if(${isVip})
+
+#if(${userChoise}>0)
+已选图书<br/>
+#foreach(${obj} in ${selectedobjs})
+<a href="$!{obj.get("url")}">$!{obj.get("selectTitle")}</a>
+#if(${velocityCount}<${selectedobjs.size()})
+<br/>
+#end
+#end
+#end
+<br/>-------------------------<br/>
+#if(${selects}>0 )
+#if(${selects}==${allowChoise})
+<br/>您可以在以下图书中任意选择${selects}本<br/>
+#else
+<br/>您还可以在以下图书中任意选择${selects}本<br/>
+#end
+#foreach(${obj} in ${noselectedobjs})
+$!{obj.get("noSelectTitle")}  <a href="$!{obj.get("selectUrl")}">选择</a>
+#if(${velocityCount}<${noselectedobjs.size()})
+<br/>
+#end
+#end
+#end
+
+#else
+${msg}<br/>
+<a href="${orderUrl}">${title}</a>
+#end
