@@ -53,7 +53,7 @@ public class Video extends ResourceAll{
 		if(hour>0){
 			s=StringUtils.leftPad(""+hour,2,'0')+":";
 		}
-		return s+StringUtils.leftPad(""+minute,2,'0')+":"+second;
+		return s+StringUtils.leftPad(""+minute,2,'0')+":"+StringUtils.leftPad(""+second,2,'0');
 		
 	}
 	
