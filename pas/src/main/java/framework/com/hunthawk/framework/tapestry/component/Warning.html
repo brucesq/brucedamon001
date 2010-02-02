@@ -1,0 +1,18 @@
+<span jwcid="$content$">
+	<span jwcid="@If" condition="ognl:errors.size()>0" >
+	<div class="warning">
+	<table  cellspacing="0" border="0">
+		<span jwcid="@For" source="ognl:errors" value="ognl:error">
+		<tr>
+		<td>
+			<img jwcid="@Image" image="ognl:warnicon" width="16" height="16" alt=""/>
+		</td>
+		<td><span jwcid="@Insert" value="ognl:error" >Warning</span></td>
+		</tr>
+		</span>
+	</table>
+	</div>
+	</span>
+</span>
+
+
