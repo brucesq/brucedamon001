@@ -1,0 +1,347 @@
+<html jwcid="@Shell" stylesheet="asset:stylesheet" title="模板列表"
+	doctype="" browserLogLevel="DEBUG" consoleEnabled="true"
+	debugEnabled="true">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+		<link rel="stylesheet" href="../style/tab.css" type="text/css"
+			media="all" />
+		<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+		<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+		<script type="text/javascript" src="../js/jquery/jquery.js"></script>
+		<title>无标题文档</title>
+	</head>
+	<body jwcid="@Body">
+		<div jwcid="warn@hunthawk:Warning" />
+			<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+				<form jwcid="userForm@Form" clientValidationEnabled="true">
+					<span jwcid="templateType@Hidden" value="ognl:templateType" /> <span
+						jwcid="templateCatalog@Hidden" value="ognl:templateCatalog" />
+							<table width="100%" height="100%" border="0" cellpadding="0"
+								cellspacing="0">
+								<tr>
+									<td height="22" valign="middle"
+										background="../img/Toolbar_bg.png">
+										<table height="22" border="0" cellpadding="0" cellspacing="0">
+											<tr>
+												<td class="ToolbarLine">
+													<img src="../img/icon_Add.png" width="11" height="11"
+														align="absmiddle">
+													&nbsp;
+													<a href="#" jwcid="@PageLink"
+														page="bussiness/EditTemplatePage">新增模板</a>
+												</td>
+												<td class="ToolbarLine">
+													<img src="../img/icon_017.png" width="14" height="14"
+														align="absmiddle">
+													<a href="#" jwcid="statusdisabled"
+														onclick="return showConfirmation('待审');">待审</a>
+												</td>
+												<td class="ToolbarLine">
+													<img src="../img/icon_05.png" width="15" height="15"
+														align="absmiddle">
+													&nbsp;
+													<a href="#" jwcid="statuspublish"
+														onclick="return showConfirmation('上线');">上线</a>
+												</td>
+												<td class="ToolbarLine">
+													<img src="../img/icon_del.png" width="11" height="11"
+														align="absmiddle">
+													&nbsp;
+													<a href="#" jwcid="@bayeux:LinkSubmitOnce"
+														action="listener:onBatchDelete"
+														onclick="return getConfirmation();">删除选中</a>
+												</td>
+												<td class="ToolbarLine">
+													<img src="../img/icon_016.png" width="14" height="14"
+														align="absmiddle">
+													<a href="#" jwcid="@bayeux:LinkSubmitOnce"
+														action="listener:templateCopy"
+														onclick="return showConfirmation('复制');">模版复制</a>
+												</td>
+												<td class="ToolbarLine">
+													<img src="../img/icon_016.png" width="14" height="14"
+														align="absmiddle">
+													<a href="#" onclick="checkCatalog();">更改目录</a>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td valign="top">
+										<div style="width: 100%; height: 100%; overflow: auto;">
+											<table width="100%" border="0" cellpadding="0"
+												cellspacing="0" jwcid="table">
+												<tr>
+													<td style="padding: 5px 10px;">
+														<table id="Searchbar" width="100%" border="0"
+															cellpadding="0" cellspacing="2" class="search_bg"
+															style="display: block">
+															<tr>
+																<td style="color: #622f04; padding: 5px;">
+																	<table>
+																		<tr>
+																			<td id="showSearchFactor" style="display: block">
+																				ID：
+																				<input name="textfield4" type="text"
+																					class="Template-text02"
+																					jwcid="templateId@TextField"
+																					value="ognl:templateId" />
+																				&nbsp; 名称：
+																				<input name="textfield4" type="text"
+																					class="Template-text02" jwcid="name@TextField"
+																					value="ognl:name" />
+																				&nbsp; 状态：
+																				<select jwcid="status@PropertySelection"
+																					model="ognl:statusList" value="ognl:status"></select>
+																				&nbsp; 输出类型：
+																				<select jwcid="showType@PropertySelection"
+																					model="ognl:showTypeList" value="ognl:showType"></select>
+																				&nbsp; 创建者：
+																				<select jwcid="creator@PropertySelection"
+																					model="ognl:creatorList" value="ognl:creator"></select>
+																				&nbsp;
+																			</td>
+																			<td>
+																				选择目录：
+																				<select jwcid="catalogs@PropertySelection"
+																					model="ognl:catalogList"
+																					value="ognl:templateCatalog"></select>
+																			</td>
+																			<td id="showCatalogButton" style="display: none">
+
+																				<input name="Submit3" type="submit"
+																					class="button-search" value="更改目录"
+																					jwcid="changeCatalog@Submit"
+																					listener="listener:changeCatalog" />
+																			</td>
+																			<td id="showSearchButton" style="display: block">
+
+																				<input name="Submit3" type="submit"
+																					class="button-search" value="搜 索"
+																					jwcid="searchS@Submit" listener="listener:search" />
+
+																			</td>
+																		</tr>
+																		<tr>
+																			<td colspan="4">
+																				URL：
+																				<input name="textfield4" type="text"
+																					class="Template-text" jwcid="urlName@TextField"
+																					value="ognl:urlName" />
+																			<td>
+																		<tr>
+																	</table>
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<!-- 
+					<tr>
+							<td style="padding:5px 10px;">
+								<table id="catalog" width="100%" border="0" cellpadding="0" cellspacing="2" class="search_bg" style="display:none">
+										<tr>
+											<td style="color:#622f04; padding:5px;">
+										选择目录：
+											<select jwcid="catalogs@PropertySelection" model="ognl:catalogList" value="ognl:templateCatalog"></select>									
+											
+											<input name="Submit3" type="submit" class="button-search" value="更改目录" jwcid="changeCatalog@Submit" listener="listener:changeCatalog"/>								
+										 </td>						
+										</tr>
+									</table>
+							</td>
+						</tr> 
+						 -->
+												<tr>
+													<td height="26" align="right" valign="bottom">
+														<span jwcid="customPages" />&nbsp; 
+													</td>
+												</tr>
+												<tr>
+													<td valign="top" style="padding: 10px;">
+														<span jwcid="checkboxGroup"> <!-- <span jwcid="@If" condition="ognl:templateCatalog==null"> -->
+															<div id="all">
+																<ul id="tabnav">
+																	<li class="all">
+																		<a href="#" jwcid="@DirectLink"
+																			listener="listener:searchByType" parameters="0">全部</a>
+																	</li>
+																	<li class="vid">
+																		<a href="#" jwcid="@DirectLink"
+																			listener="listener:searchByType" parameters="1">首页</a>
+																	</li>
+																	<li class="aud">
+																		<a href="#" jwcid="@DirectLink"
+																			listener="listener:searchByType" parameters="2">栏目</a>
+																	</li>
+																	<li class="pic">
+																		<a href="#" jwcid="@DirectLink"
+																			listener="listener:searchByType" parameters="3">资源</a>
+																	</li>
+																	<li class="tex">
+																		<a href="#" jwcid="@DirectLink"
+																			listener="listener:searchByType" parameters="4">详情</a>
+																	</li>
+																	<li class="gam">
+																		<a href="#" jwcid="@DirectLink"
+																			listener="listener:searchByType" parameters="5">资费</a>
+																	</li>
+																	<li class="mus">
+																		<a href="#" jwcid="@DirectLink"
+																			listener="listener:searchByType" parameters="6">通用</a>
+																	</li>
+
+																</ul>
+															</div> <!--  </span>-->
+															<table id="box1" width="100%" border="1" cellpadding="0"
+																cellspacing="0" bordercolor="#d5d9dc"
+																style="border-collapse: collapse;">
+																<tr>
+																	<td align="center" bgcolor="#DFDFDF">
+																		<span jwcid="controlCheckbox" />
+																	</td>
+																	<td jwcid="@contrib:TableColumns" class="title" />
+																</tr>
+																<tr align="center" jwcid="tableFormRows"
+																	class="ognl:beans.evenOdd.next">
+																	<td>
+																		<span jwcid="delete" />
+																	</td>
+																	<td jwcid="@contrib:TableValues" />
+																</tr>
+															</table> </span>
+													</td>
+												</tr>
+												<tr>
+													<td height="22" align="right">
+														<span jwcid="customPagesDown" />&nbsp; 
+													</td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+							</table> <span jwcid="deleteColumnValue"> <span jwcid="@If"
+								condition="ognl:hasCommonPermission('templatechange','delete')">
+									<a href="#" jwcid="deleteLink"
+									onclick="return getConfirmation()"> <img
+											src="../img/icon_06.png" width="16" height="16"
+											align="absmiddle" /> </a> </span> </span> <span jwcid="rightColumnValue">
+
+								<img src="img/icon_04.png" jwcid="rightImg" style="cursor: hand"
+									width="16" height="16" align="absmiddle"
+									onclick="ognl:rightURL" /> </span> <span jwcid="viewColumnValue">
+                                  <a href jwcid="viewLink" >
+                     <img src="../img/icon_03.png" width="16" height="16" align="absmiddle" />
+                      </a>
+								 </span> <span
+							jwcid="validateColumnValue"> <span jwcid="@If"
+								condition="ognl:hasCommonPermission('templatechange','edit')">
+									<a href="#" jwcid="validateLink"> <img
+											src="../img/icon_01.png" width="16" height="16"
+											align="absmiddle" /> </a> </span> </span> <span jwcid="detailColumnValue">
+								<a href jwcid="detailLink"> <img src="../img/icon_03.png"
+										width="16" height="16" align="absmiddle" /> </a> </span>
+				</form> <script type="text/javascript">
+ function checkCatalog(){
+ 	
+ 	if( document.getElementById("showCatalogButton").style.display=="none"){
+	 	document.getElementById("showSearchFactor").style.display='none';
+	 	document.getElementById("showSearchButton").style.display='none';
+	 	document.getElementById("showCatalogButton").style.display='block';
+	 }else{
+		 document.getElementById("showSearchFactor").style.display='block';
+	 	document.getElementById("showSearchButton").style.display='block';
+	 	document.getElementById("showCatalogButton").style.display='none';
+	 }
+// if(document.getElementById("catalog").style.display=="none"){
+ //	document.getElementById("catalog").style.display="block";
+// 	document.getElementById("Searchbar").style.display="none";
+ //	}else{
+ //	document.getElementById("catalog").style.display="none";
+ //	}
+ }
+</script>
+	</body>
+	<script type="text/javascript">
+<!--
+jQuery.noConflict();
+jQuery(document).ready(function() { 
+	 
+	if(document.getElementById("templateType")==null){
+		val=1;
+	}else{
+		val= document.getElementById("templateType").value;
+	}
+   
+   if(val==0){
+  	    jQuery("#video").attr("id","all");
+    	jQuery("#audio").attr("id","all");
+		jQuery("#picture").attr("id","all");
+		jQuery("#game").attr("id","all");
+		jQuery("#text").attr("id","all");
+		jQuery("#music").attr("id","all");
+		jQuery("#tid").val("7");
+		
+	}
+	
+    if(val==1){
+        jQuery("#all").attr("id","video");
+    	jQuery("#audio").attr("id","video");
+		jQuery("#picture").attr("id","video");
+		jQuery("#game").attr("id","video");
+		jQuery("#text").attr("id","video");
+		jQuery("#music").attr("id","video");
+		jQuery("#tid").val("3");
+		
+	}
+	if(val==2){
+		 jQuery("#all").attr("id","audio");
+		jQuery("#video").attr("id","audio");
+		jQuery("#picture").attr("id","audio");
+		jQuery("#game").attr("id","audio");
+		jQuery("#text").attr("id","audio");
+		jQuery("#music").attr("id","audio");
+		jQuery("#tid").val("2");
+	}
+	if(val==3){
+	 jQuery("#all").attr("id","picture");
+		jQuery("#video").attr("id","picture");
+		jQuery("#audio").attr("id","picture");
+		jQuery("#game").attr("id","picture");
+		jQuery("#text").attr("id","picture");
+		jQuery("#music").attr("id","picture");
+		jQuery("#tid").val("1");
+	}
+	if(val==4){
+	 jQuery("#all").attr("id","text");
+		jQuery("#audio").attr("id","text");
+		jQuery("#picture").attr("id","text");
+		jQuery("#game").attr("id","text");
+		jQuery("#video").attr("id","text");
+		jQuery("#music").attr("id","text");
+		jQuery("#tid").val("4");
+	}
+	if(val==5){
+	 jQuery("#all").attr("id","game");
+		jQuery("#audio").attr("id","game");
+		jQuery("#picture").attr("id","game");
+		jQuery("#video").attr("id","game");
+		jQuery("#text").attr("id","game");
+		jQuery("#music").attr("id","game");
+		jQuery("#tid").val("5");
+	}
+	if(val==6){
+	 jQuery("#all").attr("id","music");
+		jQuery("#audio").attr("id","music");
+		jQuery("#picture").attr("id","music");
+		jQuery("#game").attr("id","music");
+		jQuery("#video").attr("id","music");
+		jQuery("#text").attr("id","music");
+		jQuery("#tid").val("6");
+	}
+});  
+//-->
+</script>
+</html>
