@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+  <head>
+    <meta name="uid" content="${book.id}"/>
+    <meta name="depth" content="-1"/>
+    <meta name="totalPageCount" content="0"/>
+    <meta name="maxPageNumber" content="0"/>
+  </head>
+  <docTitle>
+     <text>${book.name}</text>
+  </docTitle>
+  <docAuthor>
+      <text>${authorName}</text>
+ 	</docAuthor>
+ 	<docType>
+ 	<text>${type}</text>
+ 	</docType>
+	<docSort>
+	<text>${sort}</text>
+	</docSort>
+	<docSecondsort>
+	<text>${secondSort}</text>
+	</docSecondsort>
+  <docKeyword>
+        <text>${book.rKeyword}</text>
+  </docKeyword>
+  <navMap>
+    <navPoint id="navpoint-1" playOrder="1">
+      <navLabel>
+        <text>∑‚√Ê</text>
+      </navLabel>
+      <content src="cover.html"/>
+    </navPoint>
+   #set($order=1)
+   #foreach($item in $chapters)
+    #set($order=$order+1)
+    <navPoint id="navpoint-$order" playOrder="$order">
+      <navLabel>
+        <text>${item.name}</text>
+      </navLabel>
+      <content src="chapters/${item.chapterIndex}.html"/>
+    </navPoint>
+    #end 
+  </navMap>
+</ncx>

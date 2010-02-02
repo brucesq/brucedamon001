@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" unique-identifier="bookid" version="2.0">
+  <metadata>
+    <dc:title>${book.name}</dc:title>
+    <dc:bookid>${book.id}</dc:bookid>
+	<dc:cpid>${cpid}</dc:cpid>
+    <dc:author>${authorName}</dc:author>
+    <dc:creator>unicom</dc:creator>
+    <dc:type>${type}</dc:type>
+	<dc:sort>${sort}</dc:sort>
+	<dc:secondsort>${secondSort}</dc:secondsort>
+    <dc:keyword>${book.rKeyword}</dc:keyword>
+    <dc:description>${book.cComment}</dc:description>
+    <dc:longdescription>${book.introLon}</dc:longdescription>
+    <dc:publisher>${book.publisher}</dc:publisher>
+    <dc:publisherdate>${book.publishTime}</dc:publisherdate>
+    <dc:isbn>${book.isbn}</dc:isbn>
+    <dc:finishflag>${book.isFinished}</dc:finishflag>
+    <dc:language>${book.bLanguage}</dc:language>
+	<dc:chargetype>${chargetype}</dc:chargetype>
+	<dc:price>${price}</dc:price>
+    <meta name="cover" content="cover-image" />
+  </metadata>
+
+  <manifest>
+    <item id="ncx" href="content.ncx" media-type="text/xml"/>
+    <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
+    #foreach($item in $chapters)
+    	#foreach($img in $item.images)
+    		<item id="image${imageUtil.getPrefix($img)}" href="images/${img}" media-type="image/${imageUtil.getSuffix($img)}"/>
+    	#end
+    	<item id="chapter${item.chapterIndex}" href="chapters/${item.chapterIndex}.html" media-type="application/xhtml+xml"/>
+	#end 
+    <item id="cover-image" href="images/cover.${extName}" media-type="image/${extName}"/>
+    <item id="css" href="stylesheet.css" media-type="text/css"/>
+  </manifest>
+  
+  <spine toc="ncx">
+    <itemref idref="cover" linear="no"/>
+     #foreach($item in $chapters)
+  		  <itemref idref="chapter${item.chapterIndex}"/>
+	 #end 
+  </spine>
+ 
+ </package>
+  
