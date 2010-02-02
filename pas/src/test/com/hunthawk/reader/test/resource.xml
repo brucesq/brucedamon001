@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	   default-autowire="byName" default-lazy-init="false">
+	 
+	  
+	  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"> 
+  		<property name="driverClass"> 
+   				 <value>oracle.jdbc.driver.OracleDriver</value> 
+  		</property> 
+  		<property name="jdbcUrl"> 
+    			<value>jdbc:oracle:thin:@219.234.95.190:1521:XE</value> 
+  		</property> 
+  		<property name="user"> 
+    			<value>hunthawk</value> 
+  		</property> 
+  		<property name="password"> 
+   				 <value>123456</value> 
+  		</property> 
+ 
+  		<property name="initialPoolSize"> 
+    			<value>1</value> 
+  		</property> 
+  		<property name="minPoolSize"> 
+    			<value>1</value> 
+ 		 </property> 
+  		<property name="maxPoolSize"> 
+    			<value>2</value> 
+ 		 </property> 
+  		<property name="checkoutTimeout"> 
+   					 <value>5000</value> 
+  		</property> 
+  		<property name="maxIdleTime"> 
+   				 <value>1800</value> 
+  		</property> 
+  		<property name="idleConnectionTestPeriod"> 
+   				 <value>3000</value> 
+  		</property>  
+  		<property name="acquireIncrement"> 
+    			<value>1</value> 
+  		</property>
+  		 <property name="autoCommitOnClose" >
+            <value>false</value>
+        </property>
+ 	</bean>  
+	   
+	
+  	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+       <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="annotatedClasses">
+	     <list>
+	       
+	       <value>com.hunthawk.reader.domain.system.Variables</value>
+	       <value>com.hunthawk.reader.domain.partner.Channel</value>
+	       <value>com.hunthawk.reader.domain.partner.ChannelChild</value>
+	       <value>com.hunthawk.reader.domain.bussiness.TemplateType</value>
+	       <value>com.hunthawk.reader.domain.bussiness.TemplateCatalog</value>
+	       <value>com.hunthawk.reader.domain.bussiness.Product</value>
+	       <value>com.hunthawk.reader.domain.bussiness.Columns</value> 
+	       <value>com.hunthawk.reader.domain.bussiness.PageGroup</value>
+	       <value>com.hunthawk.reader.domain.bussiness.SysTag</value>
+	       <value>com.hunthawk.reader.domain.bussiness.Template</value>
+	       <value>com.hunthawk.reader.domain.bussiness.PackGroupProvinceRelation</value>
+			<value>com.hunthawk.reader.domain.bussiness.PackGroupProvinceId</value>
+			 <value>com.hunthawk.reader.domain.partner.Provider</value>
+			
+	       <value>com.hunthawk.reader.domain.custom.BookBag</value>
+	       <value>com.hunthawk.reader.domain.custom.Bookmark</value>
+	       <value>com.hunthawk.reader.domain.custom.Favorites</value>
+	       <value>com.hunthawk.reader.domain.custom.UserBuy</value>
+	       
+	       <value>com.hunthawk.reader.domain.resource.Ebook</value>
+	       <value>com.hunthawk.reader.domain.resource.EbookChapter</value>
+	      
+	       <value>com.hunthawk.reader.domain.resource.ResourceAll</value> 
+	       <value>com.hunthawk.reader.domain.resource.ResourceAuthor</value>
+	       <value>com.hunthawk.reader.domain.resource.ResourceReferen</value>
+	       <value>com.hunthawk.reader.domain.resource.ResourceType</value>
+	       
+	       <value>com.hunthawk.reader.domain.resource.ResourcePack</value>
+	       <value>com.hunthawk.reader.domain.resource.ResourcePackReleation</value>
+	       
+	       <value>com.hunthawk.reader.domain.device.MobileInfo</value>
+	       <value>com.hunthawk.reader.domain.device.PersonGroup</value>
+	       <value>com.hunthawk.reader.domain.device.PersonInfo</value>
+	       <value>com.hunthawk.reader.domain.device.UAGroup</value>
+	       <value>com.hunthawk.reader.domain.device.UAGroupRelation</value>
+	       <value>com.hunthawk.reader.domain.device.UAInfo</value>
+	       
+	       <value>
+					com.hunthawk.reader.domain.resource.MaterialCatalog
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.Material
+				</value>
+
+	     </list>
+	   </property>
+	   <property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle9Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+		 		<prop key="current_session_context_class">thread</prop>
+		 		<prop key="hibernate.format_sql">true</prop> 
+		 		<prop key="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</prop>
+		 		<prop key="hibernate.jdbc.fetch_size">30</prop>
+				<prop key="hibernate.jdbc.batch_size">25</prop> 
+				<prop key="hibernate.max_fetch_depth">0</prop>
+				
+			</props>
+		</property>
+	 </bean>
+	 <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory">
+			<ref local="sessionFactory"/>
+		</property>
+	</bean>
+	 <bean name="hibernateGenericController" class="com.hunthawk.framework.HibernateGenericController">
+		<property name="hibernateTemplate"><ref local="hibernateTemplate"/></property>
+	</bean>
+	
+	<bean name="materialService" class="com.hunthawk.reader.service.resource.impl.MaterialServiceImpl" />
+	
+	
+</beans>
+	
