@@ -1,0 +1,1 @@
+FCKConfig.ToolbarCanCollapse = false;
