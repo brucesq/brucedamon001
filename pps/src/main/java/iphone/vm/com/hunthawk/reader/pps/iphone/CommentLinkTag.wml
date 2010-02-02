@@ -1,0 +1,12 @@
+<input type="text" name="msg" size="20"/>
+<anchor>${title}
+<go href="${url}" method="POST" accept-charset="UTF-8" >
+	#if(${isCustomId})
+		<postfield name="CK" value="${CK}" />
+	#end
+	<postfield name="MSG" value="$msg" />
+	<postfield name="CP" value="${CP}" />
+	<postfield name="CT" value="${CT}" />
+	<postfield name="CTI" value="${CTI}" />
+</go>
+</anchor> 

@@ -1,0 +1,31 @@
+         	<form name="messageForm" action="s.do" method="get">
+        <div class="col_input_2">
+        	<div class="col_input_2_content input_bg_2">
+            <textarea id="MSG" name="MSG"  type="text"  style="width:296px; " onfocus="javascript:removeText();">在此输入留言内容...</textarea>
+            #foreach(${obj} in ${objs})
+			<input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+			#end
+			#if(${isCustomId})
+			<input type="hidden" name="CK" value="${CK}"/>
+			#end
+			<input type="hidden" name="CP" value="${CP}" />
+			<input type="hidden" name="CT" value="${CT}" />
+			<input type="hidden" name="CTI" value="${CTI}" />
+            </div>
+        </div>
+        
+    	<div class="col_3">
+        	<div class="col_3_content">
+            <ul>
+                <li class="col_3_left"><input class="btn_2 font_color_3 font_size_1" type="submit" value="发表评论" style="border:0px;"></li>
+                <li class="col_3_middle">&nbsp;</li>
+                <li class="col_3_right"><a href="${commentUrl}"><div class="btn_2 font_color_3 font_size_1">查看评论</div></a></li>
+         	</ul>
+            </div>
+        </div> 
+        </form>
+<script language="javascript">
+function removeText(){
+	document.getElementById("MSG").value=" ";
+}
+</script>

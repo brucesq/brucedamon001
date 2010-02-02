@@ -1,0 +1,9 @@
+#if(${showInput})
+º‰∏Ù<input name="T" title="timer" type="input" value="2" format="n" emptyok="false|true" size="2" maxlength="2"/>√Î
+#end
+<anchor>${title}
+<go href="${url}" method="get" accept-charset="UTF-8" >
+#foreach(${obj} in ${objs})
+<postfield name="$!{obj.get("key")}" value="$!{obj.get("value")}" />
+#end
+</go></anchor>
