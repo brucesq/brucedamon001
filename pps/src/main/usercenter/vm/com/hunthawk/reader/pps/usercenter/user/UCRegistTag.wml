@@ -1,0 +1,23 @@
+#if(${step}==1)
+	*用户名:<input type="text" name="name" value="" emptyok="true"/><br/>
+	*手机号:<input type="text" name="mobile" value="" size="20" emptyok="true"/><br/>
+	[<anchor title="下一步">下一步
+	<go href="${url}" method="post">
+		<postfield name="name" value="$(name)"/>
+		<postfield name="mobile" value="$(mobile)"/>
+	</go></anchor>]<br/>
+#else
+	用户名：${name}<br/>
+	手机号：${mobile}<br/>
+	*验证码：<input type="text" name="vcode" value="" size="20" emptyok="true"/><br/>
+	*密码：<input type="password" name="passwd" value="" size="20" emptyok="true"/><br/>
+	*请稍候，登录密码将以短信方式发送至您的手机，请将收到的验证码填写到验证码框中。<br/>
+	[<anchor title="下一步">下一步
+	<go href="${url}" method="post">
+		<postfield name="vcode" value="$(vcode)"/>
+		<postfield name="passwd" value="$(passwd)"/>
+		<postfield name="name" value="$(name)"/>
+		<postfield name="mobile" value="$(mobile)"/>
+	</go></anchor>]<br/>
+#end
+${msg}
