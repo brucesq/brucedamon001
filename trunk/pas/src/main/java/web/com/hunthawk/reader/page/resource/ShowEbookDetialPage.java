@@ -2,7 +2,6 @@ package com.hunthawk.reader.page.resource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.tapestry.IAsset;
@@ -10,27 +9,26 @@ import org.apache.tapestry.IPage;
 import org.apache.tapestry.annotations.Asset;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.InjectPage;
-import org.apache.tapestry.engine.IEngineService;
 
 import com.hunthawk.framework.annotation.Restrict;
 import com.hunthawk.framework.tapestry.SecurityPage;
 import com.hunthawk.framework.util.BeanUtils;
-import com.hunthawk.framework.util.OrderedMap;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
 import com.hunthawk.reader.domain.resource.EbookChapter;
+import com.hunthawk.reader.domain.resource.Infomation;
 import com.hunthawk.reader.domain.resource.Magazine;
 import com.hunthawk.reader.domain.resource.MagazineChapter;
 import com.hunthawk.reader.domain.resource.NewsPapers;
 import com.hunthawk.reader.domain.resource.NewsPapersChapter;
 import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.domain.resource.ResourcePack;
-import com.hunthawk.reader.domain.resource.ResourceReferen;
+import com.hunthawk.reader.domain.resource.Video;
+import com.hunthawk.reader.domain.resource.VideoSuite;
 import com.hunthawk.reader.domain.system.Variables;
 import com.hunthawk.reader.page.util.DetailPageField;
-import com.hunthawk.reader.page.util.PageHelper;
 import com.hunthawk.reader.service.resource.ResourcePackService;
 import com.hunthawk.reader.service.resource.ResourceService;
 import com.hunthawk.reader.service.system.SystemService;
@@ -118,6 +116,16 @@ public abstract class ShowEbookDetialPage extends SecurityPage {
 				details.add(field);
 			}	
 		}
+		if(resourceAll instanceof Video){
+			List<VideoSuite> list = getResourceService().getResourceChapter(VideoSuite.class, resourceAll.getId());
+			System.out.println(list.size());
+			for(VideoSuite chapter : list){
+				DetailPageField field = new DetailPageField();
+				field.setTitle(chapter.getId());
+				field.setValue("文件"+chapter.getChapterIndex()+":"+chapter.getFilename());
+				details.add(field);
+			}	
+		}
 		return details;
 	}
 	
@@ -149,6 +157,16 @@ public abstract class ShowEbookDetialPage extends SecurityPage {
 			Comics comics = (Comics) resource;
 			imgPath = getResourceService().getPreviewCoverImg(resource.getId(),
 					comics.getImage());
+		}
+		if (resource instanceof Video) { // 视频
+			Video video = (Video) resource;
+			imgPath = getResourceService().getPreviewCoverImg(resource.getId(),
+					video.getImage());
+		}
+		if (resource instanceof Infomation) { // 新闻
+			Infomation info = (Infomation) resource;
+			imgPath = getResourceService().getPreviewCoverImg(resource.getId(),
+					info.getImage());
 		}
 		fieldCover.setValue("<img src='"+imgPath+"' align='absmiddle'");
 		details.add(fieldCover);
