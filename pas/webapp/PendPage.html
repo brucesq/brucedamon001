@@ -1,0 +1,58 @@
+<html jwcid="@Shell"   title="Add New Project"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+<title>无标题文档</title>
+<script src="js/common.js" type="text/javascript" charset="gbk"></script>
+<style>
+a{text-decoration:none;}
+img{border-style:none}  
+</style>
+</head>
+<link jwcid="@Relation" href="/css.css" media="all" />
+<body>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr height="75%">
+    <td valign="top" style="padding:7px;">
+	</td>
+  </tr>
+ <!--  <tr height="25%">
+  <td align="left" width="50%">&nbsp;</td>
+  	<td align="center" width="50%">
+  	
+    	<span jwcid="@If" condition="ognl:hasRole('product')&&!user.roleProvider">
+	    <a href="#" jwcid="@PageLink" page="bussiness/ShowProductPage">
+	    <img src="img/icon_07.png" width="16" height="16" align="absmiddle" />产品管理</a>	    
+	    </span>
+	   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	      	<span jwcid="@If" condition="ognl:hasRole('pagegroup')&&!user.roleProvider">
+	    <a href="#" jwcid="@PageLink" page="bussiness/ShowPageGroupPage">
+	     <img src="img/icon_01.png" width="16" height="16" align="absmiddle" />页面管理</a>	    
+	    </span>
+	   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	<span jwcid="@If" condition="ognl:hasRole('template')&&!user.roleProvider">
+	    <a href="#" jwcid="@PageLink" page="bussiness/ShowTemplatePage">
+	     <img src="img/icon_03.png" width="16" height="16" align="absmiddle" />模板管理</a>	    
+	    </span>
+	     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	<span jwcid="@If" condition="ognl:hasRole('uploadresource')&&!user.roleChannel">
+	    <a href="#" jwcid="@PageLink" page="resource/EditResourcePage">
+	     <img src="img/icon_04.png" width="16" height="16" align="absmiddle" />资源上传</a>	    
+	    </span>
+	       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    	<span jwcid="@If" condition="ognl:hasRole('pack')&&!user.roleChannel&&!user.roleProvider">
+	    <a href="#" jwcid="@PageLink" page="resource/ShowEpackPage">
+	     <img src="img/icon_05.png" width="16" height="16" align="absmiddle" />批价管理</a>	    
+	    </span>
+	   
+	</td>
+  </tr>
+   -->
+</table>
+</body>
+</html>
