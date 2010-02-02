@@ -1,0 +1,67 @@
+<html jwcid="@Shell" stylesheet="asset:stylesheet" title="标签向导"
+	doctype="" browserLogLevel="DEBUG" consoleEnabled="true"
+	debugEnabled="false">
+<base target="_self">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>标签向导</title>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<body jwcid="@Body">
+<span jwcid="insertGuideScript" />
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0" class="openWindowBg">
+	<tr>
+		<td valign="top">
+		<table width="580" height="380" border="0" cellpadding="0"
+			cellspacing="0" class="openWindow-outerborder">
+			<tr>
+				<th valign="top">标签参数向导</th>
+			</tr>
+
+			<tr>
+				<td valign="top" style="padding: 20px 10px;">
+
+				<form jwcid="guide@Form" clientValidationEnabled="true"><span
+					jwcid="parameter@Hidden" value="ognl:parameter" /> <span
+					jwcid="tagname@Hidden" value="ognl:tagName" />
+
+				<table width="100%" border="0" cellpadding="0" cellspacing="4">
+
+					<tr>
+						<td align="right">选择栏目集合：</td>
+						<td><input name="textfield2" type="text" readonly="true"
+							jwcid="columnids@TextField" value="ognl:columnids" /> &nbsp;&nbsp;
+						<input name="Submit" jwcid="@Any" type="button" class="buttonMain"
+							value="选择栏目" onClick="ognl:columnURL" /></td>
+					</tr>
+
+					<tr>
+						<td width="15%" align="right">链接组合策略：<br>
+						</td>
+						<td width="85%"><input jwcid="@contrib:Palette"
+							sort="literal:USER" model="ognl:mixList" selected="ognl:mixs"
+							tableClass="literal:palette"/></td>
+					</tr>
+					<tr>
+						<td align="right">&nbsp;</td>
+						<td><input name="Submit2" type="submit" jwcid="@Submit"
+							listener="listener:onSubmit" class="buttonMain" value="确  定" />
+						&nbsp;&nbsp;&nbsp;&nbsp;<input name="close" type="button"
+							class="buttonCustom"
+							onclick="javascript:window.close();return false;" value="关 闭" />
+						</td>
+					</tr>
+					<tr>
+						<td align="right">&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+				</table></form>
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

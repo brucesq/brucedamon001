@@ -1,0 +1,143 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="标签向导"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="false">
+<base target="_self">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>标签向导</title>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<body jwcid="@Body" onload="showPic()">
+<span jwcid="insertGuideScript" />
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="openWindowBg">
+<tr>
+	<td valign="top">
+		<table width="580" height="380" border="0" cellpadding="0" cellspacing="0" class="openWindow-outerborder">
+			<tr>
+					<th valign="top">标签参数向导</th>
+			</tr>
+
+			<tr>
+				<td valign="top" style="padding:20px 10px;">
+			
+				<form jwcid="guide@Form"  clientValidationEnabled="true">	
+				<span jwcid="parameter@Hidden" value="ognl:parameter" />
+				<span jwcid="tagname@Hidden" value="ognl:tagName" />	
+				
+					<table width="100%" border="0" cellpadding="0" cellspacing="4">
+										
+	
+									<tr>
+												<td width="28%" align="right">
+												是否加链接:
+												</td>
+												
+												<td width="72%">
+													 <select jwcid="linktype@PropertySelection" model="ognl:linkTypeList" value="ognl:linkType" onclick="showUrl()"></select>									
+											
+												</td>
+												 
+										</tr>
+											<tr id = "imageLink" style="display:none">
+												<td width="28%" align="right">
+												链接地址:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="urlLink@TextField" value="ognl:urlLink"  />
+												</td>
+										</tr>
+										<tr>
+												<td width="28%" align="right">
+												宽:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="width1@TextField" translator="translator:integer" displayName="literal:宽" value="ognl:width"  />
+													
+												</td>
+												 
+										</tr>
+										
+										<tr>
+												<td width="28%" align="right">
+												高:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="heitht1@TextField" translator="translator:integer" displayName="literal:高" value="ognl:height"  />
+													
+												</td>
+												 
+										</tr>
+									    <tr>
+												<td width="28%" align="right">
+												选择图片:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="imgid@TextField" readonly="true" translator="translator:integer" displayName="literal:图片ID" value="ognl:imageId"  />
+													  &nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择图片" onClick="ognl:chooseImageURL"/>
+												  
+												</td>
+										</tr>
+										<tr>
+											<td width="15%" align="right">使用本地素材：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield44" jwcid="productinfo@Upload" file="ognl:uploadFile" type="file" onKeyDown="return   false;"/>
+													 &nbsp;&nbsp;
+													<input name="Submit" jwcid="@Submit" type="submit" listener="listener:uploadMaterial" class="buttonMain" value="上传"/>
+												</td>												
+										</tr>
+										<tr>
+												<td width="28%" align="right">
+												<a href="#" onclick="showPic()">点击预览效果:</a>
+												</td>
+												
+												<td width="72%">
+												   <img src="ognl:imgUrl" style="width:40;height:40" jwcid="imgurl@Any" />
+												</td>
+										</tr>
+								
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" jwcid="@Submit" listener="listener:onSubmit"  class="buttonMain" value="确  定" />
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="close" type="button" class="buttonCustom"  onclick ="javascript:window.close();return false;" value="关 闭"/>
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+							</table>
+						</form>
+					</td>
+					</tr>
+					</table>
+					</td>
+					</tr>
+					</table>
+				
+					
+</body>
+<script type="text/javascript">
+	function showUrl(){
+	if(document.getElementById("linktype").value==0)
+		 document.getElementById("imageLink").style.display="block";
+	else
+		 document.getElementById("imageLink").style.display="none";
+	}
+ function showPic(){
+ 	showUrl();
+ 	var objImg = document.getElementById("imgurl");//pictureID是图片ID号
+ 	var width1 = document.getElementById("width1").value;
+ 	var height1 = document.getElementById("heitht1").value;
+ 	 objImg.style.width = width1;
+ 	 objImg.style.height = height1
+ }
+</script>
+</html>

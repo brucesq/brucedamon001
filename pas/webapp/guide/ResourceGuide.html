@@ -1,0 +1,215 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="标签向导"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="false">
+<base target="_self">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>标签向导</title>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<body jwcid="@Body">
+<span jwcid="insertGuideScript" />
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="openWindowBg">
+<tr>
+	<td valign="top">
+		<table width="580" height="380" border="0" cellpadding="0" cellspacing="0" class="openWindow-outerborder">
+			<tr>
+					<th valign="top">标签参数向导</th>
+			</tr>
+
+			<tr>
+				<td valign="top" style="padding:20px 10px;">
+			
+				<form jwcid="guide@Form"  clientValidationEnabled="true">	
+				<span jwcid="parameter@Hidden" value="ognl:parameter" />
+				<span jwcid="tagname@Hidden" value="ognl:tagName" />	
+				
+					<table width="100%" border="0" cellpadding="0" cellspacing="4">
+										
+	
+									<tr>
+											<td width="28%" align="right">
+												是否分页:
+												</td>	
+												<td width="72%">
+													 <select jwcid="pageLink@PropertySelection" model="ognl:pageLinkList" value="ognl:pageLink"></select>																				
+												</td> 
+										</tr>
+										
+										<tr>
+											<td width="28%" align="right">
+												是否显示序号:
+												</td>	
+												<td width="72%">
+													 <select jwcid="isDisSN@PropertySelection" model="ognl:pageLinkList" value="ognl:isDisSN"></select>																				
+												</td> 
+										</tr>
+										<tr>
+											<td width="28%" align="right">
+												是否计费:
+												</td>	
+												<td width="72%">
+													 <select jwcid="isFee@PropertySelection" model="ognl:pageLinkList" value="ognl:isFee" ></select>																				
+												</td> 
+										</tr>
+										<tr>
+											<td width="28%" align="right">
+												是否轮循:
+												</td>	
+												<td width="72%">
+													 <select jwcid="isRoll@PropertySelection" model="ognl:pageLinkList" value="ognl:isRoll" onChange="literal:tapestry.form.submit(this.form)"></select>																				
+												</td> 
+										</tr>
+										<span jwcid="@If" condition="ognl:showRoll">
+										<tr id = "imageLink">
+												<td width="28%" align="right">
+												轮循规则:
+												</td>
+												<td width="72%">
+													 <select jwcid="rollRuleId@PropertySelection" model="ognl:rollRuleIdList" value="ognl:rollRuleId" onChange="literal:tapestry.form.submit(this.form)"></select>																				
+												</td>
+										</tr>
+										<span jwcid="@If" condition="ognl:showTopCount">
+										<tr>
+												<td width="28%" align="right">
+												置顶条数:
+												</td>
+												
+												<td width="72%">
+													<Input jwcid="topCount@TextField" translator="translator:integer" displayName="literal:制定条数" value="ognl:topCount"  />
+											</td>			 
+										</tr>
+										</span>
+											<tr>
+											<td width="28%" align="right">
+												轮循最大范围:
+												</td>	
+												<td width="72%">
+													 <select jwcid="rollTotalCount@PropertySelection" model="ognl:rollTotalCountList" value="ognl:rollTotalCount"></select>																				
+												</td> 
+										</tr>
+										<tr>
+												<td width="28%" align="right">
+												轮询条数:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="rollCount@TextField" translator="translator:integer" displayName="literal:轮询条数" value="ognl:rollCount"  />
+													
+												</td>
+												 
+										</tr>
+											<tr>
+												<td width="28%" align="right">
+												轮循时间(单位：分):
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="rollTime@TextField" translator="translator:integer" displayName="literal:轮循时间" value="ognl:rollTime"  />
+													
+												</td>	 
+										</tr>
+									</span>	
+									<span jwcid="@Else">
+										<tr>
+												<td width="28%" align="right">
+												列表最大条数:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="listCount@TextField" translator="translator:integer" displayName="literal:列表总数" value="ognl:listCount"  />
+													
+												</td>
+												 
+										</tr>
+										<tr>
+												<td width="28%" align="right">
+												页/条:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="rollNumber@TextField" translator="translator:integer" displayName="literal:每页条数" value="ognl:rollNumber"  />
+													
+												</td>
+												 
+										</tr>
+									</span>
+								<span jwcid="@If" condition="ognl:showColumn">
+									<tr>
+												<td align="right">请选择栏目：</td>
+												<td>
+													<input name="textfield2" type="text" readonly="true" jwcid="columnId@TextField" value="ognl:columnId" />
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择栏目" onClick="ognl:columnURL"/>
+												</td>	 
+											</tr>
+									</span>
+									
+									<span jwcid="@If" condition="ognl:iphoneTag">
+											<tr>
+												<td width="15%" align="right">次数呈现选择：<br>
+												</td>
+												<td width="85%">
+												 <select jwcid="showtype@PropertySelection" model="ognl:showtypeList" value="ognl:showtype" onChange="literal:tapestry.form.submit(this.form)"></select>		
+												</td>
+											</tr>
+									</span>
+									<span jwcid="@Else">
+									<!-- 只有非iphone标签才显示链接组合策略 -->
+										<tr>
+												<td width="15%" align="right">链接组合策略：<br>
+												</td>
+												<td width="85%"><input jwcid="@contrib:Palette" sort="literal:USER" model="ognl:mixList"  selected="ognl:mixs" tableClass="literal:palette"  availableTitleBlock="ognl:roleList" selectedTitleBlock="ognl:roleExist"/></td>
+											</tr>
+									</span>
+											
+											<tr>
+												<td width="28%" align="right">
+													筛选条件:
+													</td>	
+													<td width="72%">
+														 <select jwcid="param@PropertySelection" model="ognl:paramList" value="ognl:param"></select>																				
+												</td> 
+											</tr>		
+					 						<tr>
+												
+												<td align="right">选择标签模板：</td>
+												<td>
+													<input name="textfield2" type="text" readonly="true" jwcid="tmdId@TextField" value="ognl:tmdId"  />
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="标签模板" onClick="ognl:tmdURL"/>
+												&nbsp;&nbsp;<font color="red">如果需要使用标签模板，请选择对应的标签模板，不使用不需要选</font>
+												</td>
+												
+											</tr>
+					 					
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" jwcid="@Submit" listener="listener:onSubmit"  class="buttonMain" value="确  定" />
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="close" type="button" class="buttonCustom"  onclick ="javascript:window.close();return false;" value="关 闭"/>
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+							</table>
+					<span jwcid="roleList@Block">
+                     组合策略列表
+                      </span>
+                      <span jwcid="roleExist@Block">
+                      已选列表
+                      </span>	
+						</form>
+					</td>
+					</tr>
+					</table>
+					</td>
+					</tr>
+					</table>
+				
+					
+</body>
+</html>
