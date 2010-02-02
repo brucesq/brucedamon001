@@ -1,0 +1,64 @@
+<!--  
+<script type="text/javascript" src="js/jquery.js"></script>-->
+<script>
+  function change(){
+		document.getElementById("usercheck").innerText="　";
+  }
+  
+  function next(){
+	var name=document.getElementById('name').value;
+	var patrn=/^[a-zA-Z0-9]{1}([a-zA-Z0-9]|[._]){2,15}$/;  
+	if (!patrn.exec(name)||name.length<4||name.length>16) {
+		alert('用户名不符合注册规则，请重新输入');
+		return false  
+	}
+  	//document.frm.action="s.do"
+  	submit1();
+  }
+ 
+ function submit1(){
+		 document.frm.submit();
+ }
+
+
+ function ajax(val){
+		var obj=val;
+		//alert("ajax - "+obj.value);
+		//$.ajax({
+		//	   type: "POST",
+		//	   url: "http://localhost:80/some.php",
+		//	   data: "name="+obj.value,
+		//	   success: function(msg){
+		//	     alert( "Data Saved: " + msg );
+		//	   }
+	//	}); 
+}
+</script>
+<form id="frm" name="frm" action="${url}" method="post" >
+<div class="bodylogin">
+    <div class="divregist" >
+    #if(${step}==1)
+		    用户名：<input name="name" id="name"  type="text" size="30" width="180" onkeyup="change()" onblur="ajax(this)"/> <br>
+		    <span style="color:red">*账户名必须是长度4-16位之间、英文小写（a~z）、数字(0~9)、点或下划线组合</span><br>
+		    手机号：<input name="mobile" id="mobile" maxlength="11" type="text"  size="30" width="180" />
+		    <span style="color:red">*</span><br>
+		     <input name="button" type="button" class="line03" value="下一步" width="35"  height="35" onclick="next()" /><br>
+  	#else
+  		用户名：${name}<br/>
+  		手机号：${mobile}<br/>
+  		验证码：<input name="vcode" id="vcode" maxlength="4" type="text"  size="30" width="180" /> <span style="color:red">*</span><br/>
+  		密码：<input id="passwd" name="passwd" type="password"  /> <span style="color:red">*</span><br/>
+  		<div style="margin-left:23px">*请稍候，登录密码将以短信方式发送至您的手机，请将收到的验证码填写到验证码框中。</div>
+  		<input type="hidden" name="name" value="${name}"/>
+  		<input type="hidden" name="mobile" value="${mobile}"/>
+  		 <input name="button" type="button" class="line03" value="下一步" width="35"  height="35" onclick="submit1()" /><br>
+  		<br>
+  	#end
+   <!-- 错误提示信息显示 -->
+    <div id="usercheck" align="center" >&nbsp;
+    	${msg}
+    </div>
+    
+</div>
+</div>
+</form>
