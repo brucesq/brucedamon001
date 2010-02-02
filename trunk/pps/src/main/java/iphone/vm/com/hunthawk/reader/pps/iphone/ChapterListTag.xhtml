@@ -1,0 +1,12 @@
+#foreach(${obj} in ${objs})
+<div class="col_1">
+     <div class="col_1_content">
+      <ul class="col_1_ul">
+      <li  class="col_1_li_text_1">
+           <a href="$!{obj.get("url")}"><span class="font_color_2 font_size_2_bold ">$!{obj.get("title")}</span></a>
+       </li>
+       <li  class="col_1_li_op"><a href="$!{obj.get("url")}"><img src="images/wap_tmp_1_btn_5.png" /></a></li>
+       </ul>
+      </div>    
+</div>
+#end

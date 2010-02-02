@@ -1,0 +1,1 @@
+<anchor>${title}<go href="${url}" method="POST" accept-charset="UTF-8" >#if(${isQuickSearch})<postfield name="qkey" value="${qvalue}" />#else<postfield name="key" value="$searchname" /><postfield name="st" value="${searchby}" />#end</go></anchor>

@@ -1,0 +1,14 @@
+#if(${isComics})
+	<img src="${url}" alt="loading..."/>
+#else
+	#if(${currentPage}==1)
+		#foreach(${obj} in ${imgs})
+			<img src="$!{obj.get("url")}" alt="loading..."/>
+			#if(${velocityCount}<${imgs.size()})
+			<br/>
+			#end
+		#end
+		<br/>
+	#end
+	${content}
+#end

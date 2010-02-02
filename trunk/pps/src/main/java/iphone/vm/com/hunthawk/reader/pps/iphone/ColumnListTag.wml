@@ -1,0 +1,9 @@
+#if(${flag}=="resource")
+	#foreach(${obj} in ${objs})
+		<a href="$!{obj.get("url")}">$!{obj.get("linkname")}</a>
+	#end
+#else
+	#foreach(${obj} in ${objs})
+		<a href="$!{obj.get("url")}">$!{obj.get("title")}   $!{obj.get("count")}</a>
+	#end
+#end

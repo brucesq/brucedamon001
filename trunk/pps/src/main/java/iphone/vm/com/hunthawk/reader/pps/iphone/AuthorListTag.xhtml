@@ -1,0 +1,34 @@
+#foreach(${obj} in ${objs})
+#set( $odd = ${velocityCount} % 2 ) 
+#if($odd == 1)
+<div class="col_5">
+<div class="col_5_content">
+<ul>
+<li class="col_5_left">
+<a href="$!{obj.get("url")}">
+<div class="btn_3 font_color_2 font_size_1_bold">
+<div class="col_5_pic"><img src="$!{obj.get("letter")}.png" width="40" height="40" /></div>
+<div class="col_5_text">$!{obj.get("title")}</div>
+</div>
+</a>
+</li>
+#end
+#if($odd == 0)
+<li class="col_5_right">
+<a href="$!{obj.get("url")}">
+<div class="btn_3 font_color_2 font_size_1_bold">
+<div class="col_5_pic"><img src="$!{obj.get("letter")}.png" width="40" height="40" /></div>
+<div class="col_5_text">$!{obj.get("title")}</div>
+</div>
+</a>
+</li>
+</ul>
+</div>
+</div>
+#end
+
+#if(${velocityCount}==${objs.size()} && $odd == 1)
+</div>
+#end
+
+#end
