@@ -480,4 +480,9 @@
 		<classname>com.hunthawk.reader.pps.column.ColumnNav</classname>
 		<desc>栏目导航</desc>
 	</tag>
+	<tag>
+		<name>resource_desc</name>
+		<classname>com.hunthawk.reader.pps.resource.ResourceDescTag</classname>
+		<desc>资源描述</desc>
+	</tag>
 </configs>

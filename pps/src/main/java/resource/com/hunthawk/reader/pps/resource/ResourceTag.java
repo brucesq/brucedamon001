@@ -187,6 +187,9 @@ public class ResourceTag extends BaseTag {
 						return resourcePV(request,tagName,resource);
 					}
 					/**end*/
+					else if(property.equalsIgnoreCase("playtime")){//时长
+						return resourcePlayTime(request,tagName,resource);
+					}
 				} else {
 					TagLogger.debug("ResourceTag", "ID为" + resID + "的资源不存在!",
 							request.getQueryString(), null);
@@ -613,6 +616,20 @@ public class ResourceTag extends BaseTag {
 		if (this.currentPage <= this.number || this.number == 0) {
 			String title = getParameter("title", "")
 					+ (resource.getCArea() == null ? "" : resource.getCArea());
+			Map resultMap = new HashMap();
+			resultMap.put(TagUtil.makeTag(tagName), title + split);
+			return resultMap;
+		} else {
+			return new HashMap();
+		}
+	}
+	
+	private Map resourcePlayTime(HttpServletRequest request, String tagName,
+			ResourceAll resource) {
+		Video video = (Video)resource;
+		if (this.currentPage <= this.number || this.number == 0) {
+			String title = getParameter("title", "")
+					+ video.getFormatPlayTime();
 			Map resultMap = new HashMap();
 			resultMap.put(TagUtil.makeTag(tagName), title + split);
 			return resultMap;
