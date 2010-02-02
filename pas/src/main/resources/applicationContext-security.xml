@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	   default-autowire="byName" default-lazy-init="false">
+	   
+	 <bean id="securityComponent" class="com.hunthawk.framework.security.SecurityComponentImpl"></bean>
+	 <bean id="identity" class="com.hunthawk.framework.security.RulebasedIdentity" init-method="init">
+	 	<property name="ruleFiles" value="classpath:/security/security.drl"/>
+	 </bean>
+	 <bean id="policyComponent" class="com.hunthawk.framework.enhance.PolicyComponentImpl"></bean>
+	 <bean id="enhanceInterceptor" class="com.hunthawk.framework.enhance.EnhanceMethodInterceptor"></bean> 
+	<!--   <bean id="eventComponent" class="com.hunthawk.framework.event.EventComponentImpl" init-method="init"></bean>-->
+	<bean id="userableComponent" class="com.hunthawk.reader.enhance.UserableEnhance" init-method="init"></bean>
+	<bean id="filterComponent" class="com.hunthawk.reader.enhance.FilterEnhance" init-method="init"></bean>
+	
+	<bean id="memcachedComponent" class="com.hunthawk.reader.enhance.MemcachedEnhance" init-method="init"></bean>
+	
+	<bean id="logComponent" class="com.hunthawk.reader.enhance.LogableEnhance" init-method="init"></bean>
+	
+	
+	 <bean id="contextConfig" class="com.hunthawk.framework.security.simple.ContextConfig" >
+	 	<property name="visitName">
+	 	<value>state:reader:visit</value>
+	 	</property>
+	 </bean>
+</beans>
