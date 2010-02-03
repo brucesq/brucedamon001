@@ -1342,6 +1342,9 @@ public class UploadServiceImpl implements UploadService {
 
 		// }
 		int index = bLon.indexOf("¡ì");
+		if(index < 0){
+			result[0] = bLon;
+		}
 		while (index >= 0) {
 
 			try {
