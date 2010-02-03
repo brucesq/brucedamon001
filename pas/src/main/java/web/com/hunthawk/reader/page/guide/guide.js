@@ -1,4 +1,4 @@
-var wml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\" \"http://www.wapforum.org/DTD/wml_1.1.xml\">\r\n<wml>\r\n<card title=\"$#title#\">\r\n<p>\r\n\r\n<a href=\"http://wap.uni-wise.com/\">联通首页#</a>\r\n</p>\r\n</card>\r\n</wml>";
+var wml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!DOCTYPE wml PUBLIC \"-//WAPFORUM//DTD WML 1.1//EN\" \"http://www.wapforum.org/DTD/wml_1.1.xml\">\r\n<wml>\r\n<card title=\"$#title#\">\r\n<p>\r\n\r\n</p>\r\n</card>\r\n</wml>";
 var wml_wap2x = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n\t\<title>$#title#<\/title>\r\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" \/>\r\n<\/head>\r\n<body>\r\n\r\n\r\n\r\n<\/body>\r\n<\/html>";
 var wml_mobile = "<aspire>\r\n\r\n\r\n\r\n</aspire>";
 var wml_jsClient = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<xpc xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"\">\r\n\r\n\r\n\r\n<\/xpc>";
