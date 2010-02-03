@@ -26,6 +26,7 @@ import com.hunthawk.reader.domain.statistics.LogData;
 import com.hunthawk.reader.domain.statistics.URLConfig;
 import com.hunthawk.reader.domain.statistics.URLConfigGroup;
 import com.hunthawk.reader.domain.statistics.URLDataReport;
+import com.hunthawk.reader.domain.statistics.URLHourDataReport;
 import com.hunthawk.reader.enhance.util.ToolDateUtil;
 import com.hunthawk.reader.service.system.SystemService;
 
@@ -74,23 +75,24 @@ public class StatisticsAccessLogJob {
 			processFile(localRoot + filename);
 		}
 
-//		stat(ToolDateUtil.dateToString(date, "yyyy-MM-dd"));
+		// stat(ToolDateUtil.dateToString(date, "yyyy-MM-dd"));
 		statUrl(date);
+		statHourUrl(date);
 		long endTime = System.currentTimeMillis();
 		System.out.println("End Process Access_Log Spend="
 				+ (endTime - startTime) + "ms");
 	}
 
 	public static void main(String[] args) {
-//		String s = "asasd|+|asd|+|asd";
-//		;
-//		String[] d = s.split("\\|\\+\\|");
-//		for (String c : d) {
-//			System.out.println(c);
-//		}
+		// String s = "asasd|+|asd|+|asd";
+		// ;
+		// String[] d = s.split("\\|\\+\\|");
+		// for (String c : d) {
+		// System.out.println(c);
+		// }
 		String url = "asdas*pd=12&*s";
 		System.out.println(url.replaceAll("\\*", "%"));
-		
+
 	}
 
 	private void processFile(String filename) {
@@ -101,7 +103,7 @@ public class StatisticsAccessLogJob {
 			fr = new InputStreamReader(new FileInputStream(filename));
 			br = new BufferedReader(fr);
 			String line = "";
-			int i=0;
+			int i = 0;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split("\\|\\+\\|");
 				if (values.length < 9) {
@@ -125,7 +127,7 @@ public class StatisticsAccessLogJob {
 				}
 			}
 			closeParser();
-			System.out.println("Insert "+i+" records!");
+			System.out.println("Insert " + i + " records!");
 			FileUtils.forceDeleteOnExit((new File(filename)));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,25 +143,123 @@ public class StatisticsAccessLogJob {
 		}
 
 	}
-	
-	private void statUrl(Date date){
+
+	private void statHourUrl(Date date) {
+		String strDate = ToolDateUtil.dateToString(date, "yyyy-MM-dd");
+		String deleteHql = "delete from URLHourDataReport where dataTime like '"
+				+ strDate + "%'";
+		int count = controller.executeUpdate(deleteHql);
+		System.out.println("UrlHourData Delete count=" + count);
+
+		List<HibernateExpression> expressions = new ArrayList<HibernateExpression>();
+		expressions
+				.add(new CompareExpression("startDate", date, CompareType.Le));
+		expressions.add(new CompareExpression("endDate", date, CompareType.Ge));
+		List<URLConfig> configs = controller.findBy(URLConfig.class, 1, 100000,
+				expressions);
+		String statHql = "select  count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '";
+
+		for (int h = 0; h < 24; h++) {
+			String hour = strDate;
+			if (h < 10) {
+				hour += " 0" + h;
+			} else {
+				hour += " " + h;
+			}
+			
+
+			for (URLConfig config : configs) {
+				String hql = statHql + hour + "%' and l.requestUrl like '"
+						+ config.getUrl().replaceAll("\\*", "%") + "'";
+				System.out.println("Config SQL" + hql);
+				List<Object[]> urlStat = controller.findBy(hql);
+				for (Object[] objs : urlStat) {
+					if (((Long) objs[0]).intValue() == 0) {
+						continue;
+					}
+					URLHourDataReport urlData = new URLHourDataReport();
+					urlData.setStatType(1);
+					urlData.setConfigId(config.getId());
+					urlData.setDataTime(hour);
+					urlData.setPageViews(((Long) objs[0]).intValue());
+					urlData.setUserViews(((Long) objs[1]).intValue());
+					urlData.setBytes(((Long) objs[2]).intValue());
+					urlData.setIpViews(((Long) objs[3]).intValue());
+					controller.save(urlData);
+				}
+			}
+		}
+
+		List<URLConfigGroup> groups = controller.getAll(URLConfigGroup.class);
+
+		statHql = "select  count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '";
+
+		for (int h = 0; h < 24; h++) {
+			String hour = strDate;
+			if (h < 10) {
+				hour += " 0" + h;
+			} else {
+				hour += " " + h;
+			}
+		
+
+			for (URLConfigGroup group : groups) {
+				String hql = statHql+hour + "%' and ( ";
+				int i = 0;
+				if (group.getConfigs().size() == 0) {
+					continue;
+				}
+				for (URLConfig config : group.getConfigs()) {
+					i++;
+					hql += " l.requestUrl like '"
+							+ config.getUrl().replaceAll("\\*", "%") + "'";
+					if (i < group.getConfigs().size()) {
+						hql += " or ";
+					}
+				}
+				hql += " ) ";
+				System.out.println("GROUP SQL" + hql);
+				List<Object[]> urlStat = controller.findBy(hql);
+				for (Object[] objs : urlStat) {
+					if (((Long) objs[0]).intValue() == 0) {
+						continue;
+					}
+					URLHourDataReport urlData = new URLHourDataReport();
+					urlData.setStatType(2);
+					urlData.setConfigId(group.getId());
+					urlData.setDataTime(hour);
+					urlData.setPageViews(((Long) objs[0]).intValue());
+					urlData.setUserViews(((Long) objs[1]).intValue());
+					urlData.setBytes(((Long) objs[2]).intValue());
+					urlData.setIpViews(((Long) objs[3]).intValue());
+					controller.save(urlData);
+				}
+			}
+		}
+	}
+
+	private void statUrl(Date date) {
 		String strDate = ToolDateUtil.dateToString(date, "yyyy-MM-dd");
 		String deleteHql = "delete from URLDataReport where dataTime like '"
-			+ strDate + "%'";
-		int count =	 controller.executeUpdate(deleteHql);
+				+ strDate + "%'";
+		int count = controller.executeUpdate(deleteHql);
 		System.out.println("UrlData Delete count=" + count);
-		
+
 		List<HibernateExpression> expressions = new ArrayList<HibernateExpression>();
-		expressions.add(new CompareExpression("startDate",date,CompareType.Le));
-		expressions.add(new CompareExpression("endDate",date,CompareType.Ge));
-		List<URLConfig> configs = controller.findBy(URLConfig.class, 1, 100000, expressions);
-		String statHql = "select  count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"+ strDate + "%' and l.requestUrl like ";
-		
-		for(URLConfig config : configs){
-			String hql = statHql+"'"+config.getUrl().replaceAll("\\*", "%")+"'";
-			System.out.println("Config SQL"+hql);
+		expressions
+				.add(new CompareExpression("startDate", date, CompareType.Le));
+		expressions.add(new CompareExpression("endDate", date, CompareType.Ge));
+		List<URLConfig> configs = controller.findBy(URLConfig.class, 1, 100000,
+				expressions);
+		String statHql = "select  count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"
+				+ strDate + "%' and l.requestUrl like ";
+
+		for (URLConfig config : configs) {
+			String hql = statHql + "'" + config.getUrl().replaceAll("\\*", "%")
+					+ "'";
+			System.out.println("Config SQL" + hql);
 			List<Object[]> urlStat = controller.findBy(hql);
-			for(Object[] objs : urlStat){
+			for (Object[] objs : urlStat) {
 				if (((Long) objs[0]).intValue() == 0) {
 					continue;
 				}
@@ -167,35 +267,37 @@ public class StatisticsAccessLogJob {
 				urlData.setStatType(1);
 				urlData.setConfigId(config.getId());
 				urlData.setDataTime(strDate);
-				urlData.setPageViews(((Long)objs[0]).intValue());
-				urlData.setUserViews(((Long)objs[1]).intValue());
-				urlData.setBytes(((Long)objs[2]).intValue());
-				urlData.setIpViews(((Long)objs[3]).intValue());
+				urlData.setPageViews(((Long) objs[0]).intValue());
+				urlData.setUserViews(((Long) objs[1]).intValue());
+				urlData.setBytes(((Long) objs[2]).intValue());
+				urlData.setIpViews(((Long) objs[3]).intValue());
 				controller.save(urlData);
 			}
 		}
-		
+
 		List<URLConfigGroup> groups = controller.getAll(URLConfigGroup.class);
-		
-		statHql = "select  count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"+ strDate + "%' and ( ";
-		
-		for(URLConfigGroup group : groups){
+
+		statHql = "select  count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"
+				+ strDate + "%' and ( ";
+
+		for (URLConfigGroup group : groups) {
 			String hql = statHql;
-			int i=0;
-			if(group.getConfigs().size() == 0){
+			int i = 0;
+			if (group.getConfigs().size() == 0) {
 				continue;
 			}
-			for(URLConfig config : group.getConfigs()){
+			for (URLConfig config : group.getConfigs()) {
 				i++;
-				hql += " l.requestUrl like '"+config.getUrl().replaceAll("\\*", "%")+"'";
-				if(i < group.getConfigs().size()){
+				hql += " l.requestUrl like '"
+						+ config.getUrl().replaceAll("\\*", "%") + "'";
+				if (i < group.getConfigs().size()) {
 					hql += " or ";
 				}
 			}
 			hql += " ) ";
-			System.out.println("GROUP SQL"+hql);
+			System.out.println("GROUP SQL" + hql);
 			List<Object[]> urlStat = controller.findBy(hql);
-			for(Object[] objs : urlStat){
+			for (Object[] objs : urlStat) {
 				if (((Long) objs[0]).intValue() == 0) {
 					continue;
 				}
@@ -203,23 +305,24 @@ public class StatisticsAccessLogJob {
 				urlData.setStatType(2);
 				urlData.setConfigId(group.getId());
 				urlData.setDataTime(strDate);
-				urlData.setPageViews(((Long)objs[0]).intValue());
-				urlData.setUserViews(((Long)objs[1]).intValue());
-				urlData.setBytes(((Long)objs[2]).intValue());
-				urlData.setIpViews(((Long)objs[3]).intValue());
+				urlData.setPageViews(((Long) objs[0]).intValue());
+				urlData.setUserViews(((Long) objs[1]).intValue());
+				urlData.setBytes(((Long) objs[2]).intValue());
+				urlData.setIpViews(((Long) objs[3]).intValue());
 				controller.save(urlData);
 			}
 		}
-		
+
 	}
 
 	private void stat(String date) {
 		// 清空原有数据
-//		String deleteSql = "delete from reader_statistics_data_report where date_time like '"
-//				+ date + "'";
+		// String deleteSql = "delete from reader_statistics_data_report where
+		// date_time like '"
+		// + date + "'";
 		String deleteHql = "delete from DataReport where dataTime like '"
 				+ date + "%'";
-		int count =	 controller.executeUpdate(deleteHql);
+		int count = controller.executeUpdate(deleteHql);
 		// controller.getHibernateTemplate().getSessionFactory()
 		// .openSession().createSQLQuery(deleteSql).executeUpdate();
 		System.out.println("Delete count=" + count);
@@ -243,7 +346,8 @@ public class StatisticsAccessLogJob {
 		}
 		// 页面组
 		statHql = "select l.paraPd,l.paraGd, count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"
-				+ date + "%' and l.paraPd is not null and l.paraGd is not null group by l.paraPd,l.paraGd";
+				+ date
+				+ "%' and l.paraPd is not null and l.paraGd is not null group by l.paraPd,l.paraGd";
 		productStat = controller.findBy(statHql);
 		for (Object[] objs : productStat) {
 			DataReport report = new DataReport();
@@ -261,7 +365,8 @@ public class StatisticsAccessLogJob {
 
 		// 栏目
 		statHql = "select l.paraPd,l.paraGd,l.paraCd, count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"
-				+ date + "%' and l.paraPd is not null and l.paraGd is not null and l.paraCd is not null group by l.paraPd,l.paraGd,l.paraCd";
+				+ date
+				+ "%' and l.paraPd is not null and l.paraGd is not null and l.paraCd is not null group by l.paraPd,l.paraGd,l.paraCd";
 		productStat = controller.findBy(statHql);
 		for (Object[] objs : productStat) {
 			DataReport report = new DataReport();
@@ -278,9 +383,9 @@ public class StatisticsAccessLogJob {
 			controller.save(report);
 		}
 	}
-	
-	private void closeParser(){
-		try{
+
+	private void closeParser() {
+		try {
 			Session session = controller.getHibernateTemplate()
 					.getSessionFactory().openSession();
 			Transaction tx = session.beginTransaction();
@@ -290,7 +395,7 @@ public class StatisticsAccessLogJob {
 			tx.commit();
 			session.close();
 			objs.clear();
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
