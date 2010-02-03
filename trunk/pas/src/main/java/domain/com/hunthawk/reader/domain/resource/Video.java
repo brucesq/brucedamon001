@@ -50,9 +50,9 @@ public class Video extends ResourceAll{
 		int minute = (playTime%3600)/60;
 		int second = ((playTime%3600)%60)/60;
 		String s = "";
-		if(hour>0){
+//		if(hour>0){
 			s=StringUtils.leftPad(""+hour,2,'0')+":";
-		}
+//		}
 		return s+StringUtils.leftPad(""+minute,2,'0')+":"+StringUtils.leftPad(""+second,2,'0');
 		
 	}
