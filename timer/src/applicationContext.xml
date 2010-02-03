@@ -78,6 +78,7 @@
 	       		   <value>com.hunthawk.reader.domain.statistics.URLConfigGroup</value>
 	       		 <value>com.hunthawk.reader.domain.statistics.URLConfig</value>
 	       		  <value>com.hunthawk.reader.domain.statistics.URLDataReport</value>
+	       		   <value>com.hunthawk.reader.domain.statistics.URLHourDataReport</value>
 
 				<value>
 					com.hunthawk.reader.domain.bussiness.TagTemplate
