@@ -271,6 +271,7 @@
 	       		  <value>com.hunthawk.reader.domain.statistics.URLConfigGroup</value>
 	       		 <value>com.hunthawk.reader.domain.statistics.URLConfig</value>
 	       		  <value>com.hunthawk.reader.domain.statistics.URLDataReport</value>
+	       		   <value>com.hunthawk.reader.domain.statistics.URLHourDataReport</value>
 	       		 
 	       		 <value>com.hunthawk.reader.domain.bussiness.TagTemplate</value>
 	       		 <value>com.hunthawk.reader.domain.custom.Favorites</value>
@@ -306,7 +307,7 @@
 					org.hibernate.cache.EhCacheProvider
 				</prop>
 				<prop key="hibernate.cache.use_query_cache">true</prop>
-		   	 <!-- 	 <prop key="hibernate.hbm2ddl.auto">update</prop> -->  
+		   	  <!-- 	 <prop key="hibernate.hbm2ddl.auto">update</prop>  -->  
 			</props>
 		</property>
 		<property name="entityCacheStrategies">
