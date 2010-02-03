@@ -85,6 +85,7 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 		String paras = (String) parameters[0];
 		setTagName((String) parameters[1]);
 		setParameter(paras.split(";"));
+//		System.out.println("active:"+getTagName());
 	}
 	
 	public boolean isShowColumn(){
@@ -114,7 +115,7 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 		}
 	}
 	public void onSubmit(IRequestCycle cycle) {
-			
+//		System.out.println("onSubmit:"+getTagName());
 		StringBuilder sb = new StringBuilder();
 		
 			sb.append("$#"+getTagName()+".");
