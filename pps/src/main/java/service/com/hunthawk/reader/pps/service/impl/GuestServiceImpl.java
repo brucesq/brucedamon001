@@ -200,7 +200,7 @@ public class GuestServiceImpl implements GuestService {
 			mobile = count.toString();
 			UserInfo info = new UserInfo();
 			info.setMobile(mobile);
-			info.setNickname("游客"+mobile.substring(7, 11));
+			info.setNickname("游客"+mobile.substring(mobile.length()-4));
 			info.setSex(2);
 			info.setRegistered(0);
 			controller.save(info);

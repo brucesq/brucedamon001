@@ -84,7 +84,7 @@ public class AutoJumpTag extends BaseTag {
 			sb.append(ParameterConstants.PORTAL_PATH);
 			sb.append("?");
 			sb.append(URLUtil.removeParameter(request.getQueryString(),
-					ParameterConstants.TEMPLATE_ID,ParameterConstants.COMMON_PAGE,ParameterConstants.AUTHOR_ID,ParameterConstants.VOTE_CONTENT_ID,ParameterConstants.VOTE_ITEM_ID,ParameterConstants.VOTE_VOTE_TYPE));
+					ParameterConstants.TEMPLATE_ID,ParameterConstants.COMMON_PAGE,ParameterConstants.AUTHOR_ID,ParameterConstants.VOTE_CONTENT_ID,ParameterConstants.VOTE_ITEM_ID,ParameterConstants.VOTE_VOTE_TYPE,ParameterConstants.VERSION_TYPE));
 			return sb.toString();
 		}
 		String url = "";
