@@ -819,8 +819,8 @@ public abstract class ShowColumnPage extends RichSearchPage {
 		String portalUrl = getSystemService().getVariables("portal_url")
 				.getValue()
 				+ "pg=c&gd="
-				+ column.getPagegroup().getId() + "&ad=001&cd="
-				+ column.getId() + "&preview=1";
+				+ column.getPagegroup().getId() + "&cd="
+				+ column.getId() ;//+ "&preview=1";
 		String content = PageUtil.getURLStream(portalUrl,getServletRequest().getContextPath());
 		logger.info("ÄÚÈÝ:" + content);
 		Preview pre = getPreviewPage();
@@ -837,8 +837,8 @@ public abstract class ShowColumnPage extends RichSearchPage {
 				.getValue();
 		String url = preUrl
 				+ URLEncoder.encode(portalUrl + "pg=c&gd="
-						+ column.getPagegroup().getId() + "&ad=001&cd="
-						+ column.getId() + "&preview=1");
+						+ column.getPagegroup().getId() + "&cd="
+						+ column.getId() );
 		return "javascript:window.open('" + url
 				+ "','','scrollbars=no,width=315,height=450')";
 	}
@@ -847,7 +847,7 @@ public abstract class ShowColumnPage extends RichSearchPage {
 		String url = getSystemService().getVariables("portal_url").getValue();
 		Columns column = (Columns) getCurrentObject();
 		return "copy('" + url + "pg=c&gd=" + column.getPagegroup().getId()
-				+ "&ad=001&cd=" + column.getId() + "&preview=1" + "');";
+				+ "&cd=" + column.getId() + "" + "');";
 	}
 
 	@InjectPage("bussiness/BatchChangeTemplatePage")
