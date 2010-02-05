@@ -48,7 +48,7 @@
      
   	<servlet-mapping>
 	  	<servlet-name>reader</servlet-name>
-	  	<url-pattern>*.do</url-pattern>
+	  	<url-pattern>*.py</url-pattern>
   	</servlet-mapping> 
   	
   	<servlet-mapping>
