@@ -460,7 +460,7 @@ public abstract class ShowPageGroupPage extends RichSearchPage {
 	public IPage onView(PageGroup pg) {
 		String portalUrl = getSystemService().getVariables("portal_url")
 				.getValue()
-				+ "pg=p&gd="+pg.getId()+"&ad=001&preview=1";
+				+ "pg=p&gd="+pg.getId();//+"&ad=001&preview=1";
 		String content = PageUtil.getURLStream(portalUrl,getServletRequest().getContextPath());
 		logger.info("ÄÚÈÝ:" + content);
 		Preview pre = getPreviewPage();
@@ -473,7 +473,7 @@ public abstract class ShowPageGroupPage extends RichSearchPage {
 	public String getUrlAddress() {
 		String url = getSystemService().getVariables("portal_url").getValue();
 		PageGroup pg = (PageGroup)getCurrentObject();
-		return "copy('" + url + "pg=p&gd="+pg.getId()+"&ad=001&preview=1"
+		return "copy('" + url + "pg=p&gd="+pg.getId()//+"&ad=001&preview=1"
 				+ "');";
 	}
 

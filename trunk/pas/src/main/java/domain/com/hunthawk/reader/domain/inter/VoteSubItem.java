@@ -6,7 +6,6 @@ package com.hunthawk.reader.domain.inter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -56,9 +55,9 @@ public class VoteSubItem extends PersistentObject {
 	private String customId;
 
 	@Id
-//	@GeneratedValue(generator = "system-assigned")
-//	@GenericGenerator(name = "system-assigned", strategy = "assigned")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(generator = "system-assigned")
+	@GenericGenerator(name = "system-assigned", strategy = "assigned")
+//	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	public String getId() {
 		return id;
