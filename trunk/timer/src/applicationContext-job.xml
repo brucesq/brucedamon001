@@ -15,7 +15,7 @@
 				<ref bean="statDataRankDateTrigger" />
 				<ref bean="statisticsUAJobTrigger" />
 				<ref bean="statisticsJobTrigger" />
-				<ref bean="voteResultJobTrigger" />
+				<!-- <ref bean="voteResultJobTrigger" /> -->
 				<ref bean="statisticsAccessLogJobTrigger" />
 				<ref bean="statisticsMonthLogJobTrigger" />
 			</list>
@@ -149,6 +149,7 @@
 	
 	
 	<!-- 统计投票任务 start -->
+	<!-- 
 	<bean id="voteResultJobObj" class="com.hunthawk.reader.timer.job.VoteResultJob">
 		<property name="hibernateGenericController">
 			<ref bean="hibernateGenericController" />
@@ -171,7 +172,7 @@
 		<property name="cronExpression" value="0 10 * * * ?" />
 
 	</bean>
-	
+	 -->
 	
 	<!-- 统计投票任务 end -->
 	

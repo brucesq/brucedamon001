@@ -80,10 +80,10 @@ public class StatisticsJob {
 		}
 		processResult(map, date);
 		// 启动投票定时任务 
-//		VoteResultJob vote = new VoteResultJob();
-//		vote.setHibernateGenericController(controller);
-//		vote.setSystemService(systemService);
-//		vote.doJob();
+		VoteResultJob vote = new VoteResultJob();
+		vote.setHibernateGenericController(controller);
+		vote.setSystemService(systemService);
+		vote.doJob();
 	}
 
 	

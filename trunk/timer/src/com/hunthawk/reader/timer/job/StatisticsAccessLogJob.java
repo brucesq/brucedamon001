@@ -29,6 +29,8 @@ import com.hunthawk.reader.domain.statistics.URLDataReport;
 import com.hunthawk.reader.domain.statistics.URLHourDataReport;
 import com.hunthawk.reader.enhance.util.ToolDateUtil;
 import com.hunthawk.reader.service.system.SystemService;
+import com.hunthawk.reader.timer.dynamicds.CustomerContextHolder;
+import com.hunthawk.reader.timer.dynamicds.DataSourceMap;
 
 /**
  * @author BruceSun
@@ -166,13 +168,18 @@ public class StatisticsAccessLogJob {
 			} else {
 				hour += " " + h;
 			}
-			
 
 			for (URLConfig config : configs) {
 				String hql = statHql + hour + "%' and l.requestUrl like '"
 						+ config.getUrl().replaceAll("\\*", "%") + "'";
 				System.out.println("Config SQL" + hql);
+				// TODO:
+				CustomerContextHolder
+						.setCustomerType(DataSourceMap.DATASOURCE2);
 				List<Object[]> urlStat = controller.findBy(hql);
+				CustomerContextHolder
+						.setCustomerType(DataSourceMap.DATASOURCE1);
+
 				for (Object[] objs : urlStat) {
 					if (((Long) objs[0]).intValue() == 0) {
 						continue;
@@ -201,10 +208,9 @@ public class StatisticsAccessLogJob {
 			} else {
 				hour += " " + h;
 			}
-		
 
 			for (URLConfigGroup group : groups) {
-				String hql = statHql+hour + "%' and ( ";
+				String hql = statHql + hour + "%' and ( ";
 				int i = 0;
 				if (group.getConfigs().size() == 0) {
 					continue;
@@ -219,7 +225,13 @@ public class StatisticsAccessLogJob {
 				}
 				hql += " ) ";
 				System.out.println("GROUP SQL" + hql);
+				// TODO:
+				CustomerContextHolder
+						.setCustomerType(DataSourceMap.DATASOURCE2);
 				List<Object[]> urlStat = controller.findBy(hql);
+				CustomerContextHolder
+						.setCustomerType(DataSourceMap.DATASOURCE1);
+
 				for (Object[] objs : urlStat) {
 					if (((Long) objs[0]).intValue() == 0) {
 						continue;
@@ -258,7 +270,12 @@ public class StatisticsAccessLogJob {
 			String hql = statHql + "'" + config.getUrl().replaceAll("\\*", "%")
 					+ "'";
 			System.out.println("Config SQL" + hql);
+
+			// TODO:
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 			List<Object[]> urlStat = controller.findBy(hql);
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
+
 			for (Object[] objs : urlStat) {
 				if (((Long) objs[0]).intValue() == 0) {
 					continue;
@@ -296,7 +313,11 @@ public class StatisticsAccessLogJob {
 			}
 			hql += " ) ";
 			System.out.println("GROUP SQL" + hql);
+			// TODO:
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 			List<Object[]> urlStat = controller.findBy(hql);
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
+
 			for (Object[] objs : urlStat) {
 				if (((Long) objs[0]).intValue() == 0) {
 					continue;
@@ -328,7 +349,12 @@ public class StatisticsAccessLogJob {
 		System.out.println("Delete count=" + count);
 		String statHql = "select l.paraPd, count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"
 				+ date + "%' and l.paraPd is not null group by l.paraPd";
+
+		// TODO:
+		CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 		List<Object[]> productStat = controller.findBy(statHql);
+		CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
+
 		for (Object[] objs : productStat) {
 			if (((Long) objs[0]).intValue() == 0) {
 				continue;
@@ -348,7 +374,12 @@ public class StatisticsAccessLogJob {
 		statHql = "select l.paraPd,l.paraGd, count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"
 				+ date
 				+ "%' and l.paraPd is not null and l.paraGd is not null group by l.paraPd,l.paraGd";
+
+		// TODO:
+		CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 		productStat = controller.findBy(statHql);
+		CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
+
 		for (Object[] objs : productStat) {
 			DataReport report = new DataReport();
 			report.setParaPd((String) objs[0]);
@@ -367,7 +398,10 @@ public class StatisticsAccessLogJob {
 		statHql = "select l.paraPd,l.paraGd,l.paraCd, count(l.id),count(distinct l.msisdn),sum(l.bytes),count(distinct l.ip) from LogData l where l.requestTime like '"
 				+ date
 				+ "%' and l.paraPd is not null and l.paraGd is not null and l.paraCd is not null group by l.paraPd,l.paraGd,l.paraCd";
+		// TODO:
+		CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 		productStat = controller.findBy(statHql);
+		CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
 		for (Object[] objs : productStat) {
 			DataReport report = new DataReport();
 			report.setParaPd((String) objs[0]);
@@ -386,6 +420,8 @@ public class StatisticsAccessLogJob {
 
 	private void closeParser() {
 		try {
+			// TODO:
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 			Session session = controller.getHibernateTemplate()
 					.getSessionFactory().openSession();
 			Transaction tx = session.beginTransaction();
@@ -395,6 +431,7 @@ public class StatisticsAccessLogJob {
 			tx.commit();
 			session.close();
 			objs.clear();
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -451,6 +488,9 @@ public class StatisticsAccessLogJob {
 			}
 			objs.add(data);
 			if (objs.size() > 1000) {
+				// TODO:
+				CustomerContextHolder
+						.setCustomerType(DataSourceMap.DATASOURCE2);
 				Session session = controller.getHibernateTemplate()
 						.getSessionFactory().openSession();
 				Transaction tx = session.beginTransaction();
@@ -460,6 +500,8 @@ public class StatisticsAccessLogJob {
 				tx.commit();
 				session.close();
 				objs.clear();
+				CustomerContextHolder
+						.setCustomerType(DataSourceMap.DATASOURCE1);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
