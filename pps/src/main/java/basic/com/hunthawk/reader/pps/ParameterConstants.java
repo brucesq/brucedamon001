@@ -10,7 +10,7 @@ package com.hunthawk.reader.pps;
 public class ParameterConstants {
 
 	//
-	public static final String PORTAL_PATH = "/s.do";
+	public static final String PORTAL_PATH = "/s.py";
 	// 页面级别 首页 列表页 资源页 详情页
 	public static final String PAGE = "pg";
 

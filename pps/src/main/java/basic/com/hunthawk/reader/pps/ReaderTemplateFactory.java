@@ -295,25 +295,27 @@ public class ReaderTemplateFactory extends TemplateFactory {
 	 * @return
 	 */
 	private boolean isProductShowable(HttpServletRequest request) {
-		Product product = RequestUtil.getProduct();
-		if (product == null) {
-			String productId = ParamUtil.getParameter(request,
-					ParameterConstants.PRODUCT_ID);
-			if (StringUtils.isEmpty(productId)) {// 预览使用
-				return true;
-			} else {
-				return false;
-			}
-		}
-		if (product.getStatus().equals(Constants.PRODUCTSTATUS_PUBLISH)) {
-			return true;
-		} else if (product.getStatus().equals(Constants.PRODUCTSTATUS_OFFLINE)) {
-			return false;
-		} else if (RequestUtil.getPersonInfo().size() > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		//TODO:
+		return true;
+//		Product product = RequestUtil.getProduct();
+//		if (product == null) {
+//			String productId = ParamUtil.getParameter(request,
+//					ParameterConstants.PRODUCT_ID);
+//			if (StringUtils.isEmpty(productId)) {// 预览使用
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//		if (product.getStatus().equals(Constants.PRODUCTSTATUS_PUBLISH)) {
+//			return true;
+//		} else if (product.getStatus().equals(Constants.PRODUCTSTATUS_OFFLINE)) {
+//			return false;
+//		} else if (RequestUtil.getPersonInfo().size() > 0) {
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 
 	/**

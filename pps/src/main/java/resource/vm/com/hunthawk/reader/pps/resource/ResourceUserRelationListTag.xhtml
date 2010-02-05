@@ -1,6 +1,4 @@
 #foreach(${obj} in ${objs})
 <a href="$!{obj.get("url")}">$!{obj.get("title")}</a>
-#if(${velocityCount}<${objs.size()})
 <br/>
-#end
 #end
