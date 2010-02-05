@@ -18,12 +18,11 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 
 import com.hunthawk.framework.HibernateGenericController;
 import com.hunthawk.reader.domain.inter.VoteSubItem;
-import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.domain.vote.VoteResult;
 import com.hunthawk.reader.enhance.util.ToolDateUtil;
 import com.hunthawk.reader.service.system.SystemService;
 
-/***
+/*******************************************************************************
  * 定时统计投票任务
  * 
  * @author penglei
@@ -45,9 +44,9 @@ public class VoteResultJob {
 
 	public void doJob() {
 		Date date = new Date();
-		date = DateUtils.addHours(date, -1);
-		String strDate = ToolDateUtil.dateToString(date, "yyyyMMdd-HH");
-		date = ToolDateUtil.stringToDate(strDate, "yyyyMMdd-HH");
+		date = DateUtils.addDays(date, -1);
+		String strDate = ToolDateUtil.dateToString(date, "yyyyMMdd");
+		date = ToolDateUtil.stringToDate(strDate, "yyyyMMdd");
 		String[] ips = systemService.getVariables("ppsips").getValue().split(
 				" ");
 		String module = systemService.getVariables("rsync_statis").getValue();
@@ -80,13 +79,13 @@ public class VoteResultJob {
 			String line = "";
 			int count = 0;
 			while ((line = br.readLine()) != null) {
-//				System.out.println(line+":"+count);
+				// System.out.println(line+":"+count);
 				++count;
 				String[] fileds = line.split("###");
 
 				if (fileds.length == 4) {
 					Map<String, String> record = new HashMap<String, String>();
-//					System.out.println("put:"+count);
+					// System.out.println("put:"+count);
 					record.put("type", fileds[0]);
 					record.put("content", fileds[1]);
 					record.put("mobile", fileds[2]);
@@ -118,15 +117,16 @@ public class VoteResultJob {
 		System.out.println("voteResult Record Size:" + map.size());
 		for (Map.Entry<String, Map<String, String>> entry : map.entrySet()) {
 			Map<String, String> record = entry.getValue();
-			
+
 			try {
 				Integer type = Integer.parseInt(record.get("type"));
 				VoteResult result = new VoteResult();
-				if(type.intValue() !=9){
+				if (type.intValue() != 9) {
 					if (type.intValue() == VoteSubItem.TYPE_PRODUCT) {
 						result.setProductId(record.get("content"));
 					} else if (type.intValue() == VoteSubItem.TYPE_COLUMN) {
-						result.setColumnId(Integer.parseInt(record.get("content")));
+						result.setColumnId(Integer.parseInt(record
+								.get("content")));
 					} else if (type.intValue() == VoteSubItem.TYPE_CONTENT) {
 						result.setContentId(record.get("content"));
 					} else if (type.intValue() == VoteSubItem.TYPE_CUSTOM) {
@@ -146,7 +146,6 @@ public class VoteResultJob {
 						tx = session.beginTransaction();
 					}
 				}
-				
 
 			} catch (Exception e) {
 				tx.rollback();

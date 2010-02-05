@@ -17,6 +17,8 @@ import com.hunthawk.reader.domain.statistics.URLConfig;
 import com.hunthawk.reader.domain.statistics.URLConfigGroup;
 import com.hunthawk.reader.domain.statistics.URLDataReport;
 import com.hunthawk.reader.enhance.util.ToolDateUtil;
+import com.hunthawk.reader.timer.dynamicds.CustomerContextHolder;
+import com.hunthawk.reader.timer.dynamicds.DataSourceMap;
 
 /**
  * @author BruceSun
@@ -61,7 +63,10 @@ public class MonthReportJob {
 			String hql = statHql + "'" + config.getUrl().replaceAll("\\*", "%")
 					+ "'";
 			System.out.println("Config SQL" + hql);
+			// TODO:
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 			List<Object[]> urlStat = controller.findBy(hql);
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
 			for (Object[] objs : urlStat) {
 				if (((Long) objs[0]).intValue() == 0) {
 					continue;
@@ -99,7 +104,10 @@ public class MonthReportJob {
 			}
 			hql += " ) ";
 			System.out.println("GROUP SQL" + hql);
+			// TODO:
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE2);
 			List<Object[]> urlStat = controller.findBy(hql);
+			CustomerContextHolder.setCustomerType(DataSourceMap.DATASOURCE1);
 			for (Object[] objs : urlStat) {
 				if (((Long) objs[0]).intValue() == 0) {
 					continue;

@@ -55,6 +55,19 @@ public class StatDataRankDate {
 
 	public void doJob() {
 		long start = System.currentTimeMillis();
+		
+		
+		try { 	//做清零动作 (包含日，周，月)
+			logger.info("StatDataZeroClear DO Clear"+new Date());
+			StatDataZeroClear statDataZeroClear=new StatDataZeroClear();
+			statDataZeroClear.setHibernateGenericController(controller);
+			statDataZeroClear.setMemcached(memcached);
+			statDataZeroClear.setSystemService(systemService);
+			statDataZeroClear.doJob();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		logger.info("StatDataRankDate Start:[日统计]");
 		try{
 			logger.info("StatDataRankDate DO doStatisticsJob"+new Date());
@@ -331,6 +344,8 @@ public class StatDataRankDate {
 		String type = "Favorites";
 		Date endDate = new Date();
 		Date startDate = DateUtils.addDays(endDate, -1);
+		String strDate = ToolDateUtil.dateToString(startDate, "yyyyMMdd");
+		startDate = ToolDateUtil.stringToDate(strDate, "yyyyMMdd");
 		universalMethod(hql, type, new Object[] { startDate, endDate });
 
 	}
@@ -345,6 +360,8 @@ public class StatDataRankDate {
 		String type = "UserBuy";
 		Date endDate = new Date();
 		Date startDate = DateUtils.addDays(endDate, -1);
+		String strDate = ToolDateUtil.dateToString(startDate, "yyyyMMdd");
+		startDate = ToolDateUtil.stringToDate(strDate, "yyyyMMdd");
 		universalMethod(hql, type, new Object[] { startDate, endDate });
 
 	}
@@ -361,6 +378,8 @@ public class StatDataRankDate {
 		Integer msgType = 1; // 对内容留言
 		Date endDate = new Date();
 		Date startDate = DateUtils.addDays(endDate, -1);
+		String strDate = ToolDateUtil.dateToString(startDate, "yyyyMMdd");
+		startDate = ToolDateUtil.stringToDate(strDate, "yyyyMMdd");
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("values", status);
 		params.put("msgType", msgType);
@@ -386,6 +405,8 @@ public class StatDataRankDate {
 		}
 		Date endDate = new Date();
 		Date startDate = DateUtils.addDays(endDate, -1);
+		String strDate = ToolDateUtil.dateToString(startDate, "yyyyMMdd");
+		startDate = ToolDateUtil.stringToDate(strDate, "yyyyMMdd");
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
