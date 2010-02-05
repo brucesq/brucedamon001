@@ -127,6 +127,35 @@ public class ResourceTag extends BaseTag {
 		}
 		// 得到资源ID
 		String resID = URLUtil.getResourceId(request);// request.getParameter(ParameterConstants.RESOURCE_ID);
+	
+		if(resID.startsWith(""+ResourceType.TYPE_VIDEO)){
+			Object isSet = request.getAttribute("SET_HISTORY");
+			if(isSet == null){
+				// 当前的URL
+				StringBuilder currentUrl = new StringBuilder();
+				currentUrl.append(request.getContextPath());
+				currentUrl.append(ParameterConstants.PORTAL_PATH);
+				currentUrl.append("?");
+				currentUrl.append(request.getQueryString());
+				/** 更新用户访问记录地址 */
+				try {
+					String productId = request
+							.getParameter(ParameterConstants.PAGEGROUP_ID);
+					getCustomService(request).updateUserFootprint(
+							RequestUtil.getMobile(), resID, currentUrl.toString(),
+							(productId == null ? "0" : productId));
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					TagLogger.debug(tagName, "更表历史记录失败:" + ex.getMessage(), request
+							.getQueryString(), null);
+				}
+				request.setAttribute("SET_HISTORY", Boolean.TRUE);
+				
+			}
+		}
+		
+		
+		
 		if (StringUtils.isEmpty(property)) {
 			TagLogger.debug(tagName, "property属性为空", request.getQueryString(),
 					null);

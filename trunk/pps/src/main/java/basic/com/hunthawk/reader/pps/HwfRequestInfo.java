@@ -185,16 +185,16 @@ public class HwfRequestInfo {
 		return uainfo;
 	}
 
-	public Product getProduct() {
-		if (product == null) {
-			String productId = ParamUtil.getParameter(request,
-					ParameterConstants.PRODUCT_ID);
-			if (StringUtils.isNotEmpty(productId)) {
-				product = getBussinessService().getProduct(productId);
-			}
-		}
-		return product;
-	}
+//	public Product getProduct() {
+//		if (product == null) {
+//			String productId = ParamUtil.getParameter(request,
+//					ParameterConstants.PRODUCT_ID);
+//			if (StringUtils.isNotEmpty(productId)) {
+//				product = getBussinessService().getProduct(productId);
+//			}
+//		}
+//		return product;
+//	}
 
 	public HttpServletRequest getRequest() {
 		return request;

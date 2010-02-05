@@ -84,7 +84,7 @@ public class FavoriteListTag extends BaseTag {
 
 		// 得到手机号
 		String mobile=RequestUtil.getMobile();
-		String productId=request.getParameter(ParameterConstants.PRODUCT_ID);
+		String productId=request.getParameter(ParameterConstants.PAGEGROUP_ID);
 		int month_fee_bag_id =ParamUtil.getIntParameter(request, ParameterConstants.MONTH_FEE_BAG_ID, -1);
 		int packId=ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_ID, -1);
 		List favorites = getCustomService(request).getUserFavoritesByPage(

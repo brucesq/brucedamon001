@@ -34,11 +34,21 @@ public class HomeTag extends BaseTag {
 			sb.append(request.getContextPath());
 			sb.append(ParameterConstants.PORTAL_PATH);
 			sb.append("?");
+			sb.append(ParameterConstants.PAGE);
+			sb.append("=");
+			sb.append(ParameterConstants.PAGE_PRODUCT);
+			sb.append("&");
 			URLUtil.append(sb, ParameterConstants.PRODUCT_ID, request);
+			URLUtil.append(sb, ParameterConstants.PAGEGROUP_ID, request);
+			URLUtil.append(sb, ParameterConstants.AREA_ID, request);
 			URLUtil.append(sb, ParameterConstants.CHANNEL_ID, request);
 			URLUtil.append(sb, ParameterConstants.UNICOM_PT, request);
-			URLUtil.trimURL(sb);
-			url = sb.toString();
+			
+//			URLUtil.append(sb, ParameterConstants.PRODUCT_ID, request);
+//			URLUtil.append(sb, ParameterConstants.CHANNEL_ID, request);
+//			URLUtil.append(sb, ParameterConstants.UNICOM_PT, request);
+//			URLUtil.trimURL(sb);
+			url = URLUtil.trimUrl(sb).toString();
 		}
 		Map velocityMap = new HashMap();
 		velocityMap.put("title", title);

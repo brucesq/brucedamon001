@@ -11,7 +11,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.hunthawk.reader.domain.bussiness.Columns;
-import com.hunthawk.reader.domain.bussiness.Product;
+import com.hunthawk.reader.domain.bussiness.PageGroup;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.EbookChapterDesc;
 import com.hunthawk.reader.domain.resource.EbookTome;
@@ -19,7 +19,6 @@ import com.hunthawk.reader.domain.resource.MagazineChapterDesc;
 import com.hunthawk.reader.domain.resource.NewsPapersChapterDesc;
 import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.domain.resource.ResourceType;
-import com.hunthawk.reader.pps.ParameterCommonTextLink;
 import com.hunthawk.reader.pps.ParameterConstants;
 import com.hunthawk.reader.pps.URLUtil;
 import com.hunthawk.reader.pps.service.BussinessService;
@@ -27,6 +26,7 @@ import com.hunthawk.reader.pps.service.CustomService;
 import com.hunthawk.reader.pps.service.ResourceService;
 import com.hunthawk.tag.BaseTag;
 import com.hunthawk.tag.TagUtil;
+import com.hunthawk.tag.util.ParamUtil;
 /**
  * 标题标签
  * 标签名称：title
@@ -48,11 +48,11 @@ public class TitleTag extends BaseTag {
 		String title=getParameter("name","");
 		if(StringUtils.isEmpty(title)){
 			if(flag.equals(ParameterConstants.PAGE_PRODUCT)){//产品页
-				String productId=request.getParameter(ParameterConstants.PRODUCT_ID);
-				Product pro=null;
+				String productId=request.getParameter(ParameterConstants.PAGEGROUP_ID);
+				PageGroup pro=null;
 				if(productId!=null && !"".equals(productId)){
-					pro=getBussinessService(request).getProduct(productId);
-					title=pro.getName();
+					pro=getBussinessService(request).getPageGroup(Integer.parseInt(productId));
+					title=pro.getPkName();
 				}else{
 					title="产品页";
 				}

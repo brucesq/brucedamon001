@@ -78,7 +78,7 @@
     <bean id="voteUpdateJobTrigger"
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail" ref="voteUpdateJob"/>
-        <property name="startDelay" value="900000"/>  
+        <property name="startDelay" value="100000"/>  
         <property name="repeatInterval" value="3600000"/>
     </bean>
     

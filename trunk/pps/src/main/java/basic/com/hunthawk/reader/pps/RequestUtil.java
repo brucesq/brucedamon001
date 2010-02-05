@@ -64,13 +64,13 @@ public class RequestUtil {
 	 */
 	public static int getNeedWapType(){
 		HwfRequestInfo info = contain.get();
-		Product product = info.getProduct();
-		if(product != null){
-			if(product.getIsadapter() != 0){//需要适配，使用用户终端的支持的类型
+//		Product product = info.getProduct();
+//		if(product != null){
+//			if(product.getIsadapter() != 0){//需要适配，使用用户终端的支持的类型
 				return info.getUAInfo().getWapType();
-			}
-		}
-		return 1;
+//			}
+//		}
+//		return 1;
 	}
 	/**
 	 * 获取所需要的宽窄屏类型
@@ -78,13 +78,13 @@ public class RequestUtil {
 	 */
 	public static int getNeedScreenType(){
 		HwfRequestInfo info = contain.get();
-		Product product = info.getProduct();
-		if(product != null){
-			if(product.getCredit() != 0){//需要适配，使用用户终端的宽窄平属性
+//		Product product = info.getProduct();
+//		if(product != null){
+//			if(product.getCredit() != 0){//需要适配，使用用户终端的宽窄平属性
 				return info.getUAInfo().getScreenType();
-			}
-		}
-		return 1;
+//			}
+//		}
+//		return 1;
 	}
 	/**
 	 * 添加Cookie值
@@ -99,10 +99,10 @@ public class RequestUtil {
 	 * 获取产品信息
 	 * @return
 	 */
-	public static Product getProduct(){
-		HwfRequestInfo info = contain.get();
-		return info.getProduct();
-	}
+//	public static Product getProduct(){
+//		HwfRequestInfo info = contain.get();
+//		return info.getProduct();
+//	}
 	/**
 	 * 获取用户类型,1：联通正常用户，2：联通用户但获取不到手机号码，3：联通3G用户，6：电信用户，7：移动用户
 	 * @return

@@ -79,7 +79,7 @@ public class ViewFavoriteTag extends BaseTag {
 		 * modify by liuxh 09-11-12
 		 * 增加产品id 和栏目id
 		 */
-		fav.setProductid(request.getParameter(ParameterConstants.PRODUCT_ID));
+		fav.setProductid(request.getParameter(ParameterConstants.PAGEGROUP_ID));
 		fav.setColumnid(ParamUtil.getIntParameter(request, ParameterConstants.COLUMN_ID, -1));
 		/**
 		 * end
@@ -168,7 +168,7 @@ public class ViewFavoriteTag extends BaseTag {
 		int flag=1;//默认成功
 		try {
 //			System.out.println(RequestUtil.getMobile());
-			getCustomService(request).deleteFavorites(RequestUtil.getMobile(),cid,request.getParameter(ParameterConstants.PRODUCT_ID));
+			getCustomService(request).deleteFavorites(RequestUtil.getMobile(),cid,request.getParameter(ParameterConstants.PAGEGROUP_ID));
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO Auto-generated catch block
