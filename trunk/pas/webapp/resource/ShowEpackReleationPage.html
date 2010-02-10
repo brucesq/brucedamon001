@@ -26,7 +26,7 @@
 															align="absmiddle">
 														&nbsp;
 														<a href="#" jwcid="@DirectLink"
-															listener="listener:editReleation" parameters="ognl:pack">新增资源到批价包</a>
+															listener="listener:editReleation" parameters="ognl:pack">新增资源到资源包</a>
 													</td>
 													<td class="ToolbarLine">
 														<img src="../img/icon_del.png" width="11" height="11"
@@ -36,7 +36,7 @@
 															action="listener:onBatchDelete"
 															onclick="return getConfirmation();">删除选中资源</a>
 													</td>
-													<td class="ToolbarLine"><img src="../img/icon_09.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="@bayeux:LinkSubmitOnce" action="listener:downloadCSV">产品信息导出</a></td>	
+													
 				
 													<span jwcid="@If" condition="ognl:showChangeFee">
 													<td class="ToolbarLine">
@@ -50,7 +50,7 @@
 														<img src="../img/icon_018.png" width="14" height="14"
 															align="absmiddle">
 														<a href="#" jwcid="@bayeux:LinkSubmitOnce"
-															action="listener:copyPackReleation" parameters="ognl:pack">复制到批价包</a>
+															action="listener:copyPackReleation" parameters="ognl:pack">复制到资源包</a>
 													</td>
 													<td class="ToolbarLine">
 														<img src="../img/icon_017.png" width="14" height="14"
@@ -63,7 +63,7 @@
 															align="absmiddle">
 														&nbsp;
 														<a href="#" jwcid="@PageLink"
-															page="resource/ShowEpackPage">返回批价包列表</a>
+															page="resource/ShowEpackPage">返回资源包列表</a>
 													</td>
 													<!-- 	<td class="ToolbarLine"><img src="../img/icon_014.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@DirectLink" listener="listener:showResourceAll" parameters="ognl:pack">资源列表添加到此批价包</a></td> -->
 													<span jwcid="@If" condition="ognl:parent!=null">
@@ -130,8 +130,8 @@
 													</tr>
 													<tr>
 														<td height="20" align="left" valign="bottom">
-														&nbsp;&nbsp;&nbsp; 当前批价包ID：<font color="red"><span jwcid="pack_Id@InsertText" value="ognl:pack.id" raw="false"/></font>
-														&nbsp;&nbsp;&nbsp;批价包名称：<font color="red"><span jwcid="pack_name@InsertText" value="ognl:pack.name" raw="false"/></font>
+														&nbsp;&nbsp;&nbsp; 当前资源包ID：<font color="red"><span jwcid="pack_Id@InsertText" value="ognl:pack.id" raw="false"/></font>
+														&nbsp;&nbsp;&nbsp;资源包名称：<font color="red"><span jwcid="pack_name@InsertText" value="ognl:pack.name" raw="false"/></font>
 														</td>
 													</tr>
 													<tr>

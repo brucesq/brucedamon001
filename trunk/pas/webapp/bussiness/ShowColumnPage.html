@@ -26,8 +26,8 @@
 					<!--<td class="ToolbarLine"><img src="../img/icon_07.png" width="15" height="15" align="absmiddle">&nbsp;<a href="#" jwcid="changeOrder"  onclick="return showConfirmation('修改排序');">排序</a></td>-->
 					<td class="ToolbarLine"><img src="../img/icon_016.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="@bayeux:LinkSubmitOnce" action="listener:columnCopy" onclick="return showConfirmation('复制');">栏目复制</a></td>	
 					<td class="ToolbarLine"><img src="../img/icon_018.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="@bayeux:LinkSubmitOnce" action="listener:changeTemplate" parameters="ognl:pageGroup">批量修改模板</a></td>	
-					<td class="ToolbarLine"><img src="../img/icon_09.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="@bayeux:LinkSubmitOnce" action="listener:downloadCSV">CSV文件下载</a></td>	
-					<td class="ToolbarLine"><img src="../img/icon_014.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@PageLink" page="bussiness/ShowPageGroupPage" >返回页面组列表</a></td>
+					
+					<td class="ToolbarLine"><img src="../img/icon_014.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@PageLink" page="bussiness/ShowPageGroupPage" >返回产品列表</a></td>
 					<span jwcid="@If" condition="ognl:showParent">				
 					<td class="ToolbarLine"><img src="../img/icon_014.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@DirectLink" listener="listener:backParentPage" parameters="ognl:{parent,pageGroup}" >返回父栏目</a></td>			
 					</span>
