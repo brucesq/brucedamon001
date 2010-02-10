@@ -42,6 +42,7 @@ public class ColumnRollTag extends BaseTag {
 		String mix=getParameter("mix","");
 		// 得到栏目ID的集合
 		String columnids=getParameter("columnids","");
+		int pageSize = getIntParameter("pageSize",5);
 		if(columnids==null || StringUtils.isEmpty(columnids)){
 			TagLogger.debug(tagName, "未选择参与轮循的栏目",request.getQueryString(), null);
 			return new HashMap();
@@ -65,7 +66,10 @@ public class ColumnRollTag extends BaseTag {
 		/** 存放列表资源 */
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Object> lsRess = new ArrayList<Object>();
+		int i=0;
 		for(Integer columnId:ids){
+			if(++i>pageSize)
+				break;
 			Columns col=getBussinessService(request).getColumns(columnId);
 			String title="";
 			if(mix==null || StringUtils.isEmpty(mix)){
