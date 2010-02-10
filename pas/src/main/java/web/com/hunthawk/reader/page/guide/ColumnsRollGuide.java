@@ -51,6 +51,9 @@ public abstract class ColumnsRollGuide extends SecurityPage implements
 	public abstract String getColumnids();
 	public abstract void setColumnids(String ids);
 	
+	public abstract Integer getPageSize();
+	public abstract void setPageSize(Integer size);
+	
 	public void activateExternalPage(java.lang.Object[] parameters,
 			IRequestCycle cycle) {
 		setTagName((String) parameters[1]);
@@ -78,6 +81,11 @@ public abstract class ColumnsRollGuide extends SecurityPage implements
 				String str = (String) mixList.get(i);
 				sb.append("<%" + str + "%>");
 			}
+			sb.append(",");
+		}
+		if(getPageSize() != null && getPageSize() > 0){
+			sb.append("pageSize=");
+			sb.append(getPageSize());
 			sb.append(",");
 		}
 		sb.append("columnids="+getColumnids());

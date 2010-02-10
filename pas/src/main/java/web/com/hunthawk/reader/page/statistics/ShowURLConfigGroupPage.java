@@ -30,6 +30,7 @@ import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.framework.tapestry.SearchCondition;
 import com.hunthawk.framework.tapestry.SearchPage;
 import com.hunthawk.framework.util.ParameterCheck;
+import com.hunthawk.reader.domain.statistics.URLConfig;
 import com.hunthawk.reader.domain.statistics.URLConfigGroup;
 import com.hunthawk.reader.service.bussiness.BussinessService;
 import com.hunthawk.reader.service.system.StatisticsService;
@@ -191,7 +192,16 @@ public abstract class ShowURLConfigGroupPage extends SearchPage {
 		getShowURLStatPage().setStatType(12);
 		return getShowURLStatPage();
 	}
+	public IPage onStatHour(URLConfigGroup obj){
+		getShowURLHourStatPage().setURLConfigId(obj.getId());
+		getShowURLHourStatPage().setStatType(2);
+		return getShowURLHourStatPage();
+	}
 
 	@InjectPage("statistics/ShowURLStatPage")
 	public abstract ShowURLStatPage getShowURLStatPage();
+	
+	@InjectPage("statistics/ShowURLHourStatPage")
+	public abstract ShowURLHourStatPage getShowURLHourStatPage();
+
 }
