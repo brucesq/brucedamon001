@@ -311,7 +311,7 @@ public abstract class ShowEpackPage extends SearchPage implements
 
 	public String getTableColumns() {
 		if (getResourcePack() == null || getResourcePack() < 0) {
-			setResourcePack(0);
+			setResourcePack(5);
 		}
 		return getSystemService().getVariables(
 				"table:resource_pack_" + getResourcePack()).getValue();
@@ -319,7 +319,7 @@ public abstract class ShowEpackPage extends SearchPage implements
 
 	public void pageBeginRender(PageEvent event) {
 		if (getResourcePack() == null || getResourcePack() < 0) {
-			setResourcePack(0);
+			setResourcePack(5);
 		}
 
 	}

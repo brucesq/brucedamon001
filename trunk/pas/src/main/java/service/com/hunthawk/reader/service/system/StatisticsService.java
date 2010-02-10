@@ -12,6 +12,7 @@ import com.hunthawk.reader.domain.statistics.DataReport;
 import com.hunthawk.reader.domain.statistics.URLConfig;
 import com.hunthawk.reader.domain.statistics.URLConfigGroup;
 import com.hunthawk.reader.domain.statistics.URLDataReport;
+import com.hunthawk.reader.domain.statistics.URLHourDataReport;
 
 /**
  * @author BruceSun
@@ -66,6 +67,13 @@ public interface StatisticsService {
 			Collection<HibernateExpression> expressions);
 
 	public List<URLDataReport> findURLDataReportBy(int pageNo, int pageSize,
+			String orderBy, boolean isAsc,
+			Collection<HibernateExpression> expressions);
+	
+	public Long getURLHourDataReportResultCount(
+			Collection<HibernateExpression> expressions);
+
+	public List<URLHourDataReport> findURLHourDataReportBy(int pageNo, int pageSize,
 			String orderBy, boolean isAsc,
 			Collection<HibernateExpression> expressions);
 
