@@ -112,8 +112,12 @@ public class UploadServiceImpl implements UploadService {
 					continue;
 				}
 				argsArr = rec.split(",");
-				String name = trim(argsArr[0], false, "作者名称");
-				String penName = trim(argsArr[1], true, "作者笔名");
+				String name = trim(argsArr[0], true, "名称");
+				String penName = trim(argsArr[1], false, "笔名");
+				
+				if(StringUtils.isEmpty(penName)){
+					penName = name;
+				}
 
 				ResourceAuthor author = resourceService
 						.getResourceAuthorByName(penName);
