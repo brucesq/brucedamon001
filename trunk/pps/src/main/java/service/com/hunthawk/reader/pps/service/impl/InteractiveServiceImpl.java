@@ -93,7 +93,7 @@ public class InteractiveServiceImpl implements InteractiveService {
 		if (board == null || board.getStatus().equals(0)) {
 			return 4;
 		}
-		if (StringUtils.isEmpty(content)) {
+		if (StringUtils.isBlank(content)) {
 			return 5;
 		}
 		Integer result = 1;

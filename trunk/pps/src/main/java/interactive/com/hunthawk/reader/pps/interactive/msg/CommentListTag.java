@@ -172,7 +172,7 @@ public class CommentListTag extends BaseTag {
 				sb.append("【游客" + mobile.substring(mobile.length() - 4) + "】");// 用户所属地区
 			}
 			sb.append("<br/>");
-			sb.append(msg.getContent());// 留言内容
+			sb.append(StrUtil.toUnicode(msg.getContent()));// 留言内容
 			// sb.append(" ");
 			// sb.append("<a href=\"#\">回复</a>");
 			/** 保存单条记录 */

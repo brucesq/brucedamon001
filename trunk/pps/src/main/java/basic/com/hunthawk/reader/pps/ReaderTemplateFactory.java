@@ -213,29 +213,29 @@ public class ReaderTemplateFactory extends TemplateFactory {
 			}
 
 		} else {// 入口地址
-			String productId = ParamUtil.getParameter(request,
-					ParameterConstants.PRODUCT_ID);
-			if (StringUtils.isNotEmpty(productId)) {
-				List<PackGroupProvinceRelation> pgs = getBussinessService(
-						request).getPackGroupProvinceRelation(productId);
-				PackGroupProvinceRelation pg = null;
-				if (pgs == null || pgs.size() == 0) {
-					return "";
-				} else if (pgs.size() == 1) {
-					pg = pgs.get(0);
-				} else {
-					// 地区适配，如果没有合适的地区,选择全网的页面组
-					String areaId = RequestUtil.getAreaId();
-					for (PackGroupProvinceRelation rel : pgs) {
-						if (rel.getAid().equals(areaId)) {
-							pg = rel;
-							break;
-						}
-						if (rel.getAid().equals("001")) {
-							pg = rel;
-						}
-					}
-				}
+//			String productId = ParamUtil.getParameter(request,
+//					ParameterConstants.PRODUCT_ID);
+//			if (StringUtils.isNotEmpty(productId)) {
+//				List<PackGroupProvinceRelation> pgs = getBussinessService(
+//						request).getPackGroupProvinceRelation(productId);
+//				PackGroupProvinceRelation pg = null;
+//				if (pgs == null || pgs.size() == 0) {
+//					return "";
+//				} else if (pgs.size() == 1) {
+//					pg = pgs.get(0);
+//				} else {
+//					// 地区适配，如果没有合适的地区,选择全网的页面组
+//					String areaId = RequestUtil.getAreaId();
+//					for (PackGroupProvinceRelation rel : pgs) {
+//						if (rel.getAid().equals(areaId)) {
+//							pg = rel;
+//							break;
+//						}
+//						if (rel.getAid().equals("001")) {
+//							pg = rel;
+//						}
+//					}
+//				}
 				String url = request.getRequestURL().toString();
 				StringBuilder sb = new StringBuilder();
 				sb.append(url);
@@ -244,36 +244,37 @@ public class ReaderTemplateFactory extends TemplateFactory {
 				sb.append("=");
 				sb.append(ParameterConstants.PAGE_PRODUCT);
 				sb.append("&");
-				sb.append(ParameterConstants.PRODUCT_ID);
-				sb.append("=");
-				sb.append(productId);
-				sb.append("&");
-				sb.append(ParameterConstants.PAGEGROUP_ID);
-				sb.append("=");
-				sb.append(pg.getPgid());
-				sb.append("&");
-				sb.append(ParameterConstants.AREA_ID);
-				sb.append("=");
-				sb.append(pg.getAid());
-				sb.append("&");
+//				sb.append(ParameterConstants.PRODUCT_ID);
+//				sb.append("=");
+//				sb.append(productId);
+//				sb.append("&");
+//				sb.append(ParameterConstants.PAGEGROUP_ID);
+//				sb.append("=");
+//				sb.append(pg.getPgid());
+//				sb.append("&");
+//				sb.append(ParameterConstants.AREA_ID);
+//				sb.append("=");
+//				sb.append(pg.getAid());
+//				sb.append("&");
 
-				String channelId = ParamUtil.getParameter(request,
-						ParameterConstants.CHANNEL_ID);
-				if (StringUtils.isEmpty(channelId) || "null".equals(channelId)) {
-					channelId = getBussinessService(request)
-							.getDefaultChannelId(productId);
-				}
-				sb.append(ParameterConstants.CHANNEL_ID);
-				sb.append("=");
-				sb.append(channelId);
-				sb.append("&");
-
+//				String channelId = ParamUtil.getParameter(request,
+//						ParameterConstants.CHANNEL_ID);
+//				if (StringUtils.isEmpty(channelId) || "null".equals(channelId)) {
+//					channelId = getBussinessService(request)
+//							.getDefaultChannelId(productId);
+//				}
+//				sb.append(ParameterConstants.CHANNEL_ID);
+//				sb.append("=");
+//				sb.append(channelId);
+//				sb.append("&");
+				URLUtil.append(sb, ParameterConstants.PAGEGROUP_ID, request);
+				URLUtil.append(sb, ParameterConstants.CHANNEL_ID, request);
 				URLUtil.append(sb, ParameterConstants.UNICOM_PT, request);
 				URLUtil.trimURL(sb);
 				Redirect.sendRedirect(sb.toString());
 				return "";
 
-			}
+//			}
 		}
 		return getNotFoundTemplate(request);
 	}
