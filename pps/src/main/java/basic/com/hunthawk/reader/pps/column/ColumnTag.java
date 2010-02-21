@@ -35,6 +35,9 @@ public class ColumnTag extends BaseTag {
 		String cid = getParameter("columnId", "-1");
 		String showNum = getParameter("showNum", "0");
 
+		String od = getParameter("od", "-1");
+		String ods = getParameter("ods", "-1");
+		
 		if (Integer.parseInt(cid) < 0) {
 			return null;
 		}
@@ -81,6 +84,18 @@ public class ColumnTag extends BaseTag {
 		sb.append("=");
 		sb.append(Integer.parseInt(cid) > 0 ? cid : col.getId());
 		sb.append("&");
+		
+		if (Integer.parseInt(od) > 0 && Integer.parseInt(ods) > 0){
+			sb.append(ParameterConstants.ORDER);
+			sb.append("=");
+			sb.append(od);
+			sb.append("&");
+			sb.append(ParameterConstants.ORDERSUB);
+			sb.append("=");
+			sb.append(ods);
+			sb.append("&");
+		}
+		
 		URLUtil.append(sb, ParameterConstants.CHANNEL_ID, request);
 		URLUtil.trimURL(sb);
 		velocityMap.put("url", sb.toString());
