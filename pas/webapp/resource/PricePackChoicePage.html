@@ -1,4 +1,4 @@
-<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="批价包选择"  doctype=""
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="资源包选择"  doctype=""
 	  browserLogLevel="ERROR"
 	  consoleEnabled="true"
 	  debugEnabled="false">
@@ -7,7 +7,7 @@
 <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
 <META HTTP-EQUIV="expires" CONTENT="0">
-<title>选择批价包</title>
+<title>选择资源包</title>
 </head>
 <script type="text/javascript"><!--
 function templateChoose()
@@ -43,7 +43,7 @@ function templateChoose()
     </table></td>
     <td valign="top" style="padding:0px 12px;"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-        <td height="40" style="padding-top:12px;"><strong>选择批价包</strong></td>
+        <td height="40" style="padding-top:12px;"><strong>选择资源包</strong></td>
       </tr>
 	  <tr>
 	  <td><font color="red"><span jwcid="error">错误信息</span></font></td>
@@ -61,7 +61,7 @@ function templateChoose()
 							编号：
 							<input name="textfield5" type="text" class="Template-text02" jwcid="searchId"/>
 							&nbsp;&nbsp;&nbsp;
-							批价包名称：
+							名称：
 								<input name="textfield" type="text" class="Template-text02" jwcid="resourcePackName"/>	
 							计费类型：
 							<select jwcid="feeTypes@PropertySelection" model="ognl:feeTypeList" value="ognl:type"></select>
