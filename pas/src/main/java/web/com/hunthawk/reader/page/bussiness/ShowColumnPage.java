@@ -656,7 +656,7 @@ public abstract class ShowColumnPage extends RichSearchPage {
 	}
 
 	public ITableColumn getDisplayPack() {
-		return new SimpleTableColumn("pricepackId", "批价包",
+		return new SimpleTableColumn("pricepackId", "资源包",
 				new ITableColumnEvaluator() {
 
 					private static final long serialVersionUID = 31491600745851970L;
