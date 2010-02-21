@@ -47,10 +47,14 @@ public class Constants {
 		ORDERTYPE.put("排序号降序", 0);
 		ORDERTYPE.put("ID降序", 1);
 		ORDERTYPE.put("推荐指数降序", 2);
-		ORDERTYPE.put("排序号和点击数降序", 3);
+//		ORDERTYPE.put("排序号和点击数降序", 3);
 		ORDERTYPE.put("排序号升序", 5);
 		ORDERTYPE.put("ID升序", 6);
 
+		ORDERTYPE.put("下载总排行", 10);
+		ORDERTYPE.put("下载月排行", 11);
+		ORDERTYPE.put("下载周排行", 12);
+		ORDERTYPE.put("下载日排行", 13);
 
 		ORDERTYPE.put("搜索总排行", 20);
 		ORDERTYPE.put("搜索月排行", 21);
@@ -62,10 +66,10 @@ public class Constants {
 		ORDERTYPE.put("收藏周排行", 32);
 		ORDERTYPE.put("收藏日排行", 33);
 
-		ORDERTYPE.put("订购总排行", 40);
-		ORDERTYPE.put("订购月排行", 41);
-		ORDERTYPE.put("订购周排行", 42);
-		ORDERTYPE.put("订购日排行", 43);
+//		ORDERTYPE.put("订购总排行", 40);
+//		ORDERTYPE.put("订购月排行", 41);
+//		ORDERTYPE.put("订购周排行", 42);
+//		ORDERTYPE.put("订购日排行", 43);
 
 		ORDERTYPE.put("留言总排行", 50);
 		ORDERTYPE.put("留言月排行", 51);

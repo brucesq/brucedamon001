@@ -3,25 +3,10 @@
  */
 package com.hunthawk.reader.page.guide;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.oro.text.regex.MatchResult;
-import org.apache.oro.text.regex.PatternCompiler;
-import org.apache.oro.text.regex.PatternMatcher;
-import org.apache.oro.text.regex.PatternMatcherInput;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.annotations.InjectComponent;
@@ -30,21 +15,11 @@ import org.apache.tapestry.components.Block;
 import org.apache.tapestry.engine.IEngineService;
 import org.apache.tapestry.form.IPropertySelectionModel;
 import org.apache.tapestry.request.IUploadFile;
-import org.apache.tapestry.valid.ValidationDelegate;
 
 import com.hunthawk.framework.annotation.Restrict;
-import com.hunthawk.framework.hibernate.CompareExpression;
-import com.hunthawk.framework.hibernate.CompareType;
-import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.framework.tapestry.SecurityPage;
 import com.hunthawk.framework.tapestry.form.MapPropertySelectModel;
 import com.hunthawk.framework.util.OrderedMap;
-import com.hunthawk.reader.domain.resource.Ebook;
-import com.hunthawk.reader.domain.resource.Material;
-import com.hunthawk.reader.domain.resource.MaterialCatalog;
-import com.hunthawk.reader.domain.resource.ResourceResType;
-import com.hunthawk.reader.domain.resource.ResourceType;
-import com.hunthawk.reader.domain.system.Variables;
 import com.hunthawk.reader.page.util.PageHelper;
 import com.hunthawk.reader.service.resource.MaterialService;
 import com.hunthawk.reader.service.resource.ResourceService;
@@ -85,7 +60,6 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 		String paras = (String) parameters[0];
 		setTagName((String) parameters[1]);
 		setParameter(paras.split(";"));
-//		System.out.println("active:"+getTagName());
 	}
 	
 	public boolean isShowColumn(){
@@ -115,7 +89,7 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 		}
 	}
 	public void onSubmit(IRequestCycle cycle) {
-//		System.out.println("onSubmit:"+getTagName());
+			
 		StringBuilder sb = new StringBuilder();
 		
 			sb.append("$#"+getTagName()+".");
@@ -132,6 +106,22 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 		if(getTmdId()!=null)
 				sb.append("tmd="+getTmdId()+",");
 		
+		/**
+		 * 添加排行榜排序规则
+		 * penglei
+		 */
+		if(getDate()!=null){
+			sb.append("ods="+getDate()+",");
+		}
+		
+		if(getOrder()!=null){
+			sb.append("od="+getOrder()+",");
+		}
+		
+		/**
+		 * end
+		 */
+		
 		if(getIsRoll()!=null && getIsRoll()==1){
 			sb.append("isRoll="+getIsRoll()+",");
 			if(getRollTotalCount()!=null)
@@ -145,6 +135,8 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 				sb.append("rollCount="+getRollCount()+",");
 			if(getRollTime()!=null)
 				sb.append("rollTime="+getRollTime()+",");
+			if(getBeginNumber()!=null)
+				sb.append("beginNumber="+getBeginNumber()+",");
 		}else{
 			sb.append("isRoll="+getIsRoll()+",");
 			if(getRollNumber()!=null)
@@ -199,6 +191,14 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 	public abstract Integer getRollTotalCount();
 	public abstract void setRollTotalCount(Integer rollTotalCount);
 	
+	public abstract Integer getOrder();
+	
+	public abstract void setOrder(Integer order);
+	
+	public abstract Integer getDate();
+	
+	public abstract void setDate(Integer date);
+	
 	/***
 	 * add by liuxh 091116
 	 * @return
@@ -230,6 +230,9 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 	public abstract Integer getRollNumber();
 	public abstract void setRollNumber(Integer rollNumber);
 	
+	public abstract Integer getBeginNumber();
+	public abstract void setBeginNumber(Integer beginNumber);
+	
 	public IPropertySelectionModel getMixList(){
 		Map<String, String> types = new OrderedMap<String, String>();
 		types.put("推荐语", "bComment");
@@ -254,6 +257,29 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 		types.put("否", -1);
 		types.put("是", 1);
 		return new MapPropertySelectModel(types);
+	}
+	
+	public IPropertySelectionModel getOrderTypeList(){
+		Map<String,Integer> map = new OrderedMap<String,Integer>();
+		map.put(" ", -1);
+		map.put("访问排行", 6);
+		map.put("搜索排行", 2);
+		map.put("收藏排行", 3);
+//		map.put("订购排行", 4);
+		map.put("留言排行", 5);
+		map.put("投票排行", 7);
+		map.put("下载排行", 1);
+		return new MapPropertySelectModel(map);
+	}
+	
+	public IPropertySelectionModel getDateTypeList(){
+		Map<String,Integer> map = new OrderedMap<String,Integer>();
+		map.put(" ", -1);
+		map.put("日", 4);
+		map.put("周", 3);
+		map.put("月", 2);
+		map.put("总", 1);
+		return new MapPropertySelectModel(map);
 	}
 
 	public IPropertySelectionModel getShowtypeList(){
@@ -360,5 +386,7 @@ public abstract class ResourceGuide extends SecurityPage implements IExternalPag
 				"bussiness/TagTemplateChoicePage", params);
 		return templateURL;
 	}
+	
+	
 }
 
