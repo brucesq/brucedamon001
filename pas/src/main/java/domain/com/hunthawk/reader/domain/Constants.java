@@ -111,7 +111,11 @@ public class Constants {
 	private static Map<Integer, Map<Integer, Integer>> URLORDER = new OrderedMap<Integer, Map<Integer, Integer>>();
 	static {
 		Map<Integer, Integer> downNumMap = new OrderedMap<Integer, Integer>(); // 点击
-		downNumMap.put(1, 2); // 点击总排行
+		downNumMap.put(1, 10); // 下载总排行
+		downNumMap.put(2, 11); // 下载月排行
+		downNumMap.put(3, 12); // 下载周排行
+		downNumMap.put(4, 13); // 下载日排行
+
 
 		Map<Integer, Integer> searchNumMap = new OrderedMap<Integer, Integer>(); // 搜索
 		searchNumMap.put(1, 20); // 搜索总排行
