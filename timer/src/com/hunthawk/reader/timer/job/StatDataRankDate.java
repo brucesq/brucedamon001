@@ -17,11 +17,13 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import com.hunthawk.framework.HibernateGenericController;
 import com.hunthawk.framework.memcached.MemCachedClientWrapper;
 import com.hunthawk.framework.util.Utility;
+import com.hunthawk.reader.domain.inter.VoteSubItem;
 import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.enhance.util.ToolDateUtil;
 import com.hunthawk.reader.service.system.SystemService;
 import com.hunthawk.reader.timer.dynamicds.CustomerContextHolder;
 import com.hunthawk.reader.timer.dynamicds.DataSourceMap;
+import com.hunthawk.reader.timer.service.VoteService;
 
 /**
  * 日统计任务
@@ -30,18 +32,29 @@ import com.hunthawk.reader.timer.dynamicds.DataSourceMap;
  * 
  */
 public class StatDataRankDate {
-	
+
 	protected static Logger logger = Logger.getLogger(StatDataRankDate.class);
 
-	
 	private HibernateGenericController controller;
 
 	private SystemService systemService;
 
 	private MemCachedClientWrapper memcached;
 
+	private VoteService voteService;
+
+	private StatDataRankSummary statDataRankSummary;
+
+	public void setStatDataRankSummary(StatDataRankSummary statDataRankSummary) {
+		this.statDataRankSummary = statDataRankSummary;
+	}
+
 	public void setMemcached(MemCachedClientWrapper memcached) {
 		this.memcached = memcached;
+	}
+
+	public void setVoteService(VoteService voteService) {
+		this.voteService = voteService;
 	}
 
 	public void setHibernateGenericController(
@@ -55,11 +68,10 @@ public class StatDataRankDate {
 
 	public void doJob() {
 		long start = System.currentTimeMillis();
-		
-		
-		try { 	//做清零动作 (包含日，周，月)
-			logger.info("StatDataZeroClear DO Clear"+new Date());
-			StatDataZeroClear statDataZeroClear=new StatDataZeroClear();
+
+		try { // 做清零动作 (包含日，周，月)
+			logger.info("StatDataZeroClear DO Clear" + new Date());
+			StatDataZeroClear statDataZeroClear = new StatDataZeroClear();
 			statDataZeroClear.setHibernateGenericController(controller);
 			statDataZeroClear.setMemcached(memcached);
 			statDataZeroClear.setSystemService(systemService);
@@ -67,47 +79,58 @@ public class StatDataRankDate {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		logger.info("StatDataRankDate Start:[日统计]");
-		try{
-			logger.info("StatDataRankDate DO doStatisticsJob"+new Date());
+		try {
+			logger.info("StatDataRankDate DO doStatisticsJob" + new Date());
 			doStatisticsJob();
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
-			logger.info("StatDataRankDate DO doFavorites"+new Date());
+		try {
+			logger.info("StatDataRankDate DO doFavorites" + new Date());
 			doFavorites(); // 日收藏总数
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
-			logger.info("StatDataRankDate DO doUserBuy"+new Date());
+		try {
+			logger.info("StatDataRankDate DO doUserBuy" + new Date());
 			doUserBuy(); // 日订购统计
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
-			logger.info("StatDataRankDate DO doMsgRecord"+new Date());
+		try {
+			logger.info("StatDataRankDate DO doMsgRecord" + new Date());
 			doMsgRecord();// 日留言统计
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
-			logger.info("StatDataRankDate DO doVoteSubItem"+new Date());
+		try {
+			logger.info("StatDataRankDate DO doVoteSubItem" + new Date());
 			doVoteSubItem();// 日投票统计
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		try{
-//			logger.info("StatDataRankDate DO doResourceDT"+new Date());
-//			doResourceDT();// 统计远程服务器的PV
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-		
+		// try{
+		// logger.info("StatDataRankDate DO doResourceDT"+new Date());
+		// doResourceDT();// 统计远程服务器的PV
+		// }catch(Exception e){
+		// e.printStackTrace();
+		// }
 		logger.info("StatDataRankDate End:[日统计]"
 				+ (System.currentTimeMillis() - start));
+
+		try {
+			logger.info("statDataRankSummary DO all Start[日]" + new Date());
+//			statDataRankSummary.doJob(); // 统计汇总（人气，搜索，收藏，订购，留言，PV，投票）
+			statDataRankSummary.doVoteSubItem();
+			statDataRankSummary.doFavorites();
+			statDataRankSummary.doMsgRecord();
+			logger.info("statDataRankSummary DO all End[日]" + new Date());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		// 统计周
 		StatDataRankWeek sdrw = new StatDataRankWeek();
 		sdrw.setHibernateGenericController(controller);
@@ -115,14 +138,14 @@ public class StatDataRankDate {
 		sdrw.setMemcached(memcached);
 		sdrw.doJob();
 
-		logger.info("StatDataRankWeek end...."); 
+		logger.info("StatDataRankWeek end....");
 		// 统计月
 		StatDataRankMonth sdrm = new StatDataRankMonth();
 		sdrm.setHibernateGenericController(controller);
 		sdrm.setSystemService(systemService);
 		sdrm.setMemcached(memcached);
 		sdrm.doJob();
-		logger.info("StatDataRankMonth end...."); 
+		logger.info("StatDataRankMonth end....");
 	}
 
 	private void doStatisticsJob() {
@@ -143,16 +166,17 @@ public class StatDataRankDate {
 		int pageNo = 1;
 		int pageSize = 100;
 		boolean hasResult = true;
-        int num = 0;
-//        long count = controller.getResultCount(hql, 1, startDate, endDate);
-//        logger.info("doStatisticsJob DOWN count SIZE="+count);
+		int num = 0;
+		// long count = controller.getResultCount(hql, 1, startDate, endDate);
+		// logger.info("doStatisticsJob DOWN count SIZE="+count);
 		while (hasResult) {
 			logger.info("doStatisticsJob DOWN start");
 			List<Object[]> clickResult = controller.findBy(hql, pageNo,
 					pageSize, 4, startDate, endDate); // 下载
-			
-//			logger.info("doStatisticsJob DOWN SIZE="+clickResult.size()+":NUM="+(++num));
-			
+
+			// logger.info("doStatisticsJob DOWN
+			// SIZE="+clickResult.size()+":NUM="+(++num));
+
 			if (clickResult.size() < pageSize) {
 				hasResult = false;
 			} else {
@@ -164,7 +188,7 @@ public class StatDataRankDate {
 			Transaction tx = session.beginTransaction();
 
 			for (Object[] objs : clickResult) {
-				
+
 				ResourceAll resource = (ResourceAll) session.get(
 						ResourceAll.class, objs[0].toString());
 				if (resource != null) {
@@ -175,7 +199,9 @@ public class StatDataRankDate {
 					} else {
 						resource.setDownnum(resource.getDownNumDate());
 					}
-					logger.info("down"+resource.getId()+":"+resource.getDownnum()+":"+resource.getDownNumDate());
+					logger.info("down" + resource.getId() + ":"
+							+ resource.getDownnum() + ":"
+							+ resource.getDownNumDate());
 
 					String resKey = Utility.getMemcachedKey(ResourceAll.class,
 							resource.getId());
@@ -184,33 +210,32 @@ public class StatDataRankDate {
 					continue;
 				}
 
-
-
 			}
 			try {
-				logger.info("doStatisticsJob DOWN commit. NUM="+(num));
+				logger.info("doStatisticsJob DOWN commit. NUM=" + (num));
 				tx.commit(); // 防止不是整数的情况下，数据既没提交也没释放
 			} catch (HibernateException e) {
 				tx.rollback();
 				e.printStackTrace();
 			}
-			logger.info("doStatisticsJob DOWN closeSession. NUM="+(num));
+			logger.info("doStatisticsJob DOWN closeSession. NUM=" + (num));
 			SessionFactoryUtils.closeSession(session);
-			logger.info("doStatisticsJob DOWN closeSession. NUM="+(num));
+			logger.info("doStatisticsJob DOWN closeSession. NUM=" + (num));
 		}
 
-		logger.info("doStatisticsJob DOWN END SIZE="+i+" :NUM="+(num));
+		logger.info("doStatisticsJob DOWN END SIZE=" + i + " :NUM=" + (num));
 		num = 0;
 		pageNo = 1;
 		i = 0;
 		hasResult = true;
-		
+
 		while (hasResult) {
 			logger.info("Start doStatisticsJob .....");
 			List<Object[]> searchResult = controller.findBy(hql, pageNo,
 					pageSize, 2, startDate, endDate); // 搜索
-			logger.info("doStatisticsJob Search SIZE="+searchResult.size()+":NUM="+(++num));
-			
+			logger.info("doStatisticsJob Search SIZE=" + searchResult.size()
+					+ ":NUM=" + (++num));
+
 			if (searchResult.size() < pageSize) {
 				hasResult = false;
 			} else {
@@ -225,13 +250,15 @@ public class StatDataRankDate {
 						ResourceAll.class, objs[0].toString());
 				if (resource != null) {
 					resource.setSearchNumDate(((Long) objs[1]).intValue());
-					if(resource.getSearchNum() != null){
+					if (resource.getSearchNum() != null) {
 						resource.setSearchNum(resource.getSearchNum()
 								+ resource.getSearchNumDate());
-					}else{
+					} else {
 						resource.setSearchNum(resource.getSearchNumDate());
 					}
-					logger.info("search"+resource.getId()+":"+resource.getSearchNum()+":"+resource.getSearchNumDate());
+					logger.info("search" + resource.getId() + ":"
+							+ resource.getSearchNum() + ":"
+							+ resource.getSearchNumDate());
 
 					String resKey = Utility.getMemcachedKey(ResourceAll.class,
 							resource.getId());
@@ -243,20 +270,20 @@ public class StatDataRankDate {
 					session.flush();
 					session.clear();
 				}
-//				if (i % 1000 == 0) {
-//					try {
-//						logger.info("doStatisticsJob Search commit. NUM="+(++num));
-//						tx.commit();
-//					} catch (HibernateException e) {
-//						tx.rollback();
-//						e.printStackTrace();
-//					}
-//					tx = session.beginTransaction();
-//				}
+				// if (i % 1000 == 0) {
+				// try {
+				// logger.info("doStatisticsJob Search commit. NUM="+(++num));
+				// tx.commit();
+				// } catch (HibernateException e) {
+				// tx.rollback();
+				// e.printStackTrace();
+				// }
+				// tx = session.beginTransaction();
+				// }
 
 			}
 			try {
-				logger.info("doStatisticsJob Search commit. NUM="+(++num));
+				logger.info("doStatisticsJob Search commit. NUM=" + (++num));
 				tx.commit(); // 防止不是整数的情况下，数据既没提交也没释放
 			} catch (HibernateException e) {
 				tx.rollback();
@@ -264,20 +291,20 @@ public class StatDataRankDate {
 			}
 			SessionFactoryUtils.closeSession(session);
 		}
-		logger.info("doStatisticsJob Search END SIZE="+i+" :NUM="+(num));
-		
-		
+		logger.info("doStatisticsJob Search END SIZE=" + i + " :NUM=" + (num));
+
 		num = 0;
 		pageNo = 1;
 		i = 0;
 		hasResult = true;
-		
+
 		while (hasResult) {
 			logger.info("Start doStatisticsJob .....");
 			List<Object[]> searchResult = controller.findBy(hql, pageNo,
 					pageSize, 1, startDate, endDate); // 点击
-			logger.info("doStatisticsJob view SIZE="+searchResult.size()+":NUM="+(++num));
-			
+			logger.info("doStatisticsJob view SIZE=" + searchResult.size()
+					+ ":NUM=" + (++num));
+
 			if (searchResult.size() < pageSize) {
 				hasResult = false;
 			} else {
@@ -292,13 +319,15 @@ public class StatDataRankDate {
 						ResourceAll.class, objs[0].toString());
 				if (resource != null) {
 					resource.setRankingNumDate(((Long) objs[1]).intValue());
-					if(resource.getRankingNum() != null){
+					if (resource.getRankingNum() != null) {
 						resource.setRankingNum(resource.getRankingNum()
 								+ resource.getRankingNumDate());
-					}else{
+					} else {
 						resource.setRankingNum(resource.getRankingNumDate());
 					}
-					logger.info("search"+resource.getId()+":"+resource.getRankingNumDate()+":"+resource.getRankingNum());
+					logger.info("search" + resource.getId() + ":"
+							+ resource.getRankingNumDate() + ":"
+							+ resource.getRankingNum());
 
 					String resKey = Utility.getMemcachedKey(ResourceAll.class,
 							resource.getId());
@@ -310,20 +339,20 @@ public class StatDataRankDate {
 					session.flush();
 					session.clear();
 				}
-//				if (i % 1000 == 0) {
-//					try {
-//						logger.info("doStatisticsJob Search commit. NUM="+(++num));
-//						tx.commit();
-//					} catch (HibernateException e) {
-//						tx.rollback();
-//						e.printStackTrace();
-//					}
-//					tx = session.beginTransaction();
-//				}
+				// if (i % 1000 == 0) {
+				// try {
+				// logger.info("doStatisticsJob Search commit. NUM="+(++num));
+				// tx.commit();
+				// } catch (HibernateException e) {
+				// tx.rollback();
+				// e.printStackTrace();
+				// }
+				// tx = session.beginTransaction();
+				// }
 
 			}
 			try {
-				logger.info("doStatisticsJob view commit. NUM="+(++num));
+				logger.info("doStatisticsJob view commit. NUM=" + (++num));
 				tx.commit(); // 防止不是整数的情况下，数据既没提交也没释放
 			} catch (HibernateException e) {
 				tx.rollback();
@@ -331,7 +360,7 @@ public class StatDataRankDate {
 			}
 			SessionFactoryUtils.closeSession(session);
 		}
-		logger.info("doStatisticsJob view END SIZE="+i+" :NUM="+(num));
+		logger.info("doStatisticsJob view END SIZE=" + i + " :NUM=" + (num));
 	}
 
 	/***************************************************************************
@@ -394,15 +423,16 @@ public class StatDataRankDate {
 	 * @author penglei
 	 */
 	private void doVoteSubItem() {
-		String hql = "select v.contentId,count(v.id) from VoteResult v where v.contentId is not null and v.itemId in(:itemId) and v.createTime between :startDate and :endDate and v.contentId is not null group by v.contentId";
+		String hql = "select v.contentId,count(v.id) from VoteResult v where v.contentId is not null and v.itemId = :itemId and v.createTime between :startDate and :endDate and v.contentId is not null group by v.contentId";
 		String type = "VoteResult";
-		String[] itemType = systemService.getVariables("vote_Result")
-				.getValue().split(";");
-		Integer[] itemIds = new Integer[itemType.length];
-		for (int i = 0; i < itemType.length; i++) {
-			itemIds[i] = Integer.parseInt(itemType[i]);
-
-		}
+//		String[] itemType = systemService.getVariables("vote_Result")
+//				.getValue().split(";");
+//		Integer[] itemIds = new Integer[itemType.length];
+//		for (int i = 0; i < itemType.length; i++) {
+//			itemIds[i] = Integer.parseInt(itemType[i]);
+//
+//		}
+		Integer itemType = Integer.parseInt(systemService.getVariables("vote_Result").getValue());
 		Date endDate = new Date();
 		Date startDate = DateUtils.addDays(endDate, -1);
 		String strDate = ToolDateUtil.dateToString(startDate, "yyyyMMdd");
@@ -410,7 +440,7 @@ public class StatDataRankDate {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("startDate", startDate);
 		params.put("endDate", endDate);
-		params.put("itemId", itemIds);
+		params.put("itemId", itemType);
 		universalMethod(hql, type, params);
 	}
 
@@ -439,7 +469,8 @@ public class StatDataRankDate {
 		boolean hasResult = true;
 
 		while (hasResult) {
-			logger.info("universalMethod:"+type+":"+hql+":"+new Date());
+			logger.info("universalMethod:" + type + ":" + hql + ":"
+					+ new Date());
 			List<Object[]> clickResult = null;
 			if (obj instanceof Object[]) {
 				Object[] values = (Object[]) obj;
@@ -471,7 +502,8 @@ public class StatDataRankDate {
 							values); // 点击
 				}
 			}
-			logger.info("universalMethod:"+type+":"+clickResult.size() +":"+new Date());
+			logger.info("universalMethod:" + type + ":" + clickResult.size()
+					+ ":" + new Date());
 			if (clickResult.size() < pageSize) {
 				hasResult = false;
 			} else {
@@ -483,31 +515,55 @@ public class StatDataRankDate {
 			Transaction tx = session.beginTransaction();
 
 			for (Object[] objs : clickResult) {
-				
+
 				ResourceAll resource = (ResourceAll) session.get(
 						ResourceAll.class, objs[0].toString());
 				if (resource != null) {
 					if (type.equals("Favorites")) {
 						resource.setFavNumDate(((Long) objs[1]).intValue()); // 设置当天收藏总数
-						resource.setFavNum(resource.getFavNumDate()
-								+ resource.getFavNum()); // 设置总收藏数
+						// resource.setFavNum(resource.getFavNumDate()
+						// + resource.getFavNum()); // 设置总收藏数
 					} else if (type.equalsIgnoreCase("UserBuy")) {
 						resource.setOrderNumDate(((Long) objs[1]).intValue()); // 设置当天订购总数
-						resource.setOrderNum(resource.getOrderNum()
-								+ resource.getOrderNumDate()); // 设置总订购数
+						 resource.setOrderNum(resource.getOrderNum()
+						 + resource.getOrderNumDate()); // 设置总订购数
 					} else if (type.equalsIgnoreCase("MsgRecord")) {
-						resource.setMsgNumDate(((Long) objs[1]).intValue()); // 设置当天留言总数
-						resource.setMsgNum(resource.getMsgNum()
-								+ resource.getMsgNumDate()); // 设置总留言数
+						resource.setMsgNumDate(((Long) objs[1]).intValue());
+						// 设置当天留言总数
+						 resource.setMsgNum(resource.getMsgNum()
+						 + resource.getMsgNumDate()); // 设置总留言数
+
 					} else if (type.equalsIgnoreCase("VoteResult")) {
-						resource.setVoteNumDate(((Long) objs[1]).intValue()); // 设置当天投票总数
-						resource.setVoteNum(resource.getVoteNum()
-								+ resource.getVoteNumDate()); // 设置总投票数
+//						resource.setVoteNumDate(((Long) objs[1]).intValue()); // 设置当天投票总数
+//						resource.setVoteNum(resource.getVoteNum()
+//								+ resource.getVoteNumDate()); // 设置总投票数
+						System.out.println("VOTE:"+resource.getId()+":"+objs[1]);
+						Map param = (Map) obj;
+						Integer itemId = (Integer) param.get("itemId");
+						logger.info("投票类型[日]:" + itemId);
+						int total = ((Long) objs[1]).intValue();
+						VoteSubItem vote = voteService.getVoteSubItemById(
+								resource.getId(), itemId);
+						if (vote != null) {
+							// 做更新
+							if (total > vote.getVoteValue().intValue()) {
+								resource.setVoteNumDate(vote.getVoteValue());// 设置当天投票总数(鲜花)
+							} else {
+								resource.setVoteNumDate(total);
+							}
+
+						} else {
+							resource.setVoteNumDate(0);
+						}
+
+
 					} else if (type.equalsIgnoreCase("ResourceDT")) {
 						resource.setRankingNumDate(((Long) objs[1]).intValue()); // 设置当天PV总数
 						resource.setRankingNum(resource.getRankingNum()
 								+ resource.getRankingNumDate()); // 设置总PV数
-						logger.info("DTDate"+resource.getId()+":"+resource.getRankingNum()+":"+resource.getRankingNumDate());
+						logger.info("DTDate" + resource.getId() + ":"
+								+ resource.getRankingNum() + ":"
+								+ resource.getRankingNumDate());
 					}
 
 					String resKey = Utility.getMemcachedKey(ResourceAll.class,
@@ -522,16 +578,16 @@ public class StatDataRankDate {
 					session.flush();
 					session.clear();
 				}
-//				if (i % 1000 == 0) {
-//					try {
-//						logger.info("universalMethod commit.");
-//						tx.commit();
-//					} catch (HibernateException e) {
-//						tx.rollback();
-//						e.printStackTrace();
-//					}
-//					tx = session.beginTransaction();
-//				}
+				// if (i % 1000 == 0) {
+				// try {
+				// logger.info("universalMethod commit.");
+				// tx.commit();
+				// } catch (HibernateException e) {
+				// tx.rollback();
+				// e.printStackTrace();
+				// }
+				// tx = session.beginTransaction();
+				// }
 
 			}
 			try {

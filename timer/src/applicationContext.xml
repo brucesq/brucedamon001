@@ -118,7 +118,7 @@
 				<value>
 					com.hunthawk.reader.domain.device.UAInfo
 				</value>
-
+				<value>com.hunthawk.reader.domain.inter.VoteSubItem</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

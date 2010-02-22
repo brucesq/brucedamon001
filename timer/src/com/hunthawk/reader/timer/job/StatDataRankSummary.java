@@ -14,10 +14,12 @@ import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import com.hunthawk.framework.HibernateGenericController;
 import com.hunthawk.framework.memcached.MemCachedClientWrapper;
 import com.hunthawk.framework.util.Utility;
+import com.hunthawk.reader.domain.inter.VoteSubItem;
 import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.service.system.SystemService;
 import com.hunthawk.reader.timer.dynamicds.CustomerContextHolder;
 import com.hunthawk.reader.timer.dynamicds.DataSourceMap;
+import com.hunthawk.reader.timer.service.VoteService;
 
 /**
  * 统计汇总
@@ -47,6 +49,14 @@ public class StatDataRankSummary {
 			HibernateGenericController controller) {
 		this.controller = controller;
 	}
+	
+	private VoteService voteService;
+
+	public void setVoteService(VoteService voteService) {
+		this.voteService = voteService;
+	}
+
+	
 	public void doResourceDTJob(){
 //		long start = System.currentTimeMillis();
 //		logger.info("StatDataRankSummary Start:[汇总DT统计]");
@@ -288,7 +298,7 @@ public class StatDataRankSummary {
 	 * 
 	 * @author penglei
 	 */
-	private void doFavorites() {
+	public void doFavorites() {
 		String hql = "select f.contentId,count(f.mobile) from Favorites f where f.contentId is not null group by f.contentId";
 		String type = "Favorites";
 		universalMethod(hql, type, null);
@@ -312,7 +322,7 @@ public class StatDataRankSummary {
 	 * 
 	 * @author penglei
 	 */
-	private void doMsgRecord() {
+	public void doMsgRecord() {
 		String hql = "select m.contentId,count(m.mobile) from MsgRecord m where m.status in(:values) and m.msgType= :msgType and m.contentId is not null group by m.contentId";
 		String type = "MsgRecord";
 		Object[] status = { 1, 2 };// 1：发布未审；2：发布已审
@@ -328,18 +338,19 @@ public class StatDataRankSummary {
 	 * 
 	 * @author penglei
 	 */
-	private void doVoteSubItem() {
-		String hql = "select v.contentId,count(v.id) from VoteResult v where v.contentId is not null and v.itemId in(:itemId) and  v.contentId is not null group by v.contentId";
+	public void doVoteSubItem() {
+		String hql = "select v.contentId,count(v.id) from VoteResult v where v.contentId is not null and v.itemId = :itemId and  v.contentId is not null group by v.contentId";
 		String type = "VoteResult";
-		String[] itemType = systemService.getVariables("vote_Result")
-				.getValue().split(";");
-		Integer[] itemIds = new Integer[itemType.length];
-		for (int i = 0; i < itemType.length; i++) {
-			itemIds[i] = Integer.parseInt(itemType[i]);
-
-		}
+//		String[] itemType = systemService.getVariables("vote_Result")
+//				.getValue().split(";");
+//		Integer[] itemIds = new Integer[itemType.length];
+//		for (int i = 0; i < itemType.length; i++) {
+//			itemIds[i] = Integer.parseInt(itemType[i]);
+//
+//		}
+		Integer itemType = Integer.parseInt(systemService.getVariables("vote_Result").getValue());
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("itemId", itemIds);
+		params.put("itemId", itemType);
 		universalMethod(hql, type, params);
 	}
 
@@ -439,7 +450,27 @@ public class StatDataRankSummary {
 
 					} else if (type.equalsIgnoreCase("VoteResult")) {
 
-						resource.setVoteNum(((Long) objs[1]).intValue()); // 设置投票汇总
+//						resource.setVoteNum(((Long) objs[1]).intValue()); // 设置投票汇总
+						Map param=(Map)obj;
+						Integer itemId=(Integer) param.get("itemId");
+						int total = ((Long) objs[1]).intValue();
+						
+						logger.info("投票类型[总]:"+itemId);
+						
+						VoteSubItem vote = voteService.getVoteSubItemById(
+								resource.getId(), itemId);
+						if (vote != null) {
+
+							if (total != vote.getVoteValue().intValue()) {// 做更新
+								resource.setVoteNum(vote.getVoteValue());
+							} else {
+								resource.setVoteNum(total);
+							}
+
+						}else{
+							resource.setVoteNum(0);
+						}
+
 
 					} else if (type.equalsIgnoreCase("ResourceDT")) {
 
