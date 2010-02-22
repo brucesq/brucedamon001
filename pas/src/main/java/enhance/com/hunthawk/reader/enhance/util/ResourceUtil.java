@@ -255,6 +255,7 @@ class SyncThread extends Thread {
 	String rsyncType;
 	String[] fileNames;
 	static List<String> rsyncDirs = new ArrayList<String>();
+	static int counter = 0;
 
 	public SyncThread(String command, File outputFile, String serverName,
 			String localRoot, String rsyncIp, String rsyncModule,
@@ -272,13 +273,18 @@ class SyncThread extends Thread {
 	
 	private boolean isParentDirNeedRsync(String path){
 		int index = path.lastIndexOf("/");
+		counter ++ ;
+		if(counter>500){
+			counter = 0;
+			return true;
+		}
 		if(index > 0){
 			String localDir = path.substring(0,index);
 			if(rsyncDirs.contains(localDir)){
 				return false;
 			}
 			try{
-				File dir = new File(localDir);
+				File dir = new File(localRoot+"/"+localDir);
 				if(System.currentTimeMillis() - dir.lastModified()  < 3600000){
 					System.out.println("OK:"+(System.currentTimeMillis() - dir.lastModified())+":"+localDir);
 					rsyncDirs.add(localDir);
@@ -286,7 +292,8 @@ class SyncThread extends Thread {
 				}
 				
 			}catch(Exception e){
-				
+				System.out.println("RSYNCERROR:"+localRoot+"/"+localDir);
+				e.printStackTrace();
 			}
 		}
 		return false;
