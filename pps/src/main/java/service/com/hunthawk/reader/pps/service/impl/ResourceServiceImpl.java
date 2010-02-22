@@ -320,6 +320,11 @@ public class ResourceServiceImpl implements ResourceService {
 		case 6:
 			hql += " order by rel.id asc";
 			break;
+		
+		case 10:
+			hql += " order by resource.downnum desc";
+			break;// 人气总排行
+		
 		case 11:
 			hql += " order by resource.downNumMonth desc";
 			break;// 点击月排行

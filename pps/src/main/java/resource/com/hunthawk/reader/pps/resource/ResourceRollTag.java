@@ -159,13 +159,14 @@ public class ResourceRollTag extends BaseTag {
 		 * 
 		 */
 
-		urlOrder = getIntParameter(ParameterConstants.ORDER, -1);
-		urlOrderSub = getIntParameter(ParameterConstants.ORDERSUB, -1);
+		urlOrder = ParamUtil.getIntParameter(request,
+				ParameterConstants.ORDER, -1);
+		urlOrderSub = ParamUtil.getIntParameter(request,
+				ParameterConstants.ORDERSUB, -1);
+		
 		if (urlOrder < 0 && urlOrderSub < 0) {
-			urlOrder = ParamUtil.getIntParameter(request,
-					ParameterConstants.ORDER, -1);
-			urlOrderSub = ParamUtil.getIntParameter(request,
-					ParameterConstants.ORDERSUB, -1);
+			urlOrder = getIntParameter(ParameterConstants.ORDER, -1);
+			urlOrderSub = getIntParameter(ParameterConstants.ORDERSUB, -1);	
 		}
 
 		// 获取url 排序参数 end
@@ -628,6 +629,9 @@ public class ResourceRollTag extends BaseTag {
 			break;
 		case 7:
 			showType = "投票榜";
+			break;
+		case 1:
+			showType = "下载榜";
 			break;
 
 		default:
