@@ -32,6 +32,8 @@
 			<ref bean="systemServiceTarget" />
 		</property>
 		<property name="memcached" ref="memcached"></property>
+		<property name="voteService" ref="voteService"></property>
+		<property name="statDataRankSummary" ref="statDataRankSummaryObj"></property>
 	</bean>
 
 	<bean id="statDataRankDate"
@@ -186,6 +188,8 @@
 			<ref bean="systemServiceTarget" />
 		</property>
 		<property name="memcached" ref="memcached"></property>
+		<property name="voteService" ref="voteService"></property>
+		
 	</bean>
 	
 	<!-- 所有统计任务汇总 end -->

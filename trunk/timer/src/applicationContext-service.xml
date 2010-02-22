@@ -27,5 +27,12 @@
 		class="com.hunthawk.reader.timer.service.impl.StatisticsUAServiceImpl">
 		<property name="hibernateGenericController" ref="hibernateGenericController"></property>
 	</bean>
+	
+	<bean id="voteService"
+		class="com.hunthawk.reader.timer.service.impl.VoteServiceImpl">
+		<property name="hibernateGenericController" ref="hibernateGenericController"></property>
+		<property name="memcached" ref="memcached"></property>
+	</bean>
+	
 
 </beans>
