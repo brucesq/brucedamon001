@@ -136,9 +136,14 @@ public class UploadServiceImpl implements UploadService {
 					author.setSex(Integer
 							.parseInt(trim(argsArr[3], true, "性别")));
 				} catch (Exception e) {
-					throw new Exception("性别必须是数字.");
+//					throw new Exception("性别必须是数字.");
+					author.setSex(3);
 				}
-				author.setArea(trim(argsArr[4], true, "地区"));
+				try{
+					author.setArea(trim(argsArr[4], true, "地区"));
+				}catch(Exception e){
+					author.setArea("未知");
+				}
 
 				String imgdir = "";
 				boolean hasDir = false;

@@ -101,7 +101,7 @@ public class ResourceAll extends PersistentObject {
 	/**
 	 * 下载数据
 	 */
-	private Integer downnum;
+	private Integer downnum = 0;
 	/**
 	 * 推荐指数
 	 */
