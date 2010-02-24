@@ -79,7 +79,7 @@
 			<value>3</value>
 		</property>
 		<property name="maxPoolSize">
-			<value>15</value>
+			<value>60</value>
 		</property>
 		<property name="checkoutTimeout">
 			<value>5000</value>
@@ -91,7 +91,7 @@
 			<value>3000</value>
 		</property>
 		<property name="acquireIncrement">
-			<value>2</value>
+			<value>5</value>
 		</property>
 		<property name="autoCommitOnClose">
 			<value>false</value>
