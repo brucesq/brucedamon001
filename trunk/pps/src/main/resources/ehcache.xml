@@ -50,29 +50,29 @@
 	 <cache name="memcache"
 		maxElementsInMemory="100000"
 		eternal="false"
-		timeToIdleSeconds="2"
-		timeToLiveSeconds="2"
+		timeToIdleSeconds="30"
+		timeToLiveSeconds="30"
 		overflowToDisk="true"/>
 		
 	<cache name="longmemcache"
 		maxElementsInMemory="100000"
 		eternal="false"
-		timeToIdleSeconds="2"
-		timeToLiveSeconds="2"
+		timeToIdleSeconds="600"
+		timeToLiveSeconds="600"
 		overflowToDisk="true"/>	
 		
 	<cache name="mediummemcache"
 		maxElementsInMemory="100000"
 		eternal="false"
-		timeToIdleSeconds="2"
-		timeToLiveSeconds="2"
+		timeToIdleSeconds="120"
+		timeToLiveSeconds="120"
 		overflowToDisk="true"/>	
 		
 	<cache name="resourcechapter"
 		maxElementsInMemory="100000"
 		eternal="false"
-		timeToIdleSeconds="2"
-		timeToLiveSeconds="2"
+		timeToIdleSeconds="600"
+		timeToLiveSeconds="600"
 		overflowToDisk="true"/>	
 	
 </ehcache>

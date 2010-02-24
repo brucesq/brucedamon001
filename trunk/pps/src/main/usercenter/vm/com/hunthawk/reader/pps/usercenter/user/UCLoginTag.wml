@@ -1,7 +1,0 @@
-用户名/手机号:<input type="text" name="login_id" value="" size="16" emptyok="true"/><br/>
-密码:<input type="text" name="login_passwd" value="" size="16" emptyok="true"/><br/>
-<anchor title="登录">登录
-<go href="${url}" method="post">
-	<postfield name="name" value="$(login_id)"/>
-	<postfield name="password" value="$(login_passwd)"/>
-</go></anchor>
