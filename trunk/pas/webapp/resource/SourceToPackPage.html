@@ -1,4 +1,4 @@
-<html jwcid="@Shell"   title="资源到批价包"  doctype=""
+<html jwcid="@Shell"   title="资源到资源包"  doctype=""
 	  browserLogLevel="DEBUG"
 	  consoleEnabled="true"
 	  debugEnabled="true">
@@ -31,16 +31,16 @@
 <span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#" jwcid="@PageLink" page="resource/ShowEbookPage">资源列表</a>－》批量加入批价包</td>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#" jwcid="@PageLink" page="resource/ShowEbookPage">资源列表</a>－》批量加入资源包</td>
 	</tr>
 	<tr>
 		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
 			<table height="22" border="0" cellpadding="0" cellspacing="0">
 			  <tr >
 				<tr>
-					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;新增资源到批价包</td>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;新增资源到资源包</td>
 					<span jwcid="@If" condition="ognl:checkPack">
-					<td class="ToolbarLine"><img src="../img/icon_07.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@DirectLink" listener="listener:showPackReleations" parameters="ognl:pack">查看批价包下资源</a></td>							
+					<td class="ToolbarLine"><img src="../img/icon_07.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@DirectLink" listener="listener:showPackReleations" parameters="ognl:pack">查看资源包下资源</a></td>							
 					</span>
 				</tr>
 			</table>
@@ -57,13 +57,13 @@
 					<br>
 					<table width="100%" border="0" cellspacing="6" cellpadding="0">
 					<tr>
-												<td width="15%" align="right">批价包：<br>
+												<td width="15%" align="right">资源包：<br>
 												</td>
 												<td>
 													
-													<input name="textfield" type="text" class="inputMain" jwcid="pricepackId@TextField" value="ognl:pricepackId"  validators="validators:required" displayName="literal:批价包"/>
+													<input name="textfield" type="text" class="inputMain" jwcid="pricepackId@TextField" value="ognl:pricepackId"  validators="validators:required" displayName="literal:资源包"/>
 													&nbsp;&nbsp; 
-													<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择批价包" onClick="ognl:packURL"/>
+													<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择资源包" onClick="ognl:packURL"/>
 													<input type="hidden" jwcid="packFeeType@Hidden" value="ognl:packFeeType"/>
 												</td>											
 											</tr>
