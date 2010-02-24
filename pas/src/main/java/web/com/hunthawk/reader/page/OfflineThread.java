@@ -231,6 +231,14 @@ public class OfflineThread extends Thread {
 					errInfo += e.getMessage();
 				}
 				
+				try {
+					processResourceUpload(unUploadFileDir, copyMap,
+							ResourceAll.RESOURCE_TYPE_VIDEO,
+							"video.csv");
+				} catch (Exception e) {
+					errInfo += e.getMessage();
+				}
+				
 				{  //记录日志--结束----
 					OffLineLog log = new OffLineLog();
 					log.setValue("文件【"+ upFileTureName + "解析完毕】");
