@@ -59,9 +59,7 @@
   				<fileset dir="${srcDir}/main/java/iphone">
   		  		  					<include name="vm/**" />
   		  		 </fileset>
-  				<fileset dir="${srcDir}/main/usercenter">
-  		  		  		  					<include name="vm/**" />
-  		  		</fileset>
+  				
   	</copy>
   </target>
 
