@@ -45,6 +45,7 @@ public class StatDataZeroClear {
 		doFavoritesZeroClear();	//收藏清零
 		doUserBuyZeroClear();	//订购清零
 		doMsgRecordZeroClear();	//留言清零
+		doVoteZeroClear();
 		logger.info("[统计数据清零 ]---------end");
 	}
 
@@ -139,4 +140,29 @@ public class StatDataZeroClear {
 
 	}
 
+	private void doVoteZeroClear() {
+		String voteDatas[][] = {
+				{ "voteNumDate", "voteNumWeek", "voteNumMonth" } };
+		Date endDate = new Date();
+		Date[] startDates = { DateUtils.addDays(endDate, -1),
+				DateUtils.addDays(endDate, -7), DateUtils.addDays(endDate, -30) };
+		String[] voteTypes={"vote_Result"}; 
+		for (int j = 0; j < voteDatas.length; j++) {
+			
+			for (int i = 0; i < startDates.length; i++) {
+				Integer voteType = Integer.parseInt(systemService.getVariables(voteTypes[j]).getValue());
+				logger.info("投票类型[清零]:"+voteType);
+				String hql = "update ResourceAll r set r."
+						+ voteDatas[j][i]
+						+ " = 0 where not exists (select v.contentId,count(v.id) from VoteResult v where v.contentId is not null and v.itemId =? and v.createTime between ? and ? and v.contentId is not null and v.contentId =r.id group by v.contentId) and r."
+						+ voteDatas[j][i] + ">0";
+				try {
+					controller.executeUpdate(hql, voteType, startDates[i],
+							endDate);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }
