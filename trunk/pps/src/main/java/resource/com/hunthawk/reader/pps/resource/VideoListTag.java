@@ -35,7 +35,7 @@ public class VideoListTag extends BaseTag {
 	public Map parseTag(HttpServletRequest request, String tagName) {
 		String resourceId = URLUtil.getResourceId(request);
 		List<VideoSuite> videos = getResourceService(request).getVideoSuiteList(resourceId);
-		String dir = getResourceService(request).getResourceDirectory(resourceId);
+		String dir = getResourceService(request).getVideoResourceDirectory(resourceId);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getContextPath());

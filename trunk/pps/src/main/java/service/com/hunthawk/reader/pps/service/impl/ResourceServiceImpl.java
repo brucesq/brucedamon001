@@ -1761,6 +1761,33 @@ public class ResourceServiceImpl implements ResourceService {
 		// RESOURCE_VISITS.clear();
 		return allKeys;
 	}
+	public String getVideoResourceDirectory(String resourceId){
+		StringBuilder url = new StringBuilder();
+		url.append(bussinessService.getVariables("video_url").getValue());
+		Integer resourceType = Integer.parseInt(resourceId.substring(0, 1));
+		String key = "notfound";
+		if (ResourceAll.RESOURCE_TYPE_BOOK.equals(resourceType)) {
+			key = "ebook";
+		} else if (ResourceAll.RESOURCE_TYPE_COMICS.equals(resourceType)) {
+			key = "comics";
+		} else if (ResourceAll.RESOURCE_TYPE_MAGAZINE.equals(resourceType)) {
+			key = "magazine";
+		} else if (ResourceAll.RESOURCE_TYPE_NEWSPAPER.equals(resourceType)) {
+			key = "newspaper";
+		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
+			key = "video";
+		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
+			key = "infomation";
+		}
+		url.append(key);
+		url.append("/");
+		int id = Integer.parseInt(resourceId.substring(1));
+		url.append(id / 1000);
+		url.append("/");
+		url.append(resourceId);
+		url.append("/");
+		return url.toString();
+	}
 
 	public String getResourceDirectory(String resourceId) {
 		StringBuilder url = new StringBuilder();

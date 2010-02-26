@@ -654,4 +654,6 @@ public interface ResourceService {
 	public int getVideoSuiteListCount(String resourceId);
 	
 	public String getResourceDirectory(String resourceId);
+	
+	public String getVideoResourceDirectory(String resourceId);
 }
