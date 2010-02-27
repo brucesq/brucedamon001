@@ -110,7 +110,8 @@ public abstract class EditAuthorPage extends EditPage implements IExternalPage,
 			ResourceAuthor resourceauthor = (ResourceAuthor) object;
 			if (isModelNew()) {
 				resourceauthor.setCreateTime(new Date());
-				resourceauthor.setCreatorId(5);
+				resourceauthor.setCreatorId(getUser().getId());
+				resourceauthor.setStatus(0);
 				getResourceService().addResourceAuthor(resourceauthor);
 			}
 			if (entryFile != null) {

@@ -40,13 +40,13 @@ import com.hunthawk.framework.tapestry.form.MapPropertySelectModel;
 import com.hunthawk.framework.tapestry.form.ObjectPropertySelectionModel;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.partner.Provider;
+import com.hunthawk.reader.domain.resource.Application;
+import com.hunthawk.reader.domain.resource.ApplicationSuite;
 import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.domain.resource.ResourceAuthor;
 import com.hunthawk.reader.domain.resource.ResourceReferen;
 import com.hunthawk.reader.domain.resource.ResourceResType;
 import com.hunthawk.reader.domain.resource.ResourceType;
-import com.hunthawk.reader.domain.resource.Video;
-import com.hunthawk.reader.domain.resource.VideoSuite;
 import com.hunthawk.reader.domain.system.UserImpl;
 import com.hunthawk.reader.domain.system.Variables;
 import com.hunthawk.reader.enhance.util.RandomGUID;
@@ -64,7 +64,7 @@ import com.hunthawk.reader.service.system.SystemService;
  * 
  */
 @Restrict(roles = { "resourcechange" }, mode = Restrict.Mode.ROLE)
-public abstract class EditVideoPage extends EditPage implements
+public abstract class EditApplicationPage extends EditPage implements
 		PageBeginRenderListener {
 	// @SuppressWarnings("unused")
 	// private String resourceId;
@@ -148,54 +148,130 @@ public abstract class EditVideoPage extends EditPage implements
 	 */
 	@Override
 	public Class getModelClass() {
-		return Video.class;
+		return Application.class;
 	}
 
-	private void processOnlineVideo(File file) {
+	private void changeJad(File jad, ApplicationSuite suite) {
+		String url = getResourceService().getChapterImg(suite.getResourceId(),
+				suite.getFilename());
+		System.out.println("JAD:" + url);
+		try {
+			List<String> content = FileUtils.readLines(jad);
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < content.size(); i++) {
+				String str = content.get(i);
+				if (str.startsWith("MIDlet-Jar-URL")) {
+					str = "MIDlet-Jar-URL:" + url.substring(0, url.lastIndexOf("."))+".jar";
+				}
+				builder.append(str);
+				builder.append("\r\n");
+			}
+			FileUtils.writeStringToFile(jad, builder.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void processOnlineVideo(File file, String resourceId) {
 		// 处理UC播放器
 
 		List<String> onlineFiles = new ArrayList<String>();
 		System.out.println(file.getAbsolutePath());
+		int i = getLastIndex();
 		if (file.exists() && file.isDirectory()) {
-			File[] videos = file.listFiles();
-			for (File vf : videos) {
-				if (vf.getName().endsWith(".ucs")) {
-					String filename = vf.getName();
-					int index = filename.lastIndexOf("_");
-					String targetFileName;
-					if (index > 0) {
-						targetFileName = filename.substring(0, index) + ".mp4";
-					
-					} else {
-						targetFileName = vf.getName().replaceAll("ucs", "mp4");
+			File[] files = file.listFiles();
+			for (File vf : files) {
+				if (vf.isDirectory()) {
+					String brand = vf.getName();
+					File[] apps = vf.listFiles();
+					Map<String, Long> sizes = new HashMap<String, Long>();
+					for (File app : apps) {
+						if (app.getName().endsWith(".jar")) {
+							sizes.put(app.getName(), app.length());
+						}
 					}
-					logger.info("targetFileName:" + targetFileName);
-					onlineFiles.add(UploadServiceImpl.getFilePathDir(vf
-							.getAbsolutePath())
-							+ File.separator + targetFileName);
+					for (File app : apps) {
+						if (app.getName().endsWith(".jar"))
+							continue;
+						if (app.getName().endsWith(".jad")) {
+							Long size = sizes.get(app.getName().replaceAll(
+									"jad", "jar"));
+							if (size == null) {
+								System.out
+										.println("ERROR:can't found jar file for "
+												+ app.getName());
+							}
+							ApplicationSuite suite = new ApplicationSuite();
+							suite.setBrand(brand);
+							suite.setChapterIndex(i++);
+							suite.setResourceId(resourceId);
+							suite.setSize(size.intValue());
+							suite.setFilename(brand + "/" + app.getName());
+							int index = app.getName().lastIndexOf("_");
+							if (index > 0) {
+								String filedesc = app.getName().substring(
+										index + 1);
+								index = filedesc.indexOf(".");
+								filedesc = filedesc.substring(0, index);
+								suite.setUa(filedesc);
+							} else {
+								suite.setUa("");
+							}
+							suite.setType(UploadServiceImpl
+									.getFileExtName(suite.getFilename()));
+							
+							try {
+								getResourceService().addResourceChapter(suite,
+										ResourceType.TYPE_APPLICATION);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							changeJad(app,suite);
+
+						} else {
+							ApplicationSuite suite = new ApplicationSuite();
+							suite.setBrand(brand);
+							suite.setChapterIndex(i++);
+							suite.setResourceId(resourceId);
+							suite.setSize(((Long) app.length()).intValue());
+							suite.setFilename(brand + "/" + app.getName());
+							int index = app.getName().lastIndexOf("_");
+							if (index > 0) {
+								String filedesc = app.getName().substring(
+										index + 1);
+								index = filedesc.indexOf(".");
+								filedesc = filedesc.substring(0, index);
+								suite.setUa(filedesc);
+							} else {
+								suite.setUa("");
+							}
+							suite.setType(UploadServiceImpl
+									.getFileExtName(suite.getFilename()));
+							try {
+								getResourceService().addResourceChapter(suite,
+										ResourceType.TYPE_APPLICATION);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+
+						}
+					}
 				}
+
 			}
-		}
-		String onlineDir = getOnlineVideoDir() + File.separator;
-		for (String online : onlineFiles) {
-			File srcFile = new File(online);
-			// String filename = srcFile.getName();
-			// int index = filename.lastIndexOf("_");
-			// String targetFileName = filename;
-			// if(index > 0){
-			// targetFileName =
-			// filename.substring(0,index)+"."+UploadServiceImpl.getFileExtName(filename);
-			// }
-			if (srcFile.exists()) {
-				File destFile = new File(onlineDir + srcFile.getName());
-				try {
-					FileUtils.moveFile(srcFile, destFile);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			try {
+				FileUtils.copyDirectory(file, new File(getResourceService()
+						.getChapterAddress(resourceId)));
+				getUploadService().rsyncDirectry(
+						new File(getResourceService().getChapterAddress(
+								resourceId)));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 		}
+
 	}
 
 	private String getOnlineVideoDir() {
@@ -215,11 +291,11 @@ public abstract class EditVideoPage extends EditPage implements
 	protected boolean persist(Object object) {
 		try {
 			String errorMessage = "";
-			Video video = (Video) object;
+			Application video = (Application) object;
 			if (isModelNew()) {
 				video.setCreatorId(this.getUser().getId());
 				getResourceService()
-						.addResource(video, ResourceType.TYPE_VIDEO);
+						.addResource(video, ResourceType.TYPE_APPLICATION);
 			}
 
 			// 修改资源作者ID
@@ -307,51 +383,8 @@ public abstract class EditVideoPage extends EditPage implements
 					UnzipFile.unzip(file2, dir2);
 
 					if (dir2.isDirectory()) {
-						processOnlineVideo(dir2);
-						File[] videos = dir2.listFiles();
-						int i = getLastIndex();
-						for (File vf : videos) {
-							i++;
-							VideoSuite vs = new VideoSuite();
-							vs.setResourceId(video.getId());
-							vs.setSize(((Long) vf.length()).intValue());
-							int index = vf.getName().lastIndexOf("_");
-							if(index > 0){
-								String filedesc = vf.getName().substring(index+1);
-								index = filedesc.indexOf(".");
-								filedesc = filedesc.substring(0,index);
-								vs.setFiledesc(filedesc);
-							}else{
-								vs.setFiledesc("");
-							}
-							vs.setChapterIndex(i);
-							String vfilename = vf.getName();
-							vs.setFilename(vfilename);
-							while (getResourceService().isVideoFileNameExists(
-									vs)) {
-								vfilename = i + vfilename;
-								vs.setFilename(vfilename);
-							}
-							vs.setType(UploadServiceImpl.getFileExtName(vs.getFilename()));
-
-							try {
-								File destFile = new File(getResourceService()
-										.getChapterAddress(video.getId())
-										+ vs.getFilename());
-								if (!destFile.equals(vf)) {
-									FileUtils.copyFile(vf, destFile);
-								}
-								getResourceService().addResourceChapter(vs,
-										ResourceType.TYPE_VIDEO);
-								
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
+						processOnlineVideo(dir2, video.getId());
 					}
-					getUploadService().rsyncDirectry(new File(getResourceService()
-							.getChapterAddress(video.getId())));
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -375,7 +408,7 @@ public abstract class EditVideoPage extends EditPage implements
 			// String authorId = auId(selectedResourceAuthor);
 			video.setAuthorId(getAuthorIDs());
 			getResourceService().updateResource(video,
-					ResourceAll.RESOURCE_TYPE_VIDEO);
+					ResourceAll.RESOURCE_TYPE_APPLICATION);
 			// 根据资源id将引用关系先删除
 			getResourceService().deleteResourceResType(video.getId());
 			// 添加资源与资源列表关系表
@@ -448,7 +481,7 @@ public abstract class EditVideoPage extends EditPage implements
 		Collection<HibernateExpression> hibernateExpressions = new ArrayList<HibernateExpression>();
 
 		HibernateExpression nameE = new CompareExpression("showType",
-				ResourceType.TYPE_VIDEO, CompareType.Equal);
+				ResourceType.TYPE_APPLICATION, CompareType.Equal);
 		hibernateExpressions.add(nameE);
 
 		return hibernateExpressions;
@@ -503,7 +536,7 @@ public abstract class EditVideoPage extends EditPage implements
 		if (isModelNew()) {// 新增加
 			return new ArrayList();
 		} else {// 修改的
-			Video ebook = (Video) getModel();
+			Application ebook = (Application) getModel();
 			// ebook.getId();
 			Collection<HibernateExpression> expressions = new ArrayList<HibernateExpression>();
 			HibernateExpression ex = new CompareExpression("rid",
@@ -543,7 +576,7 @@ public abstract class EditVideoPage extends EditPage implements
 		if (isModelNew()) {// 新增加
 			return new ArrayList();
 		} else {// 修改的
-			Video ebook = (Video) getModel();
+			Application ebook = (Application) getModel();
 			ebook.getAuthorId();
 			Integer[] list = ebook.getAuthorIds();
 			ArrayList<ResourceAuthor> arrayList = new ArrayList<ResourceAuthor>();
@@ -662,7 +695,7 @@ public abstract class EditVideoPage extends EditPage implements
 
 	public void pageBeginRender(PageEvent event) {
 		if (getModel() == null) {
-			setModel(new Video());
+			setModel(new Application());
 		}
 		// 初始化那个版权的名称：
 		ResourceAll resource = (ResourceAll) getModel();
@@ -731,7 +764,7 @@ public abstract class EditVideoPage extends EditPage implements
 		if (isModelNew())
 			return "";
 		ResourceAll resource = (ResourceAll) getModel();
-		Video video = (Video) resource;
+		Application video = (Application) resource;
 		String url = getResourceService().getPreviewCoverImg(resource.getId(),
 				video.getImage());
 
@@ -768,12 +801,12 @@ public abstract class EditVideoPage extends EditPage implements
 	public int getLastIndex() {
 		if (isModelNew())
 			return 0;
-		Video video = (Video) getModel();
+		Application video = (Application) getModel();
 		List<HibernateExpression> ex = new ArrayList<HibernateExpression>();
 		ex.add(new CompareExpression("resourceId", video.getId(),
 				CompareType.Equal));
-		List<VideoSuite> suites = getResourceService().getResourceChapterList(
-				VideoSuite.class, 1, 1, "id", false, ex);
+		List<ApplicationSuite> suites = getResourceService().getResourceChapterList(
+				ApplicationSuite.class, 1, 1, "id", false, ex);
 		if (suites.size() > 0) {
 			return suites.get(0).getChapterIndex();
 		}
@@ -783,11 +816,11 @@ public abstract class EditVideoPage extends EditPage implements
 	public List getResourceSuites() {
 		if (isModelNew())
 			return new ArrayList();
-		Video video = (Video) getModel();
+		Application video = (Application) getModel();
 		List<HibernateExpression> ex = new ArrayList<HibernateExpression>();
 		ex.add(new CompareExpression("resourceId", video.getId(),
 				CompareType.Equal));
-		return getResourceService().getResourceChapterList(VideoSuite.class, 1,
+		return getResourceService().getResourceChapterList(ApplicationSuite.class, 1,
 				1000, "id", false, ex);
 	}
 
@@ -812,14 +845,14 @@ public abstract class EditVideoPage extends EditPage implements
 		return unzipDir;
 	}
 
-	public IPage onDeleteSuite(VideoSuite suite) {
+	public IPage onDeleteSuite(ApplicationSuite suite) {
 		try {
-			Video video = (Video) getResourceService().getResource(
-					suite.getResourceId(), ResourceType.TYPE_VIDEO);
+			Application video = (Application) getResourceService().getResource(
+					suite.getResourceId(), ResourceType.TYPE_APPLICATION);
 			this.setModel(video);
 			this.setResourceAll(video);
 			getResourceService().deleteResourceChapter(suite,
-					ResourceType.TYPE_VIDEO);
+					ResourceType.TYPE_APPLICATION);
 
 		} catch (Exception e) {
 			getDelegate().setFormComponent(null);
@@ -829,8 +862,18 @@ public abstract class EditVideoPage extends EditPage implements
 
 		return this;
 	}
+	
+	public IPropertySelectionModel getOnlineList(){
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("单击", 0);
+		map.put("联网", 1);
+		MapPropertySelectModel mapPro = new MapPropertySelectModel(map, false,
+				"");
+		return mapPro;
 
-	public abstract void setCurrentSuite(VideoSuite vs);
+	}
 
-	public abstract VideoSuite getCurrentSuite();
+	public abstract void setCurrentSuite(ApplicationSuite vs);
+
+	public abstract ApplicationSuite getCurrentSuite();
 }

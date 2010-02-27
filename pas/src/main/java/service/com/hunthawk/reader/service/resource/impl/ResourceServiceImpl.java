@@ -26,6 +26,7 @@ import com.hunthawk.framework.util.BeanUtils;
 import com.hunthawk.framework.util.Utility;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.partner.Provider;
+import com.hunthawk.reader.domain.resource.Application;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
@@ -996,6 +997,8 @@ public class ResourceServiceImpl implements ResourceService {
 			return controller.get(Video.class, resourceId);
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			return controller.get(Infomation.class, resourceId);
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			return controller.get(Application.class, resourceId);
 		}
 		return null;
 	}
@@ -1366,6 +1369,8 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "video";
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		url.append(key);
 		url.append("/");
@@ -1438,6 +1443,8 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "video";
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
+		} else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		url.append(key);
 		url.append("/");

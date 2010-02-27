@@ -322,7 +322,7 @@ public abstract class ShowEpackReleationPage extends SearchPage {
 		types.put("杂志", ResourceType.TYPE_MAGAZINE);
 		types.put("视频", ResourceType.TYPE_VIDEO);
 		types.put("资讯", ResourceType.TYPE_INFO);
-
+		types.put("软件", ResourceType.TYPE_APPLICATION);
 		return new MapPropertySelectModel(types, false, "");
 	}
 

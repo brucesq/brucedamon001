@@ -349,6 +349,7 @@ public class Constants {
 		RESOURCETYPE.put("铃声", 5);
 		RESOURCETYPE.put("视频", 6);
 		RESOURCETYPE.put("资讯", 7);
+		RESOURCETYPE.put("软件", 8);
 	}
 
 	// 资源是否全本

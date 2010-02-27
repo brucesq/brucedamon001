@@ -42,8 +42,9 @@ public class ResourceAll extends PersistentObject {
 	public static final Integer RESOURCE_TYPE_RING = 5;
 	public static final Integer RESOURCE_TYPE_VIDEO = 6;
 	public static final Integer RESOURCE_TYPE_INFO = 7;
+	public static final Integer RESOURCE_TYPE_APPLICATION = 8;
 	/**
-	 * 资源ID 规则为YXXXXXXX,共8位， Y:资源类别1图书，2报纸，3杂志，4漫画，5铃声，6视频 XXXXXXX: 序列号，由0补足位数
+	 * 资源ID 规则为YXXXXXXX,共8位， Y:资源类别1图书，2报纸，3杂志，4漫画，5铃声，6视频,7新闻，8软件 XXXXXXX: 序列号，由0补足位数
 	 * 如图书10000001,报纸20000001
 	 */
 
