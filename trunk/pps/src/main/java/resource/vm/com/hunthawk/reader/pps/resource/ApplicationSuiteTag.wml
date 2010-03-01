@@ -1,0 +1,6 @@
+#foreach(${obj} in ${objs})
+<a href="${dir}${obj.get("obj").filename}">$!{obj.get("name")}</a>
+#if(${velocityCount}<${objs.size()})
+<br/>
+#end
+#end

@@ -300,6 +300,9 @@ public class URLUtil {
 		// 没传参数来的，自动解析url获取
 		for (String query : querys) {
 			kv = query.split("=");
+			if(kv.length<2){
+				continue;
+			}
 			int flag = 0;
 			for (String paramType : list) {
 				if (kv[0].equalsIgnoreCase(paramType)) {
@@ -324,6 +327,26 @@ public class URLUtil {
 		url.append(sb.toString());
 		return url.toString();
 	}
+	/**
+	 * 处理URL中包含&转义符的情况
+	 * @param request
+	 * @return
+	 */
+	public static Map<String,String> getParameters(String queryString){
+		Map<String,String> parameters = new HashMap<String,String>();
+		queryString = queryString.replaceAll("\\?", "&");
+		queryString = queryString.replaceAll("%26", "&");
+		String[] params =  queryString.split("&");
+		for(String str : params){
+			int index = str.indexOf("=");
+			if(index > 0){
+				String name = str.substring(0,index);
+				String value = str.substring(index+1);
+				parameters.put(name, value);
+			}
+		}
+		return parameters;
+	}
 
 	public static void main(String[] args) {
 		String query = "a=2&s=1&as=4&fr=as";
@@ -332,16 +355,23 @@ public class URLUtil {
 		 * sb = new StringBuilder(); sb.append(query); sb.append("&");
 		 * trimURL(sb); System.out.println(sb.toString());
 		 */
-		System.out.println(getURLvalue(query, "as"));
-		String url="pg=r&pd=150000000&gd=4073&ad=001&cd=2947&fd=7101&nd=19896&rd=10003948&pn=1&ed=350070000005";
-		System.out.println(url);
-		Map<String,String> values=new HashMap<String,String>();
-		values.put(ParameterConstants.FEE_BAG_ID, "6951");
-		values.put(ParameterConstants.FEE_BAG_RELATION_ID,"19800");
-		List<String> list=new ArrayList();
-		list.add(ParameterConstants.FEE_BAG_ID);
-		list.add(ParameterConstants.FEE_BAG_RELATION_ID);
-		System.out.println(urlChangeParam(url,values,list));
+//		System.out.println(getURLvalue(query, "as"));
+//		String url="pg=r&pd=150000000&gd=4073&ad=001&cd=2947&fd=7101&nd=19896&rd=10003948&pn=1&ed=350070000005";
+//		System.out.println(url);
+//		Map<String,String> values=new HashMap<String,String>();
+//		values.put(ParameterConstants.FEE_BAG_ID, "6951");
+//		values.put(ParameterConstants.FEE_BAG_RELATION_ID,"19800");
+//		List<String> list=new ArrayList();
+//		list.add(ParameterConstants.FEE_BAG_ID);
+//		list.add(ParameterConstants.FEE_BAG_RELATION_ID);
+//		System.out.println(urlChangeParam(url,values,list));
+		
+		String text = "pg=d%26pd=150000001%26gd=4070%26ad=001%26cd=2901%26fd=6801%26nd=49885%26zd=10014268004%26fc=15000000%26pn=1%26ed=222090000011?linkid=&productid=0551499901";
+		Map<String,String> map = getParameters(text);
+		for(Map.Entry<String, String> entry:map.entrySet()){
+			System.out.println(entry.getKey()+"="+entry.getValue());
+		}
+			
 	}
 
 }

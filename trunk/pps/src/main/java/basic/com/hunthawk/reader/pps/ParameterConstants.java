@@ -57,6 +57,12 @@ public class ParameterConstants {
 	public static final String SEARCH_PARAM_VALUE="key";
 	//快速搜索链接名称
 	public static final String QUICK_SEARCH_LINK_NAME="qkey";
+	//搜索关键字
+	
+	//软件品牌名称
+	public static final String BRAND_NAME="brd";
+	
+	
 	
 	//作者ID
 	public static final String AUTHOR_ID="au";

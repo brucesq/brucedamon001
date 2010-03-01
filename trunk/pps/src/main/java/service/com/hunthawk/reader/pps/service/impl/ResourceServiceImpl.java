@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 
 import com.hunthawk.framework.HibernateGenericController;
@@ -27,12 +26,15 @@ import com.hunthawk.framework.util.Utility;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.bussiness.Columns;
 import com.hunthawk.reader.domain.partner.Provider;
+import com.hunthawk.reader.domain.resource.Application;
+import com.hunthawk.reader.domain.resource.ApplicationSuite;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
 import com.hunthawk.reader.domain.resource.EbookChapter;
 import com.hunthawk.reader.domain.resource.EbookChapterDesc;
 import com.hunthawk.reader.domain.resource.EbookTome;
+import com.hunthawk.reader.domain.resource.Infomation;
 import com.hunthawk.reader.domain.resource.Magazine;
 import com.hunthawk.reader.domain.resource.MagazineChapter;
 import com.hunthawk.reader.domain.resource.MagazineChapterDesc;
@@ -46,9 +48,9 @@ import com.hunthawk.reader.domain.resource.ResourcePack;
 import com.hunthawk.reader.domain.resource.ResourcePackReleation;
 import com.hunthawk.reader.domain.resource.ResourceResType;
 import com.hunthawk.reader.domain.resource.ResourceType;
+import com.hunthawk.reader.domain.resource.Video;
 import com.hunthawk.reader.domain.resource.VideoSuite;
 import com.hunthawk.reader.pps.ArrayUtil;
-import com.hunthawk.reader.pps.StatisticsLog;
 import com.hunthawk.reader.pps.service.BussinessService;
 import com.hunthawk.reader.pps.service.ResourceService;
 import com.hunthawk.reader.service.partner.PartnerService;
@@ -1778,6 +1780,8 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "video";
 		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		url.append(key);
 		url.append("/");
@@ -1806,6 +1810,8 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "video";
 		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		url.append(key);
 		url.append("/");
@@ -1839,6 +1845,12 @@ public class ResourceServiceImpl implements ResourceService {
 			return controller.get(Magazine.class, resourceId);
 		} else if (ResourceAll.RESOURCE_TYPE_NEWSPAPER.equals(resourceType)) {
 			return controller.get(NewsPapers.class, resourceId);
+		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
+			return controller.get(Video.class, resourceId);
+		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
+			return controller.get(Infomation.class, resourceId);
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			return controller.get(Application.class, resourceId);
 		}
 		return controller.get(ResourceAll.class, resourceId);
 	}
@@ -2623,5 +2635,40 @@ public class ResourceServiceImpl implements ResourceService {
 
 	public int getVideoSuiteListCount(String resourceId) {
 		return getVideoSuiteList(resourceId).size();
+	}
+
+	public List<ApplicationSuite> getApplicationSuiteList(String resourceId) {
+		String key = Utility
+				.getMemcachedKey(ResourceAll.class, resourceId, "chapters");
+		List<ApplicationSuite> chapters = null;
+		try {
+			chapters = (List<ApplicationSuite>) memcached
+					.getAndSaveLocalLong(key);
+			if (chapters != null) {
+				return chapters;
+			}
+		} catch (Exception e) {
+			logger.error("从Memcached中获取资源章节信息出错!", e);
+		}
+		chapters = controller.findBy(ApplicationSuite.class, "resourceId", resourceId,
+				"chapterIndex", true);
+		memcached.setAndSaveLong(key, chapters,
+				72 * MemCachedClientWrapper.HOUR);
+		return chapters;
+	}
+
+	public int getApplicationSuiteListCount(String resourceId) {
+		return getVideoSuiteList(resourceId).size();
+	}
+
+	public List<String> getApplicationBrand(String resourceId){
+		List<ApplicationSuite> as = getApplicationSuiteList(resourceId);
+		List<String> brands = new ArrayList<String>();
+		for(ApplicationSuite app : as){
+			if(!brands.contains(app.getBrand()))
+						brands.add(app.getBrand());
+			
+		}
+		return brands;
 	}
 }
