@@ -78,22 +78,22 @@ public class ActionServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		// long startTime = System.currentTimeMillis();
 
-		request.setCharacterEncoding("UTF-8");
-		String mobileSec = request.getParameter("mobileno");
-		if(StringUtils.isNotEmpty(mobileSec)){
-			Des des = new Des();
-			String mobileNo = des.decrypt(mobileSec);
-			Cookie mycookies = new Cookie(sessionId, mobileNo);
-			mycookies.setMaxAge(315360000);
-			if (this.cookieDomain != null && this.cookieDomain.length() > 0) {
-				mycookies.setDomain(this.cookieDomain);
-			}
-			mycookies.setPath(this.cookiePath);
-			response.addCookie(mycookies);
-			request.getSession().setAttribute("x-up-calling-line-id", mobileNo);
-		}
-		RequestUtil.setRequest(request,response);
-		FeeProcess.process(request);
+//		request.setCharacterEncoding("UTF-8");
+//		String mobileSec = request.getParameter("mobileno");
+//		if(StringUtils.isNotEmpty(mobileSec)){
+//			Des des = new Des();
+//			String mobileNo = des.decrypt(mobileSec);
+//			Cookie mycookies = new Cookie(sessionId, mobileNo);
+//			mycookies.setMaxAge(315360000);
+//			if (this.cookieDomain != null && this.cookieDomain.length() > 0) {
+//				mycookies.setDomain(this.cookieDomain);
+//			}
+//			mycookies.setPath(this.cookiePath);
+//			response.addCookie(mycookies);
+//			request.getSession().setAttribute("x-up-calling-line-id", mobileNo);
+//		}
+//		RequestUtil.setRequest(request,response);
+//		FeeProcess.process(request);
 		
 		String page = request.getParameter(ParameterConstants.PAGE);
 		String resourceId = URLUtil.getResourceId(request);

@@ -5,7 +5,9 @@ package com.hunthawk.reader.pps.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +18,6 @@ import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.framework.memcached.MemCachedClientWrapper;
 import com.hunthawk.framework.memcached.NullObject;
 import com.hunthawk.framework.util.Utility;
-import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.bussiness.Columns;
 import com.hunthawk.reader.domain.bussiness.DefaultTemplateSet;
 import com.hunthawk.reader.domain.bussiness.DefaultTemplateSetPK;
@@ -27,7 +28,6 @@ import com.hunthawk.reader.domain.bussiness.TagTemplate;
 import com.hunthawk.reader.domain.bussiness.Template;
 import com.hunthawk.reader.domain.bussiness.UserDefTag;
 import com.hunthawk.reader.domain.resource.Material;
-import com.hunthawk.reader.domain.resource.ResourcePackReleation;
 import com.hunthawk.reader.domain.system.Variables;
 import com.hunthawk.reader.pps.service.BussinessService;
 
@@ -100,24 +100,25 @@ public class BussinessServiceImpl implements BussinessService {
 		return (Template) tmpl;
 
 	}
-	
-	public Integer getDefaultTemplate(Integer pageType,Integer wapType){
+
+	public Integer getDefaultTemplate(Integer pageType, Integer wapType) {
 		String key = Utility.getMemcachedKey(DefaultTemplateSet.class, String
-				.valueOf(pageType), String
-				.valueOf(wapType));
-		try{
-			Integer templateId = (Integer)memcached.getAndSaveLocalMedium(key);
-			if(templateId != null)
+				.valueOf(pageType), String.valueOf(wapType));
+		try {
+			Integer templateId = (Integer) memcached.getAndSaveLocalMedium(key);
+			if (templateId != null)
 				return templateId;
-		}catch(Exception e){
+		} catch (Exception e) {
 			logger.error("从Memcached中获取默认模板信息出错!", e);
 		}
 		DefaultTemplateSetPK pk = new DefaultTemplateSetPK();
 		pk.setPageType(pageType);
 		pk.setWapType(wapType);
-		DefaultTemplateSet defaultset = controller.get(DefaultTemplateSet.class,pk);
-		if(defaultset != null){
-			memcached.setAndSaveLocalMedium(key, defaultset.getTemplateId(), 72 * MemCachedClientWrapper.HOUR);
+		DefaultTemplateSet defaultset = controller.get(
+				DefaultTemplateSet.class, pk);
+		if (defaultset != null) {
+			memcached.setAndSaveLocalMedium(key, defaultset.getTemplateId(),
+					72 * MemCachedClientWrapper.HOUR);
 			return defaultset.getTemplateId();
 		}
 		return -1;
@@ -240,36 +241,49 @@ public class BussinessServiceImpl implements BussinessService {
 	// expressions);
 	// }
 	@SuppressWarnings("unchecked")
-	public List<Columns> getColumnChilds(int parentId,int pageNum,int pageSize,int order) {
+	public List<Columns> getColumnChilds(int parentId, int pageNum,
+			int pageSize, int order) {
 		// CMS更新栏目时，清空该缓存
-		String key = Utility.getMemcachedKey(Columns.class,
-				String.valueOf(parentId), String.valueOf(pageNum), String
-						.valueOf(pageSize));
+		String key = Utility.getMemcachedKey(Columns.class, String
+				.valueOf(parentId), String.valueOf(pageNum), String
+				.valueOf(pageSize));
 		List<Columns> cols = null;
 		try {
 			cols = (List<Columns>) memcached.getAndSaveLocalMedium(key);
 			if (cols != null)
-				return  cols;
+				return cols;
 		} catch (Exception e) {
 			logger.error("从Memcached中获取产品子栏目信息时出错!", e);
 		}
-		String hql="from Columns where parent=? and status=1 ";
-		switch(order){
-		case 0:hql+=" order by order desc";break;
-		case 1:hql+=" order by id desc";break;
-		case 2:hql+=" order by order asc";break;//栏目不存在点击数  指向规则5
-		case 5:hql+=" order by order asc";break;
-		case 6:hql+=" order by id asc";break;
-		default:hql+=" order by order asc,id desc"; //默认 order 升序 id降序
+		String hql = "from Columns where parent=? and status=1 ";
+		switch (order) {
+		case 0:
+			hql += " order by order desc";
+			break;
+		case 1:
+			hql += " order by id desc";
+			break;
+		case 2:
+			hql += " order by order asc";
+			break;// 栏目不存在点击数 指向规则5
+		case 5:
+			hql += " order by order asc";
+			break;
+		case 6:
+			hql += " order by id asc";
+			break;
+		default:
+			hql += " order by order asc,id desc"; // 默认 order 升序 id降序
 		}
-		//String hql="from Columns where parent=? and status=1 order by order asc,id desc";
+		// String hql="from Columns where parent=? and status=1 order by order
+		// asc,id desc";
 		Columns parent = new Columns();
 		parent.setId(parentId);
-		cols=controller.findBy(hql,pageNum, pageSize, parent);
+		cols = controller.findBy(hql, pageNum, pageSize, parent);
 		memcached.setAndSaveLocalMedium(key, cols,
 				5 * MemCachedClientWrapper.MINUTE);
 		return cols;
-		
+
 	}
 
 	public Variables getVariables(String name) {
@@ -301,7 +315,9 @@ public class BussinessServiceImpl implements BussinessService {
 			return null;
 		return (Variables) var;
 	}
-	public List<Columns> getColumnsByPageGroupId(Integer pageGroupId,int pageNum,int pageSize){
+
+	public List<Columns> getColumnsByPageGroupId(Integer pageGroupId,
+			int pageNum, int pageSize) {
 		Collection<HibernateExpression> hibernateExpressions = new ArrayList<HibernateExpression>();
 		PageGroup pagegroup = new PageGroup();
 		pagegroup.setId(pageGroupId);
@@ -312,103 +328,113 @@ public class BussinessServiceImpl implements BussinessService {
 				pageSize, hibernateExpressions);
 		return columns;
 	}
-	public Columns getColumnsByResourceType(Integer pageGroupId,Integer resourceTypeId){
-		String key = Utility.getMemcachedKey(Columns.class, pageGroupId.toString(),resourceTypeId.toString() );
+
+	public Columns getColumnsByResourceType(Integer pageGroupId,
+			Integer resourceTypeId) {
+		String key = Utility.getMemcachedKey(Columns.class, pageGroupId
+				.toString(), resourceTypeId.toString());
 		Columns col = null;
-		try{
-			col = (Columns)memcached.getAndSaveLocalMedium(key);
-			if(col != null){
+		try {
+			col = (Columns) memcached.getAndSaveLocalMedium(key);
+			if (col != null) {
 				return col;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			logger.error("从Memcached中获取资源分类栏目信息时出错!", e);
 		}
-		
+
 		Collection<HibernateExpression> hibernateExpressions = new ArrayList<HibernateExpression>();
 		PageGroup pagegroup = new PageGroup();
 		pagegroup.setId(pageGroupId);
 		HibernateExpression ex = new CompareExpression("pagegroup", pagegroup,
 				CompareType.Equal);
 		hibernateExpressions.add(ex);
-		
-		HibernateExpression columnTypeE = new CompareExpression("columnType", 1,
-				CompareType.Equal);
+
+		HibernateExpression columnTypeE = new CompareExpression("columnType",
+				1, CompareType.Equal);
 		hibernateExpressions.add(columnTypeE);
-		
+
 		HibernateExpression statusE = new CompareExpression("status", 1,
 				CompareType.Equal);
 		hibernateExpressions.add(statusE);
-		
-		HibernateExpression TypeE = new CompareExpression("resourceTypeId", resourceTypeId,
-				CompareType.Equal);
+
+		HibernateExpression TypeE = new CompareExpression("resourceTypeId",
+				resourceTypeId, CompareType.Equal);
 		hibernateExpressions.add(TypeE);
-		List<Columns> columns = controller.findBy(Columns.class, 1,
-				1, hibernateExpressions);
-		if(columns.size() > 0){
+		List<Columns> columns = controller.findBy(Columns.class, 1, 1,
+				hibernateExpressions);
+		if (columns.size() > 0) {
 			col = columns.get(0);
-			memcached.setAndSaveLocalMedium(key, col, 10*MemCachedClientWrapper.MINUTE);
+			memcached.setAndSaveLocalMedium(key, col,
+					10 * MemCachedClientWrapper.MINUTE);
 			return col;
-		}else{
+		} else {
 			return null;
 		}
 	}
-	public String getDefaultChannelId(String productId){
+
+	public String getDefaultChannelId(String productId) {
 		Product product = getProduct(productId);
-		return product.getShowType()+product.getChannel().getId()+"000";
+		return product.getShowType() + product.getChannel().getId() + "000";
 	}
-	
-	public UserDefTag getUserDefTagById(int userTagId){
-		String key = Utility.getMemcachedKey(UserDefTag.class, String.valueOf(userTagId));
+
+	public UserDefTag getUserDefTagById(int userTagId) {
+		String key = Utility.getMemcachedKey(UserDefTag.class, String
+				.valueOf(userTagId));
 		Object var = null;
 		try {
 			var = memcached.getAndSaveLocalLong(key);
-			if(var!=null)
-				return (UserDefTag)var;
+			if (var != null)
+				return (UserDefTag) var;
 		} catch (Exception e) {
 			logger.error("从Memcached中获取用户自定义标签信息时出错!", e);
 		}
-		
+
 		Collection<HibernateExpression> hibernateExpressions = new ArrayList<HibernateExpression>();
-		HibernateExpression statusE= new CompareExpression("status", 1,
+		HibernateExpression statusE = new CompareExpression("status", 1,
 				CompareType.Equal);
 		hibernateExpressions.add(statusE);
-		HibernateExpression idE= new CompareExpression("id", userTagId,
+		HibernateExpression idE = new CompareExpression("id", userTagId,
 				CompareType.Equal);
 		hibernateExpressions.add(idE);
-		List<UserDefTag> tags=controller.findBy(UserDefTag.class, 1, 1, hibernateExpressions);
-		
-		if(tags!=null && tags.size()>0){
-			memcached.setAndSaveLong(key, tags.get(0), 72 * MemCachedClientWrapper.HOUR);
+		List<UserDefTag> tags = controller.findBy(UserDefTag.class, 1, 1,
+				hibernateExpressions);
+
+		if (tags != null && tags.size() > 0) {
+			memcached.setAndSaveLong(key, tags.get(0),
+					72 * MemCachedClientWrapper.HOUR);
 			return tags.get(0);
 		}
 		return null;
 	}
-	
-	public TagTemplate getTagTemplate(int id){
-		String key = Utility.getMemcachedKey(TagTemplate.class, String.valueOf(id));
+
+	public TagTemplate getTagTemplate(int id) {
+		String key = Utility.getMemcachedKey(TagTemplate.class, String
+				.valueOf(id));
 		Object var = null;
 		try {
 			var = memcached.getAndSaveLocalLong(key);
-			if(var!=null)
-				return (TagTemplate)var;
+			if (var != null)
+				return (TagTemplate) var;
 		} catch (Exception e) {
 			logger.error("从Memcached中获取标签模板信息时出错!", e);
 		}
-		
-		
-		TagTemplate tm =controller.get(TagTemplate.class, id);
-		
-		if(tm != null){
+
+		TagTemplate tm = controller.get(TagTemplate.class, id);
+
+		if (tm != null) {
 			memcached.setAndSaveLong(key, tm, 1 * MemCachedClientWrapper.HOUR);
 			return tm;
 		}
 		return null;
 	}
-	/**add by liuxh 09-12-24*/
-	public Material getMaterial(Integer id){
+
+	/** add by liuxh 09-12-24 */
+	public Material getMaterial(Integer id) {
 		return controller.get(Material.class, id);
 	}
-	/**end*/
+
+	/** end */
 	/**
 	 * 分页
 	 * 
@@ -418,7 +444,7 @@ public class BussinessServiceImpl implements BussinessService {
 	 * @return
 	 */
 	private List page(List list, int pageNo, int pageSize) {
-		if(list == null || list.size()<2){
+		if (list == null || list.size() < 2) {
 			return list;
 		}
 		int start = pageSize * (pageNo - 1);
@@ -426,5 +452,28 @@ public class BussinessServiceImpl implements BussinessService {
 		start = start > list.size() - 1 ? list.size() - 1 : start;
 		end = end > list.size() ? list.size() : end;
 		return list.subList(start, end);
+	}
+
+	public Map<String, String> getBrandNames() {
+		String key = Utility.getMemcachedKey(Object.class, "brand_names");
+		Object var = null;
+		try {
+			var = memcached.getAndSaveLocalLong(key);
+			if (var != null)
+				return (Map<String, String>) var;
+		} catch (Exception e) {
+			logger.error("从Memcached中获取厂商信息时出错!", e);
+		}
+
+		String brandNames = getVariables("brand_names").getValue();
+		String[] brands = brandNames.split(";");
+		Map<String, String> map = new HashMap<String, String>();
+		for (String brand : brands) {
+			String[] kv = brand.split(":");
+			map.put(kv[0], kv[1]);
+		}
+		memcached.setAndSaveLong(key, map, 1 * MemCachedClientWrapper.HOUR);
+		return map;
+
 	}
 }

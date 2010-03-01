@@ -12,6 +12,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.hunthawk.reader.domain.bussiness.TagTemplate;
+import com.hunthawk.reader.domain.resource.Application;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
@@ -59,10 +60,8 @@ public class ResourceTag extends BaseTag {
 	private int number;
 	private int currentPage;
 	private String split;
-	
+
 	private TagTemplate tagTem = null;
-	
-	
 
 	public String getSplit() {
 		return split;
@@ -92,16 +91,16 @@ public class ResourceTag extends BaseTag {
 	public Map parseTag(HttpServletRequest request, String tagName) {
 		// TODO Auto-generated method stub
 		String n = getParameter("number", "0");
-		
+
 		int tagTemplateId = this.getIntParameter("tmd", 0);
-		
-		if(tagTemplateId > 0){
+
+		if (tagTemplateId > 0) {
 			tagTem = getBussinessService(request).getTagTemplate(tagTemplateId);
-			
-		}else{
+
+		} else {
 			tagTem = null;
 		}
-		
+
 		split = getParameter("split", "");
 		if (!StringUtils.isEmpty(n)) {
 			try {
@@ -127,10 +126,11 @@ public class ResourceTag extends BaseTag {
 		}
 		// 得到资源ID
 		String resID = URLUtil.getResourceId(request);// request.getParameter(ParameterConstants.RESOURCE_ID);
-	
-		if(resID.startsWith(""+ResourceType.TYPE_VIDEO)){
+
+		if (resID.startsWith("" + ResourceType.TYPE_VIDEO)
+				|| resID.startsWith("" + ResourceType.TYPE_APPLICATION)) {
 			Object isSet = request.getAttribute("SET_HISTORY");
-			if(isSet == null){
+			if (isSet == null) {
 				// 当前的URL
 				StringBuilder currentUrl = new StringBuilder();
 				currentUrl.append(request.getContextPath());
@@ -142,20 +142,19 @@ public class ResourceTag extends BaseTag {
 					String productId = request
 							.getParameter(ParameterConstants.PAGEGROUP_ID);
 					getCustomService(request).updateUserFootprint(
-							RequestUtil.getMobile(), resID, currentUrl.toString(),
+							RequestUtil.getMobile(), resID,
+							currentUrl.toString(),
 							(productId == null ? "0" : productId));
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					TagLogger.debug(tagName, "更表历史记录失败:" + ex.getMessage(), request
-							.getQueryString(), null);
+					TagLogger.debug(tagName, "更表历史记录失败:" + ex.getMessage(),
+							request.getQueryString(), null);
 				}
 				request.setAttribute("SET_HISTORY", Boolean.TRUE);
-				
+
 			}
 		}
-		
-		
-		
+
 		if (StringUtils.isEmpty(property)) {
 			TagLogger.debug(tagName, "property属性为空", request.getQueryString(),
 					null);
@@ -211,13 +210,13 @@ public class ResourceTag extends BaseTag {
 						return resourceFavoritesCount(request, tagName,
 								resource);
 					}
-					/**add by liuxh  09-11-17  增加资源访问量属性*/
-					else if(property.equalsIgnoreCase("PV")){//资源访问量
-						return resourcePV(request,tagName,resource);
+					/** add by liuxh 09-11-17 增加资源访问量属性 */
+					else if (property.equalsIgnoreCase("PV")) {// 资源访问量
+						return resourcePV(request, tagName, resource);
 					}
-					/**end*/
-					else if(property.equalsIgnoreCase("playtime")){//时长
-						return resourcePlayTime(request,tagName,resource);
+					/** end */
+					else if (property.equalsIgnoreCase("playtime")) {// 时长
+						return resourcePlayTime(request, tagName, resource);
 					}
 				} else {
 					TagLogger.debug("ResourceTag", "ID为" + resID + "的资源不存在!",
@@ -228,25 +227,25 @@ public class ResourceTag extends BaseTag {
 		return new HashMap();
 	}
 
-	/***
+	/***************************************************************************
 	 * 
 	 * @param request
 	 * @param tagName
 	 * @param resource
 	 * @return
 	 */
-	private Map resourcePV(HttpServletRequest request,
-			String tagName, ResourceAll resource) {
+	private Map resourcePV(HttpServletRequest request, String tagName,
+			ResourceAll resource) {
 		if (this.currentPage <= this.number || this.number == 0) {
 			Map resultMap = new HashMap();
-			String title = getParameter("title", "")
-					+ resource.getRankingNum();
+			String title = getParameter("title", "") + resource.getRankingNum();
 			resultMap.put(TagUtil.makeTag(tagName), title + split);
 			return resultMap;
 		} else {
 			return new HashMap();
 		}
 	}
+
 	/** 收藏数 */
 	private Map resourceFavoritesCount(HttpServletRequest request,
 			String tagName, ResourceAll resource) {
@@ -362,27 +361,28 @@ public class ResourceTag extends BaseTag {
 	/** 资源名称 */
 	private Map resourceName(HttpServletRequest request, String tagName,
 			ResourceAll resource) {
-		if(request.getAttribute("downnum")==null){
-			long num=getResourceService(request).incrResourceVisits(resource.getId());// 资源点击数+1
+		if (request.getAttribute("downnum") == null) {
+			long num = getResourceService(request).incrResourceVisits(
+					resource.getId());// 资源点击数+1
 			request.setAttribute("downnum", num);
 		}
 		if (this.currentPage <= this.number || this.number == 0) {
 			Map resultMap = new HashMap();
 			String title = getParameter("title", "")
 					+ (resource.getName() == null ? "" : resource.getName());
-			
-//			resultMap.put(TagUtil.makeTag(tagName), title + split);
+
+			// resultMap.put(TagUtil.makeTag(tagName), title + split);
 			/**
-			 * 标签模版可配置
-			 * modify by liuxh 09-11-03
+			 * 标签模版可配置 modify by liuxh 09-11-03
 			 */
-			if(tagTem!=null){
+			if (tagTem != null) {
 				Map velocityMap = new HashMap();
 				velocityMap.put("strUtil", new StrUtil());
-				velocityMap.put("title",title + split);
-				String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+				velocityMap.put("title", title + split);
+				String result = DBVmInstance.getInstance().parseVM(velocityMap,
+						this, tagTem);
 				resultMap.put(TagUtil.makeTag(tagName), result);
-			}else{
+			} else {
 				resultMap.put(TagUtil.makeTag(tagName), title + split);
 			}
 			/**
@@ -594,7 +594,7 @@ public class ResourceTag extends BaseTag {
 				imgurl = url;
 				name = comics.getName();
 			}
-		}else if (resource.getId().startsWith("6")) {// 视频
+		} else if (resource.getId().startsWith("6")) {// 视频
 			Video video = (Video) resource;
 			if (video.getImage().toLowerCase().matches(
 					"[^.]+\\.(png|jpg|gif|jpeg)")) {
@@ -607,10 +607,11 @@ public class ResourceTag extends BaseTag {
 				imgurl = url;
 				name = video.getName();
 			}
-		}else if (resource.getId().startsWith(""+ResourceType.TYPE_INFO)) {// INFO
+		} else if (resource.getId().startsWith("" + ResourceType.TYPE_INFO)) {// INFO
 			Infomation info = (Infomation) resource;
-			if (StringUtils.isNotEmpty(info.getImage())&&info.getImage().toLowerCase().matches(
-					"[^.]+\\.(png|jpg|gif|jpeg)")) {
+			if (StringUtils.isNotEmpty(info.getImage())
+					&& info.getImage().toLowerCase().matches(
+							"[^.]+\\.(png|jpg|gif|jpeg)")) {
 				String url = getResourceService(request).getPreviewCoverImg(
 						info.getId(), info.getImage(), size);
 				// System.out.println("url--->"+url);
@@ -620,22 +621,40 @@ public class ResourceTag extends BaseTag {
 				imgurl = url;
 				name = info.getName();
 			}
+		} else if (resource.getId().startsWith(
+				"" + ResourceType.TYPE_APPLICATION)) {// APPLICATION
+
+			Application app = (Application) resource;
+			if (StringUtils.isNotEmpty(app.getImage())
+					&& app.getImage().toLowerCase().matches(
+							"[^.]+\\.(png|jpg|gif|jpeg)")) {
+				String url = getResourceService(request).getPreviewCoverImg(
+						app.getId(), app.getImage(), size);
+				// System.out.println("url--->"+url);
+				sb.append("<img src=\"").append(url).append(
+						"\" alt=\"" + app.getName() + "\"  />");
+
+				imgurl = url;
+				name = app.getName();
+			}
 		}
-		if(tagTem != null){
-			if(imgurl.length() > 0){
+
+		if (tagTem != null) {
+			if (imgurl.length() > 0) {
 				HashMap velocityMap = new HashMap();
 				velocityMap.put("url", imgurl);
 				velocityMap.put("name", name);
-//				Map resultMap = new HashMap();
-				String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+				// Map resultMap = new HashMap();
+				String result = DBVmInstance.getInstance().parseVM(velocityMap,
+						this, tagTem);
 				return result;
 			}
-		}else{
-			if(sb.length() > 0){
+		} else {
+			if (sb.length() > 0) {
 				return sb.toString();
 			}
 		}
-		
+
 		return "";
 	}
 
@@ -652,17 +671,21 @@ public class ResourceTag extends BaseTag {
 			return new HashMap();
 		}
 	}
-	
+
 	private Map resourcePlayTime(HttpServletRequest request, String tagName,
 			ResourceAll resource) {
-		Video video = (Video)resource;
-		if (this.currentPage <= this.number || this.number == 0) {
-			String title = getParameter("title", "")
-					+ video.getFormatPlayTime();
-			Map resultMap = new HashMap();
-			resultMap.put(TagUtil.makeTag(tagName), title + split);
-			return resultMap;
-		} else {
+		if (resource instanceof Video) {
+			Video video = (Video) resource;
+			if (this.currentPage <= this.number || this.number == 0) {
+				String title = getParameter("title", "")
+						+ video.getFormatPlayTime();
+				Map resultMap = new HashMap();
+				resultMap.put(TagUtil.makeTag(tagName), title + split);
+				return resultMap;
+			} else {
+				return new HashMap();
+			}
+		}else{
 			return new HashMap();
 		}
 	}
@@ -675,9 +698,13 @@ public class ResourceTag extends BaseTag {
 			if (resource.getId().startsWith(
 					String.valueOf(ResourceType.TYPE_BOOK))) {// 图书
 				return ebookNextChapter(request, tagName, resource);
-			} else if (resource.getId().startsWith(String.valueOf(ResourceType.TYPE_COMICS))) {// 漫画
-				return comicsNextChapter(request,tagName,resource);
-			} else if (resource.getId().startsWith(String.valueOf(ResourceType.TYPE_MAGAZINE)) || resource.getId().startsWith(String.valueOf(ResourceType.TYPE_NEWSPAPERS))) {// 杂志、报纸
+			} else if (resource.getId().startsWith(
+					String.valueOf(ResourceType.TYPE_COMICS))) {// 漫画
+				return comicsNextChapter(request, tagName, resource);
+			} else if (resource.getId().startsWith(
+					String.valueOf(ResourceType.TYPE_MAGAZINE))
+					|| resource.getId().startsWith(
+							String.valueOf(ResourceType.TYPE_NEWSPAPERS))) {// 杂志、报纸
 				return nextChapter(request, tagName);
 			}
 			return new HashMap();
@@ -688,25 +715,29 @@ public class ResourceTag extends BaseTag {
 
 	/**
 	 * 漫画下一章节
+	 * 
 	 * @param request
 	 * @param tagName
 	 * @param resource
 	 * @return
-	 * @author liuxh  09-11-03
+	 * @author liuxh 09-11-03
 	 */
 	private Map comicsNextChapter(HttpServletRequest request, String tagName,
-			ResourceAll resource){
-		String mobile=RequestUtil.getMobile();
-		String productId=request.getParameter(ParameterConstants.PRODUCT_ID);
-		String resourceId=resource.getId();
-		int month_fee_bag_id =ParamUtil.getIntParameter(request, ParameterConstants.MONTH_FEE_BAG_ID, -1);
-		int packId=ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_ID, -1);
-		
-		
+			ResourceAll resource) {
+		String mobile = RequestUtil.getMobile();
+		String productId = request.getParameter(ParameterConstants.PRODUCT_ID);
+		String resourceId = resource.getId();
+		int month_fee_bag_id = ParamUtil.getIntParameter(request,
+				ParameterConstants.MONTH_FEE_BAG_ID, -1);
+		int packId = ParamUtil.getIntParameter(request,
+				ParameterConstants.FEE_BAG_ID, -1);
+
 		String title = getParameter("title", "");
-		String currChapter = request.getParameter(ParameterConstants.CHAPTER_ID);
-		String nextChapterId = getResourceService(request).browseResourceChapter(currChapter, false);
-		boolean exists=StringUtils.isNotEmpty(nextChapterId);
+		String currChapter = request
+				.getParameter(ParameterConstants.CHAPTER_ID);
+		String nextChapterId = getResourceService(request)
+				.browseResourceChapter(currChapter, false);
+		boolean exists = StringUtils.isNotEmpty(nextChapterId);
 		if (title.indexOf("!chaptername!") < 0) {
 			if (StringUtils.isEmpty(nextChapterId)) {// 已经是最后一章 没有下一章信息
 				return new HashMap();
@@ -747,20 +778,26 @@ public class ResourceTag extends BaseTag {
 			}
 		}
 		ResourcePackReleation rel = null;
-		if (ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1)!= -1) {
-			rel = getResourceService(request).getResourcePackReleation(ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1));
+		if (ParamUtil.getIntParameter(request,
+				ParameterConstants.FEE_BAG_RELATION_ID, -1) != -1) {
+			rel = getResourceService(request).getResourcePackReleation(
+					ParamUtil.getIntParameter(request,
+							ParameterConstants.FEE_BAG_RELATION_ID, -1));
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getContextPath());
-		Map feeMap=getFeeLogicService(request).isFee(productId, resourceId, mobile, rel, packId, month_fee_bag_id);
-		/**章节控制点*/
-		int choicePoint =rel==null?0: rel.getChoice()==null?0:rel.getChoice();
-		ComicsChapter comics = getResourceService(request).getComicsChapterById(nextChapterId);
-		if(feeMap==null  || comics.getChapterIndex()<choicePoint){
+		Map feeMap = getFeeLogicService(request).isFee(productId, resourceId,
+				mobile, rel, packId, month_fee_bag_id);
+		/** 章节控制点 */
+		int choicePoint = rel == null ? 0 : rel.getChoice() == null ? 0 : rel
+				.getChoice();
+		ComicsChapter comics = getResourceService(request)
+				.getComicsChapterById(nextChapterId);
+		if (feeMap == null || comics.getChapterIndex() < choicePoint) {
 			sb.append(ParameterConstants.PORTAL_PATH);
 			sb.append("?");
-		}else{
+		} else {
 			sb.append(feeMap.get("builder"));
 		}
 		sb.append(ParameterConstants.PAGE);
@@ -782,9 +819,9 @@ public class ResourceTag extends BaseTag {
 		sb.append(ParameterConstants.PAGE_NUMBER);
 		sb.append("=");
 		sb.append("1");
-//		sb.append("&");
-//		URLUtil.append(sb, ParameterConstants.WORDAGE, request);
-		if(feeMap!=null && comics.getChapterIndex()>=choicePoint){
+		// sb.append("&");
+		// URLUtil.append(sb, ParameterConstants.WORDAGE, request);
+		if (feeMap != null && comics.getChapterIndex() >= choicePoint) {
 			sb.append("&");
 			sb.append(ParameterConstants.FEE_ID);
 			sb.append("=");
@@ -812,13 +849,13 @@ public class ResourceTag extends BaseTag {
 			velocityMap.put("url", sb.toString());
 			Map resultMap = new HashMap();
 			/**
-			 * 标签模版可配置
-			 * modify by liuxh 09-11-03
+			 * 标签模版可配置 modify by liuxh 09-11-03
 			 */
-			String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+			String result = DBVmInstance.getInstance().parseVM(velocityMap,
+					this, tagTem);
 			resultMap.put(TagUtil.makeTag(tagName), result);
-//			resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//					.parseVM(velocityMap, this));
+			// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+			// .parseVM(velocityMap, this));
 			return resultMap;
 		} else {
 			TagLogger.debug(tagName, "ID为" + nextChapterId
@@ -826,6 +863,7 @@ public class ResourceTag extends BaseTag {
 			return new HashMap();
 		}
 	}
+
 	/**
 	 * 报纸 杂志 下一篇标签
 	 * 
@@ -834,24 +872,26 @@ public class ResourceTag extends BaseTag {
 	 * @return
 	 */
 	private Map nextChapter(HttpServletRequest request, String tagName) {
-		String mobile=RequestUtil.getMobile();
-		String productId=request.getParameter(ParameterConstants.PRODUCT_ID);
-		String resourceId=URLUtil.getResourceId(request);
-		int month_fee_bag_id =ParamUtil.getIntParameter(request, ParameterConstants.MONTH_FEE_BAG_ID, -1);
-		int packId=ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_ID, -1);
-		
-		
+		String mobile = RequestUtil.getMobile();
+		String productId = request.getParameter(ParameterConstants.PRODUCT_ID);
+		String resourceId = URLUtil.getResourceId(request);
+		int month_fee_bag_id = ParamUtil.getIntParameter(request,
+				ParameterConstants.MONTH_FEE_BAG_ID, -1);
+		int packId = ParamUtil.getIntParameter(request,
+				ParameterConstants.FEE_BAG_ID, -1);
+
 		String title = "".equals(getParameter("title", "")) ? ParameterConstants.NEXT_CHAPTER_LINK
 				: getParameter("title", "");
-		ResourceAll resource = getResourceService(request).getResource(resourceId);
+		ResourceAll resource = getResourceService(request).getResource(
+				resourceId);
 		int flag = Integer.parseInt(resource.getId().substring(0, 1));
-		
 
-		/**当前章节ID*/
+		/** 当前章节ID */
 		String chapterID = request.getParameter(ParameterConstants.CHAPTER_ID);
-		/**下一章ID*/
-		String nextChapter = getResourceService(request).browseResourceChapter(chapterID, false);
-		boolean exists=StringUtils.isNotEmpty(nextChapter);
+		/** 下一章ID */
+		String nextChapter = getResourceService(request).browseResourceChapter(
+				chapterID, false);
+		boolean exists = StringUtils.isNotEmpty(nextChapter);
 		if (title.indexOf("!chaptername!") < 0) {
 			if (StringUtils.isEmpty(nextChapter)) {// 已经是最后一章 没有下一章信息
 				return new HashMap();
@@ -891,48 +931,53 @@ public class ResourceTag extends BaseTag {
 				nextChapter = rid + endCount;
 			}
 		}
-	
+
 		ResourcePackReleation rel = null;
-		if (ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1)!= -1) {
-			rel = getResourceService(request).getResourcePackReleation(ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1));
+		if (ParamUtil.getIntParameter(request,
+				ParameterConstants.FEE_BAG_RELATION_ID, -1) != -1) {
+			rel = getResourceService(request).getResourcePackReleation(
+					ParamUtil.getIntParameter(request,
+							ParameterConstants.FEE_BAG_RELATION_ID, -1));
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getContextPath());
-		Map feeMap=getFeeLogicService(request).isFee(productId, resourceId, mobile, rel, packId, month_fee_bag_id);
-		/**章节控制点*/
-		int choicePoint =rel==null?0:rel.getChoice()==null?0:rel.getChoice();
+		Map feeMap = getFeeLogicService(request).isFee(productId, resourceId,
+				mobile, rel, packId, month_fee_bag_id);
+		/** 章节控制点 */
+		int choicePoint = rel == null ? 0 : rel.getChoice() == null ? 0 : rel
+				.getChoice();
 		NewsPapersChapterDesc npcd = null;
 		MagazineChapterDesc mcd = null;
-		int chapterIndex=-1;
+		int chapterIndex = -1;
 		if (flag == ResourceType.TYPE_MAGAZINE) {// 杂志
 			mcd = getResourceService(request).getMagazineChapterDescById(
 					nextChapter);
-			if(title.indexOf("!chaptername!") > 0){
+			if (title.indexOf("!chaptername!") > 0) {
 				title = title.replaceAll("!chaptername!", "");
-			}else{
+			} else {
 				title += " " + mcd.getName();
 			}
 			/**
-			 * 杂志的计费控制点在卷  查询归属卷的index
-			 * modify by liuxh 
+			 * 杂志的计费控制点在卷 查询归属卷的index modify by liuxh
 			 */
-			EbookTome tome=getResourceService(request).getEbookTomeById(mcd.getTomeId());
-			chapterIndex=tome.getTomeIndex();	
+			EbookTome tome = getResourceService(request).getEbookTomeById(
+					mcd.getTomeId());
+			chapterIndex = tome.getTomeIndex();
 		} else if (flag == ResourceType.TYPE_NEWSPAPERS) {// 报纸
 			npcd = getResourceService(request).getNewsPapersChapterDescById(
 					nextChapter);
-			if(title.indexOf("!chaptername!") > 0){
+			if (title.indexOf("!chaptername!") > 0) {
 				title = title.replaceAll("!chaptername!", "");
-			}else{
+			} else {
 				title += " " + npcd.getName();
 			}
-			chapterIndex=npcd.getChapterIndex();
+			chapterIndex = npcd.getChapterIndex();
 		}
-		if(feeMap==null  || chapterIndex<choicePoint){
+		if (feeMap == null || chapterIndex < choicePoint) {
 			sb.append(ParameterConstants.PORTAL_PATH);
 			sb.append("?");
-		}else{
+		} else {
 			sb.append(feeMap.get("builder"));
 		}
 		sb.append(ParameterConstants.PAGE);
@@ -954,19 +999,20 @@ public class ResourceTag extends BaseTag {
 		sb.append(ParameterConstants.PAGE_NUMBER);
 		sb.append("=");
 		sb.append("1");
-		if (StringUtils.isNotEmpty(request.getParameter(ParameterConstants.WORDAGE))) {
+		if (StringUtils.isNotEmpty(request
+				.getParameter(ParameterConstants.WORDAGE))) {
 			sb.append("&");
 			sb.append(ParameterConstants.WORDAGE);
 			sb.append("=");
 			sb.append(request.getParameter(ParameterConstants.WORDAGE));
-		} 
-		if(feeMap!=null && chapterIndex>=choicePoint){
+		}
+		if (feeMap != null && chapterIndex >= choicePoint) {
 			sb.append("&");
 			sb.append(ParameterConstants.FEE_ID);
 			sb.append("=");
 			sb.append(feeMap.get("feeId"));
 		}
-	
+
 		if (npcd != null || mcd != null) {
 			Map velocityMap = new HashMap();
 			velocityMap.put("exists", exists);
@@ -974,13 +1020,13 @@ public class ResourceTag extends BaseTag {
 			velocityMap.put("url", sb.toString());
 			Map resultMap = new HashMap();
 			/**
-			 * 标签模版可配置
-			 * modify by liuxh 09-11-03
+			 * 标签模版可配置 modify by liuxh 09-11-03
 			 */
-			String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+			String result = DBVmInstance.getInstance().parseVM(velocityMap,
+					this, tagTem);
 			resultMap.put(TagUtil.makeTag(tagName), result);
-//			resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//					.parseVM(velocityMap, this));
+			// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+			// .parseVM(velocityMap, this));
 			return resultMap;
 		} else {
 			TagLogger.debug(tagName, "ID为" + chapterID + "的章节信息不存在,无法显示下一章节链接",
@@ -999,18 +1045,21 @@ public class ResourceTag extends BaseTag {
 	 */
 	private Map ebookNextChapter(HttpServletRequest request, String tagName,
 			ResourceAll resource) {
-		String mobile=RequestUtil.getMobile();
-		String productId=request.getParameter(ParameterConstants.PRODUCT_ID);
-		String resourceId=resource.getId();
-		int month_fee_bag_id =ParamUtil.getIntParameter(request, ParameterConstants.MONTH_FEE_BAG_ID, -1);
-		int packId=ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_ID, -1);
-		
-		
+		String mobile = RequestUtil.getMobile();
+		String productId = request.getParameter(ParameterConstants.PRODUCT_ID);
+		String resourceId = resource.getId();
+		int month_fee_bag_id = ParamUtil.getIntParameter(request,
+				ParameterConstants.MONTH_FEE_BAG_ID, -1);
+		int packId = ParamUtil.getIntParameter(request,
+				ParameterConstants.FEE_BAG_ID, -1);
+
 		String title = getParameter("title", "");
-//		Ebook ebook = (Ebook) resource;
-		String currChapter = request.getParameter(ParameterConstants.CHAPTER_ID);
-		String nextChapterId = getResourceService(request).browseResourceChapter(currChapter, false);
-		boolean exists=StringUtils.isNotEmpty(nextChapterId);
+		// Ebook ebook = (Ebook) resource;
+		String currChapter = request
+				.getParameter(ParameterConstants.CHAPTER_ID);
+		String nextChapterId = getResourceService(request)
+				.browseResourceChapter(currChapter, false);
+		boolean exists = StringUtils.isNotEmpty(nextChapterId);
 		if (title.indexOf("!chaptername!") < 0) {
 			if (StringUtils.isEmpty(nextChapterId)) {// 已经是最后一章 没有下一章信息
 				return new HashMap();
@@ -1051,20 +1100,26 @@ public class ResourceTag extends BaseTag {
 			}
 		}
 		ResourcePackReleation rel = null;
-		if (ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1)!= -1) {
-			rel = getResourceService(request).getResourcePackReleation(ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1));
+		if (ParamUtil.getIntParameter(request,
+				ParameterConstants.FEE_BAG_RELATION_ID, -1) != -1) {
+			rel = getResourceService(request).getResourcePackReleation(
+					ParamUtil.getIntParameter(request,
+							ParameterConstants.FEE_BAG_RELATION_ID, -1));
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getContextPath());
-		Map feeMap=getFeeLogicService(request).isFee(productId, resourceId, mobile, rel, packId, month_fee_bag_id);
-		/**章节控制点*/
-		int choicePoint =rel==null?0:rel.getChoice()==null?0:rel.getChoice();
-		EbookChapterDesc ec = getResourceService(request).getEbookChapterDesc(nextChapterId);
-		if(feeMap==null  || ec.getChapterIndex()<choicePoint){
+		Map feeMap = getFeeLogicService(request).isFee(productId, resourceId,
+				mobile, rel, packId, month_fee_bag_id);
+		/** 章节控制点 */
+		int choicePoint = rel == null ? 0 : rel.getChoice() == null ? 0 : rel
+				.getChoice();
+		EbookChapterDesc ec = getResourceService(request).getEbookChapterDesc(
+				nextChapterId);
+		if (feeMap == null || ec.getChapterIndex() < choicePoint) {
 			sb.append(ParameterConstants.PORTAL_PATH);
 			sb.append("?");
-		}else{
+		} else {
 			sb.append(feeMap.get("builder"));
 		}
 		sb.append(ParameterConstants.PAGE);
@@ -1086,13 +1141,14 @@ public class ResourceTag extends BaseTag {
 		sb.append(ParameterConstants.PAGE_NUMBER);
 		sb.append("=");
 		sb.append("1");
-		if (StringUtils.isNotEmpty(request.getParameter(ParameterConstants.WORDAGE))) {
+		if (StringUtils.isNotEmpty(request
+				.getParameter(ParameterConstants.WORDAGE))) {
 			sb.append("&");
 			sb.append(ParameterConstants.WORDAGE);
 			sb.append("=");
 			sb.append(request.getParameter(ParameterConstants.WORDAGE));
-		} 
-		if(feeMap!=null && ec.getChapterIndex()>=choicePoint){
+		}
+		if (feeMap != null && ec.getChapterIndex() >= choicePoint) {
 			sb.append("&");
 			sb.append(ParameterConstants.FEE_ID);
 			sb.append("=");
@@ -1120,13 +1176,13 @@ public class ResourceTag extends BaseTag {
 			velocityMap.put("url", sb.toString());
 			Map resultMap = new HashMap();
 			/**
-			 * 标签模版可配置
-			 * modify by liuxh 09-11-03
+			 * 标签模版可配置 modify by liuxh 09-11-03
 			 */
-			String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+			String result = DBVmInstance.getInstance().parseVM(velocityMap,
+					this, tagTem);
 			resultMap.put(TagUtil.makeTag(tagName), result);
-//			resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//					.parseVM(velocityMap, this));
+			// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+			// .parseVM(velocityMap, this));
 			return resultMap;
 		} else {
 			TagLogger.debug(tagName, "ID为" + nextChapterId
@@ -1144,10 +1200,13 @@ public class ResourceTag extends BaseTag {
 			if (resource.getId().startsWith(
 					String.valueOf(ResourceType.TYPE_BOOK))) {// 图书
 				return ebookPreChapter(request, tagName, resource);
-			} else if (resource.getId().startsWith(String.valueOf(ResourceType.TYPE_COMICS))) {// 漫画
-				return comicsPreChapter(request,tagName,resource);
 			} else if (resource.getId().startsWith(
-					String.valueOf(ResourceType.TYPE_MAGAZINE)) || resource.getId().startsWith(String.valueOf(ResourceType.TYPE_NEWSPAPERS))) {// 杂志\报纸
+					String.valueOf(ResourceType.TYPE_COMICS))) {// 漫画
+				return comicsPreChapter(request, tagName, resource);
+			} else if (resource.getId().startsWith(
+					String.valueOf(ResourceType.TYPE_MAGAZINE))
+					|| resource.getId().startsWith(
+							String.valueOf(ResourceType.TYPE_NEWSPAPERS))) {// 杂志\报纸
 				return prevChapter(request, tagName);
 			}
 			return new HashMap();
@@ -1155,20 +1214,23 @@ public class ResourceTag extends BaseTag {
 			return new HashMap();
 		}
 	}
+
 	/**
 	 * 漫画上一章标签
-	 * @author liuxh  09-11-03 
+	 * 
+	 * @author liuxh 09-11-03
 	 * @return
 	 */
 	private Map comicsPreChapter(HttpServletRequest request, String tagName,
-			ResourceAll resource){
-		
+			ResourceAll resource) {
+
 		String title = getParameter("title", "");
-		/**当前章节ID*/
+		/** 当前章节ID */
 		String chapterID = request.getParameter(ParameterConstants.CHAPTER_ID);
-		/**上一章ID*/
-		String preChapterId = getResourceService(request).browseResourceChapter(chapterID, true);
-		boolean exists=StringUtils.isNotEmpty(preChapterId);
+		/** 上一章ID */
+		String preChapterId = getResourceService(request)
+				.browseResourceChapter(chapterID, true);
+		boolean exists = StringUtils.isNotEmpty(preChapterId);
 		if (title.indexOf("!chaptername!") < 0) {
 			if (StringUtils.isEmpty(preChapterId)) {//
 				TagLogger.debug(tagName, "已经是第一章  无上一章信息", request
@@ -1182,7 +1244,8 @@ public class ResourceTag extends BaseTag {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getContextPath());
-		ComicsChapter comics = getResourceService(request).getComicsChapterById(preChapterId);
+		ComicsChapter comics = getResourceService(request)
+				.getComicsChapterById(preChapterId);
 		sb.append(ParameterConstants.PORTAL_PATH);
 		sb.append("?");
 		sb.append(ParameterConstants.PAGE);
@@ -1205,7 +1268,6 @@ public class ResourceTag extends BaseTag {
 		sb.append("=");
 		sb.append("1");
 
-	
 		if (comics != null) {
 			Map velocityMap = new HashMap();
 
@@ -1221,19 +1283,21 @@ public class ResourceTag extends BaseTag {
 			velocityMap.put("url", sb.toString());
 			Map resultMap = new HashMap();
 			/**
-			 * 标签模版可配置
-			 * modify by liuxh 09-11-03
+			 * 标签模版可配置 modify by liuxh 09-11-03
 			 */
-			String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+			String result = DBVmInstance.getInstance().parseVM(velocityMap,
+					this, tagTem);
 			resultMap.put(TagUtil.makeTag(tagName), result);
-//			resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//					.parseVM(velocityMap, this));
+			// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+			// .parseVM(velocityMap, this));
 			return resultMap;
 		} else {
-			TagLogger.debug(tagName, "ID为" + preChapterId+ "的章节信息不存在,无法显示上一章链接", request.getQueryString(), null);
+			TagLogger.debug(tagName, "ID为" + preChapterId
+					+ "的章节信息不存在,无法显示上一章链接", request.getQueryString(), null);
 			return new HashMap();
 		}
 	}
+
 	/**
 	 * 报纸 杂志的上一篇标签
 	 * 
@@ -1242,15 +1306,18 @@ public class ResourceTag extends BaseTag {
 	 * @return
 	 */
 	private Map prevChapter(HttpServletRequest request, String tagName) {
-		String resourceId=URLUtil.getResourceId(request);
-		String title = "".equals(getParameter("title", "")) ? ParameterConstants.PRE_CHAPTER_LINK: getParameter("title", "");
-		ResourceAll resource = getResourceService(request).getResource(resourceId);
+		String resourceId = URLUtil.getResourceId(request);
+		String title = "".equals(getParameter("title", "")) ? ParameterConstants.PRE_CHAPTER_LINK
+				: getParameter("title", "");
+		ResourceAll resource = getResourceService(request).getResource(
+				resourceId);
 		int flag = Integer.parseInt(resource.getId().substring(0, 1));
-		/**当前章节ID*/
+		/** 当前章节ID */
 		String chapterID = request.getParameter(ParameterConstants.CHAPTER_ID);
-		/**上一章ID*/
-		String preChapter = getResourceService(request).browseResourceChapter(chapterID, true);
-		boolean exists=StringUtils.isNotEmpty(preChapter);
+		/** 上一章ID */
+		String preChapter = getResourceService(request).browseResourceChapter(
+				chapterID, true);
+		boolean exists = StringUtils.isNotEmpty(preChapter);
 		if (title.indexOf("!chaptername!") < 0) {
 			if (StringUtils.isEmpty(preChapter)) {//
 				TagLogger.debug(tagName, "已经是第一章  无上一章信息", request
@@ -1262,29 +1329,29 @@ public class ResourceTag extends BaseTag {
 				preChapter = URLUtil.getResourceId(request) + "001";
 			}
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getContextPath());
 		NewsPapersChapterDesc npcd = null;
 		MagazineChapterDesc mcd = null;
 		if (flag == ResourceType.TYPE_MAGAZINE) {// 杂志
 			mcd = getResourceService(request).getMagazineChapterDescById(
-						preChapter);
-			if(title.indexOf("!chaptername!") > 0){
-					title = title.replaceAll("!chaptername!", "");
-			}else{
-					title += " " + mcd.getName();
+					preChapter);
+			if (title.indexOf("!chaptername!") > 0) {
+				title = title.replaceAll("!chaptername!", "");
+			} else {
+				title += " " + mcd.getName();
 			}
 		} else if (flag == ResourceType.TYPE_NEWSPAPERS) {// 报纸
 			npcd = getResourceService(request).getNewsPapersChapterDescById(
-						preChapter);
-			if(title.indexOf("!chaptername!") > 0){
-					title = title.replaceAll("!chaptername!", "");
-			}else{
-					title += " " + npcd.getName();
+					preChapter);
+			if (title.indexOf("!chaptername!") > 0) {
+				title = title.replaceAll("!chaptername!", "");
+			} else {
+				title += " " + npcd.getName();
 			}
 		}
-		
+
 		sb.append(ParameterConstants.PORTAL_PATH);
 		sb.append("?");
 		sb.append(ParameterConstants.PAGE);
@@ -1306,12 +1373,13 @@ public class ResourceTag extends BaseTag {
 		sb.append(ParameterConstants.PAGE_NUMBER);
 		sb.append("=");
 		sb.append("1");
-		if (StringUtils.isNotEmpty(request.getParameter(ParameterConstants.WORDAGE))) {
+		if (StringUtils.isNotEmpty(request
+				.getParameter(ParameterConstants.WORDAGE))) {
 			sb.append("&");
 			sb.append(ParameterConstants.WORDAGE);
 			sb.append("=");
 			sb.append(request.getParameter(ParameterConstants.WORDAGE));
-		} 
+		}
 		if (npcd != null || mcd != null) {
 			Map velocityMap = new HashMap();
 			velocityMap.put("exists", exists);
@@ -1319,13 +1387,13 @@ public class ResourceTag extends BaseTag {
 			velocityMap.put("url", sb.toString());
 			Map resultMap = new HashMap();
 			/**
-			 * 标签模版可配置
-			 * modify by liuxh 09-11-03
+			 * 标签模版可配置 modify by liuxh 09-11-03
 			 */
-			String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+			String result = DBVmInstance.getInstance().parseVM(velocityMap,
+					this, tagTem);
 			resultMap.put(TagUtil.makeTag(tagName), result);
-//			resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//					.parseVM(velocityMap, this));
+			// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+			// .parseVM(velocityMap, this));
 			return resultMap;
 		} else {
 			System.out.println("ID为" + chapterID + "的章节信息不存在,无法显示下一章节链接");
@@ -1345,20 +1413,22 @@ public class ResourceTag extends BaseTag {
 	 */
 	private Map ebookPreChapter(HttpServletRequest request, String tagName,
 			ResourceAll resource) {
-//		String mobile=RequestUtil.getMobile();
-//		String productId=request.getParameter(ParameterConstants.PRODUCT_ID);
-//		String resourceId=resource.getId();
-//		int month_fee_bag_id =ParamUtil.getIntParameter(request, ParameterConstants.MONTH_FEE_BAG_ID, -1);
-//		int packId=ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_ID, -1);
-		
-		
+		// String mobile=RequestUtil.getMobile();
+		// String productId=request.getParameter(ParameterConstants.PRODUCT_ID);
+		// String resourceId=resource.getId();
+		// int month_fee_bag_id =ParamUtil.getIntParameter(request,
+		// ParameterConstants.MONTH_FEE_BAG_ID, -1);
+		// int packId=ParamUtil.getIntParameter(request,
+		// ParameterConstants.FEE_BAG_ID, -1);
+
 		String title = getParameter("title", "");
-//		Ebook ebook = (Ebook) resource;
-		/**当前章节ID*/
+		// Ebook ebook = (Ebook) resource;
+		/** 当前章节ID */
 		String chapterID = request.getParameter(ParameterConstants.CHAPTER_ID);
-		/**上一章ID*/
-		String preChapterId = getResourceService(request).browseResourceChapter(chapterID, true);
-		boolean exists=StringUtils.isNotEmpty(preChapterId);
+		/** 上一章ID */
+		String preChapterId = getResourceService(request)
+				.browseResourceChapter(chapterID, true);
+		boolean exists = StringUtils.isNotEmpty(preChapterId);
 		if (title.indexOf("!chaptername!") < 0) {
 			if (StringUtils.isEmpty(preChapterId)) {//
 				TagLogger.debug(tagName, "已经是第一章  无上一章信息", request
@@ -1370,24 +1440,29 @@ public class ResourceTag extends BaseTag {
 				preChapterId = URLUtil.getResourceId(request) + "001";
 			}
 		}
-//		ResourcePackReleation rel = null;
-//		if (ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1)!= -1) {
-//			rel = getResourceService(request).getResourcePackReleation(ParamUtil.getIntParameter(request, ParameterConstants.FEE_BAG_RELATION_ID, -1));
-//		}
-	
+		// ResourcePackReleation rel = null;
+		// if (ParamUtil.getIntParameter(request,
+		// ParameterConstants.FEE_BAG_RELATION_ID, -1)!= -1) {
+		// rel =
+		// getResourceService(request).getResourcePackReleation(ParamUtil.getIntParameter(request,
+		// ParameterConstants.FEE_BAG_RELATION_ID, -1));
+		// }
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getContextPath());
-//		Map feeMap=getFeeLogicService(request).isFee(productId, resourceId, mobile, rel, packId, month_fee_bag_id);
-		/**章节控制点*/
-//		int choicePoint = rel.getChoice()==null?0:rel.getChoice();
+		// Map feeMap=getFeeLogicService(request).isFee(productId, resourceId,
+		// mobile, rel, packId, month_fee_bag_id);
+		/** 章节控制点 */
+		// int choicePoint = rel.getChoice()==null?0:rel.getChoice();
 		// 根据章节ID查找章节名称
-		EbookChapterDesc ec = getResourceService(request).getEbookChapterDesc(preChapterId);
-//		if(feeMap==null  || ec.getChapterIndex()<choicePoint){
-			sb.append(ParameterConstants.PORTAL_PATH);
-			sb.append("?");
-//		}else{
-//			sb.append(feeMap.get("builder"));
-//		}
+		EbookChapterDesc ec = getResourceService(request).getEbookChapterDesc(
+				preChapterId);
+		// if(feeMap==null || ec.getChapterIndex()<choicePoint){
+		sb.append(ParameterConstants.PORTAL_PATH);
+		sb.append("?");
+		// }else{
+		// sb.append(feeMap.get("builder"));
+		// }
 		sb.append(ParameterConstants.PAGE);
 		sb.append("=");
 		sb.append(ParameterConstants.PAGE_DETAIL);
@@ -1407,20 +1482,20 @@ public class ResourceTag extends BaseTag {
 		sb.append(ParameterConstants.PAGE_NUMBER);
 		sb.append("=");
 		sb.append("1");
-		if (StringUtils.isNotEmpty(request.getParameter(ParameterConstants.WORDAGE))) {
+		if (StringUtils.isNotEmpty(request
+				.getParameter(ParameterConstants.WORDAGE))) {
 			sb.append("&");
 			sb.append(ParameterConstants.WORDAGE);
 			sb.append("=");
 			sb.append(request.getParameter(ParameterConstants.WORDAGE));
-		} 
-//		if(feeMap!=null && ec.getChapterIndex()>=choicePoint){
-//			sb.append("&");
-//			sb.append(ParameterConstants.FEE_ID);
-//			sb.append("=");
-//			sb.append(feeMap.get("feeId"));
-//		}
+		}
+		// if(feeMap!=null && ec.getChapterIndex()>=choicePoint){
+		// sb.append("&");
+		// sb.append(ParameterConstants.FEE_ID);
+		// sb.append("=");
+		// sb.append(feeMap.get("feeId"));
+		// }
 
-	
 		if (ec != null) {
 			Map velocityMap = new HashMap();
 
@@ -1436,16 +1511,17 @@ public class ResourceTag extends BaseTag {
 			velocityMap.put("url", sb.toString());
 			Map resultMap = new HashMap();
 			/**
-			 * 标签模版可配置
-			 * modify by liuxh 09-11-03
+			 * 标签模版可配置 modify by liuxh 09-11-03
 			 */
-			String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+			String result = DBVmInstance.getInstance().parseVM(velocityMap,
+					this, tagTem);
 			resultMap.put(TagUtil.makeTag(tagName), result);
-//			resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//					.parseVM(velocityMap, this));
+			// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+			// .parseVM(velocityMap, this));
 			return resultMap;
 		} else {
-			TagLogger.debug(tagName, "ID为" + preChapterId+ "的章节信息不存在,无法显示上一章链接", request.getQueryString(), null);
+			TagLogger.debug(tagName, "ID为" + preChapterId
+					+ "的章节信息不存在,无法显示上一章链接", request.getQueryString(), null);
 			return new HashMap();
 		}
 
@@ -1516,12 +1592,12 @@ public class ResourceTag extends BaseTag {
 				velocityMap.put("url", sb.toString());
 				Map resultMap = new HashMap();
 				/**
-				 * 标签模版可配置
-				 * modify by liuxh 09-11-03
+				 * 标签模版可配置 modify by liuxh 09-11-03
 				 */
-				String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
-//				resultMap.put(TagUtil.makeTag(tagName), VmInstance
-//						.getInstance().parseVM(velocityMap, this));
+				String result = DBVmInstance.getInstance().parseVM(velocityMap,
+						this, tagTem);
+				// resultMap.put(TagUtil.makeTag(tagName), VmInstance
+				// .getInstance().parseVM(velocityMap, this));
 				resultMap.put(TagUtil.makeTag(tagName), result);
 				return resultMap;
 			}
@@ -1575,7 +1651,8 @@ public class ResourceTag extends BaseTag {
 		String[] arrtomes = null;
 		if (flag == ResourceType.TYPE_NEWSPAPERS) {// 报纸
 			// 根据资源ID查询卷列表
-			tomes = getResourceService(request).getEbookTomeByResourceId(rid,1,100);
+			tomes = getResourceService(request).getEbookTomeByResourceId(rid,
+					1, 100);
 			arrtomes = new String[tomes.size()];
 			for (int i = 0; i < tomes.size(); i++) {
 				EbookTome t = tomes.get(i);
@@ -1586,8 +1663,8 @@ public class ResourceTag extends BaseTag {
 		}
 		int curTomeNum = Integer.parseInt(tomeId
 				.substring((tomeId.length() - 2)));
-//		int start = Integer.parseInt(arrtomes[0].substring((arrtomes[0]
-//				.length() - 2)));
+		// int start = Integer.parseInt(arrtomes[0].substring((arrtomes[0]
+		// .length() - 2)));
 		int end = Integer.parseInt(arrtomes[arrtomes.length - 1]
 				.substring((arrtomes[arrtomes.length - 1].length() - 2)));
 		if (curTomeNum >= end) {
@@ -1640,13 +1717,13 @@ public class ResourceTag extends BaseTag {
 		velocityMap.put("url", sb.toString());
 		Map resultMap = new HashMap();
 		/**
-		 * 标签模版可配置
-		 * modify by liuxh 09-11-03
+		 * 标签模版可配置 modify by liuxh 09-11-03
 		 */
-		String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+		String result = DBVmInstance.getInstance().parseVM(velocityMap, this,
+				tagTem);
 		resultMap.put(TagUtil.makeTag(tagName), result);
-//		resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//				.parseVM(velocityMap, this));
+		// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+		// .parseVM(velocityMap, this));
 		return resultMap;
 
 	}
@@ -1697,7 +1774,8 @@ public class ResourceTag extends BaseTag {
 		int[] arrtomes = null;
 		if (flag == ResourceType.TYPE_NEWSPAPERS) {// 报纸
 			// 根据资源ID查询卷列表
-			tomes = getResourceService(request).getEbookTomeByResourceId(rid,1,1000);
+			tomes = getResourceService(request).getEbookTomeByResourceId(rid,
+					1, 1000);
 			arrtomes = new int[tomes.size()];
 			for (int i = 0; i < tomes.size(); i++) {
 				EbookTome t = tomes.get(i);
@@ -1710,7 +1788,7 @@ public class ResourceTag extends BaseTag {
 		int curTomeNum = Integer.parseInt(tomeId
 				.substring((tomeId.length() - 2)));
 		int start = arrtomes[0];
-//		int end = arrtomes[arrtomes.length - 1];
+		// int end = arrtomes[arrtomes.length - 1];
 		if (curTomeNum <= start) {
 			curTomeNum = start;
 		} else {
@@ -1764,13 +1842,13 @@ public class ResourceTag extends BaseTag {
 		velocityMap.put("url", sb.toString());
 		Map resultMap = new HashMap();
 		/**
-		 * 标签模版可配置
-		 * modify by liuxh 09-11-03
+		 * 标签模版可配置 modify by liuxh 09-11-03
 		 */
-		String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
+		String result = DBVmInstance.getInstance().parseVM(velocityMap, this,
+				tagTem);
 		resultMap.put(TagUtil.makeTag(tagName), result);
-//		resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
-//				.parseVM(velocityMap, this));
+		// resultMap.put(TagUtil.makeTag(tagName), VmInstance.getInstance()
+		// .parseVM(velocityMap, this));
 		return resultMap;
 	}
 
@@ -1837,12 +1915,12 @@ public class ResourceTag extends BaseTag {
 				velocityMap.put("url", sb.toString());
 				Map resultMap = new HashMap();
 				/**
-				 * 标签模版可配置
-				 * modify by liuxh 09-11-03
+				 * 标签模版可配置 modify by liuxh 09-11-03
 				 */
-				String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
-//				resultMap.put(TagUtil.makeTag(tagName), VmInstance
-//						.getInstance().parseVM(velocityMap, this));
+				String result = DBVmInstance.getInstance().parseVM(velocityMap,
+						this, tagTem);
+				// resultMap.put(TagUtil.makeTag(tagName), VmInstance
+				// .getInstance().parseVM(velocityMap, this));
 				resultMap.put(TagUtil.makeTag(tagName), result);
 				return resultMap;
 			}
@@ -1943,6 +2021,7 @@ public class ResourceTag extends BaseTag {
 		}
 		return iphoneService;
 	}
+
 	private BussinessService getBussinessService(HttpServletRequest request) {
 		if (bussinessService == null) {
 			ServletContext servletContext = request.getSession()
@@ -1954,14 +2033,14 @@ public class ResourceTag extends BaseTag {
 		}
 		return bussinessService;
 	}
+
 	private FeeLogicService getFeeLogicService(HttpServletRequest request) {
 		if (feeLogicService == null) {
 			ServletContext servletContext = request.getSession()
 					.getServletContext();
 			WebApplicationContext wac = WebApplicationContextUtils
 					.getRequiredWebApplicationContext(servletContext);
-			feeLogicService = (FeeLogicService) wac
-					.getBean("feeLogicService");
+			feeLogicService = (FeeLogicService) wac.getBean("feeLogicService");
 		}
 		return feeLogicService;
 	}
