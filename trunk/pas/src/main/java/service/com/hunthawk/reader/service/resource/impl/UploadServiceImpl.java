@@ -30,6 +30,8 @@ import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.framework.util.BeanUtils;
 import com.hunthawk.framework.util.ImageTool;
 import com.hunthawk.reader.domain.partner.Provider;
+import com.hunthawk.reader.domain.resource.Application;
+import com.hunthawk.reader.domain.resource.ApplicationSuite;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
@@ -381,169 +383,7 @@ public class UploadServiceImpl implements UploadService {
 
 	}
 
-//	public Map<String, Integer> readCopyCsvFile(String dirName, String dir,
-//			UserImpl user) throws Exception {
-//		InputStreamReader fr = null;
-//		BufferedReader br = null;
-//		Map<String, Integer> map = new HashMap<String, Integer>();
-//
-//		if (user.getProvider() == null) {
-//			throw new Exception("用户关联的合作方为空,请联系管理员,更新用户关联的合作方信息");
-//		}
-//		try {
-//			fr = new InputStreamReader(new FileInputStream(dirName));
-//			br = new BufferedReader(fr);
-//			String rec = null;
-//			String[] argsArr = null;
-//			String[] argsArrCopyR = null;
-//			String copyRightFile = null;
-//
-//			// 去掉第一行数据
-//			br.readLine();
-//			int lineNo = 1;
-//			while ((rec = br.readLine()) != null) {
-//
-//				lineNo++;
-//				String resInfo = "版权文件第" + lineNo + "行";
-//
-//				if (StringUtils.isEmpty(rec)) {
-//					continue;
-//				}
-//
-//				argsArr = rec.split(",");
-//
-//				boolean isNew = true;
-//
-//				String identifier = argsArr[0].trim();
-//				try {
-//					Integer.parseInt(identifier);
-//				} catch (Exception e) {
-//					throw new Exception("版权标识必须是数字.");
-//				}
-//
-//				Collection<HibernateExpression> expressions = new ArrayList<HibernateExpression>();
-//				expressions.add(new CompareExpression("cpId", user
-//						.getProvider().getId(), CompareType.Equal));
-//				expressions.add(new CompareExpression("identifier", identifier,
-//						CompareType.Equal));
-//				List<ResourceReferen> referens = resourceService
-//						.findResourceReferenBy(1, 1, "id", true, expressions);
-//
-//				ResourceReferen referen = null;
-//				if (referens.size() > 0) {
-//					referen = referens.get(0);
-//					isNew = false;
-//				} else {
-//					referen = new ResourceReferen();
-//				}
-//
-//				int j = 0;
-//				referen
-//						.setIdentifier(trim(argsArr[j++], true, resInfo
-//								+ "版权标识"));
-//				referen.setName(trim(argsArr[j++], true, resInfo + "版权方名称"));
-//				referen.setContactName(trim(argsArr[j++], true, resInfo
-//						+ "版权方联系人"));
-//				referen.setContactPhone(trim(argsArr[j++], true, resInfo
-//						+ "版权方联系人电话"));
-//
-//				referen
-//						.setEmail(trim(argsArr[j++], true, resInfo + "版权方联系人邮箱"));
-//				referen
-//						.setAddress(trim(argsArr[j++], true, resInfo
-//								+ "版权方联系地址"));
-//				referen.setFax(trim(argsArr[j++], true, resInfo + "版权方联系传真"));
-//
-//				referen.setBeginTime(strToDate(argsArr[j++].trim(), true,
-//						resInfo + "开始时间"));
-//				referen.setEndTime(strToDate(argsArr[j++].trim(), true, resInfo
-//						+ "结束时间"));
-//				referen.setShowUrl(argsArr[j]);
-//				
-//				if (isNew) {
-//					referen.setStatus(1);
-//					referen.setCreatorId(user.getId());
-//					referen.setCreateTime(new Date());
-//				}
-//				referen.setCpId(user.getProvider().getId());
-//
-//				referen.setModifyTime(new Date());
-//				referen.setModifierId(user.getId());
-//
-//				copyRightFile = getFiles(dir + File.separator + argsArr[j]);
-//				argsArrCopyR = copyRightFile.split("/");
-//
-//				for (int i = 0; i < argsArrCopyR.length; i++) {
-//					if (argsArrCopyR[i].startsWith("userpor")) {
-//						referen.setCopyrightUse(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("attorn")) {
-//						referen.setCopyrightAttorn(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("cooperate")) {
-//						referen.setCooperatePro(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("provider")) {
-//						referen.setProviderInfo(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("copyright")) {
-//						referen.setCopyrightCheck(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("productinfo")) {
-//						referen.setProductInfo(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("mcpinfo")) {
-//						referen.setMcpinfo(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("promises")) {
-//						referen.setPromises(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("authorinfo")) {
-//						referen.setAuthorName(argsArrCopyR[i]);
-//					}
-//					if (argsArrCopyR[i].startsWith("other")) {
-//						referen.setCopyrightOther(argsArrCopyR[i]);
-//					}
-//
-//				}
-//
-//				if (isNew) {
-//					resourceService.addResourceReferen(referen);
-//				} else {
-//					resourceService.updateResourceReferen(referen);
-//				}
-//
-//				map.put(referen.getShowUrl(), referen.getId());
-//
-//				File destDir = getUploadResourceDir("referen", ""
-//						+ referen.getId());
-//				File srcDir = new File(dir + File.separator
-//						+ referen.getShowUrl());
-//				// 拷贝目录文件
-//				FileUtils.copyDirectory(srcDir, destDir);
-//				rsyncDirectry(destDir);
-//				referen.setShowUrl("referen/" + referen.getId() / 1000 + "/"
-//						+ referen.getId() + "/");
-//				resourceService.updateResourceReferen(referen);
-//
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		} finally {
-//			try {
-//				if (fr != null)
-//					fr.close();
-//				if (br != null)
-//					br.close();
-//			} catch (IOException ex) {
-//				ex.printStackTrace();
-//			}
-//		}
-//		return map;
-//
-//	}
+
 
 	/**
 	 * 清空资源的附属属性,如章节、卷、关联的类型
@@ -789,6 +629,8 @@ public class UploadServiceImpl implements UploadService {
 					//视频处理文件
 					if(ResourceType.TYPE_VIDEO.equals(resourceType)){
 						parseVideo(resDir,resource.getId(),resourceType);
+					}else if(ResourceType.TYPE_APPLICATION.equals(resourceType)){
+						parseApplication(resDir,resource.getId(),resourceType);
 					}else{
 						parseDirectory(resDir, "directory.txt", resource.getId(),
 							resourceType, resInfo);
@@ -972,7 +814,7 @@ public class UploadServiceImpl implements UploadService {
 			}
 		}
 
-		if (!ResourceType.TYPE_VIDEO.equals(resourceType)) {
+		if (!ResourceType.TYPE_VIDEO.equals(resourceType) && !ResourceType.TYPE_APPLICATION.equals(resourceType)) {
 			int words = checkChapter(dir, resourceType, prefixInfo);
 			resource.setWords(words);
 		}
@@ -1084,6 +926,8 @@ public class UploadServiceImpl implements UploadService {
 			key = "newspaper_format";
 		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			key = "video_format";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application_format";
 		}
 		Variables var = systemService.getVariables(key);
 		return var.getValue();
@@ -1101,6 +945,8 @@ public class UploadServiceImpl implements UploadService {
 			key = "newspaper";
 		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			key = "video";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		return getUploadResourceDir(key, id);
 	}
@@ -1263,8 +1109,124 @@ public class UploadServiceImpl implements UploadService {
 			tNameDir.mkdirs();
 		return tName;
 	}
-	
-	
+	private void parseApplication(String fileDir,String resourceId,Integer type){
+		String appDir = fileDir+File.separator+"application";
+		File file = new File(appDir);
+		int i = 1 ;
+		if (file.exists() && file.isDirectory()) {
+			File[] files = file.listFiles();
+			for (File vf : files) {
+				if (vf.isDirectory()) {
+					String brand = vf.getName();
+					File[] apps = vf.listFiles();
+					Map<String, Long> sizes = new HashMap<String, Long>();
+					for (File app : apps) {
+						if (app.getName().endsWith(".jar")) {
+							sizes.put(app.getName(), app.length());
+						}
+					}
+					for (File app : apps) {
+						if (app.getName().endsWith(".jar"))
+							continue;
+						if (app.getName().endsWith(".jad")) {
+							Long size = sizes.get(app.getName().replaceAll(
+									"jad", "jar"));
+							if (size == null) {
+								System.out
+										.println("ERROR:can't found jar file for "
+												+ app.getName());
+							}
+							ApplicationSuite suite = new ApplicationSuite();
+							suite.setBrand(brand);
+							suite.setChapterIndex(i++);
+							suite.setResourceId(resourceId);
+							suite.setSize(size.intValue());
+							suite.setFilename(brand + "/" + app.getName());
+							int index = app.getName().lastIndexOf("_");
+							if (index > 0) {
+								String filedesc = app.getName().substring(
+										index + 1);
+								index = filedesc.indexOf(".");
+								filedesc = filedesc.substring(0, index);
+								suite.setUa(filedesc);
+							} else {
+								suite.setUa("");
+							}
+							suite.setType(UploadServiceImpl
+									.getFileExtName(suite.getFilename()));
+							
+							try {
+								resourceService.addResourceChapter(suite,
+										ResourceType.TYPE_APPLICATION);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							changeJad(app,suite);
+
+						} else {
+							ApplicationSuite suite = new ApplicationSuite();
+							suite.setBrand(brand);
+							suite.setChapterIndex(i++);
+							suite.setResourceId(resourceId);
+							suite.setSize(((Long) app.length()).intValue());
+							suite.setFilename(brand + "/" + app.getName());
+							int index = app.getName().lastIndexOf("_");
+							if (index > 0) {
+								String filedesc = app.getName().substring(
+										index + 1);
+								index = filedesc.indexOf(".");
+								filedesc = filedesc.substring(0, index);
+								suite.setUa(filedesc);
+							} else {
+								suite.setUa("");
+							}
+							suite.setType(UploadServiceImpl
+									.getFileExtName(suite.getFilename()));
+							try {
+								resourceService.addResourceChapter(suite,
+										ResourceType.TYPE_APPLICATION);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+
+						}
+					}
+				}
+
+			}
+			try {
+				FileUtils.copyDirectory(file, new File(resourceService
+						.getChapterAddress(resourceId)));
+				rsyncDirectry(
+						new File(resourceService.getChapterAddress(
+								resourceId)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+	public void changeJad(File jad, ApplicationSuite suite) {
+		String url = resourceService.getChapterImg(suite.getResourceId(),
+				suite.getFilename());
+		System.out.println("JAD:" + url);
+		try {
+			List<String> content = FileUtils.readLines(jad);
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < content.size(); i++) {
+				String str = content.get(i);
+				if (str.startsWith("MIDlet-Jar-URL")) {
+					str = "MIDlet-Jar-URL:" + url.substring(0, url.lastIndexOf("."))+".jar";
+				}
+				builder.append(str);
+				builder.append("\r\n");
+			}
+			FileUtils.writeStringToFile(jad, builder.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	private void parseVideo(String fileDir,String resourceId,Integer type){
 		String videoDir = fileDir+File.separator+"video";
 		processOnlineVideo(fileDir);
@@ -1869,6 +1831,8 @@ public class UploadServiceImpl implements UploadService {
 			return new NewsPapers();
 		}else if(ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			return new Video();
+		}else if(ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			return new Application();
 		}
 		return null;
 	}
