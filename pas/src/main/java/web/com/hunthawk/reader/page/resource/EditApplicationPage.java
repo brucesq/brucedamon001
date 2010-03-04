@@ -151,32 +151,31 @@ public abstract class EditApplicationPage extends EditPage implements
 		return Application.class;
 	}
 
-	private void changeJad(File jad, ApplicationSuite suite) {
-		String url = getResourceService().getChapterImg(suite.getResourceId(),
-				suite.getFilename());
-		System.out.println("JAD:" + url);
-		try {
-			List<String> content = FileUtils.readLines(jad);
-			StringBuilder builder = new StringBuilder();
-			for (int i = 0; i < content.size(); i++) {
-				String str = content.get(i);
-				if (str.startsWith("MIDlet-Jar-URL")) {
-					str = "MIDlet-Jar-URL:" + url.substring(0, url.lastIndexOf("."))+".jar";
-				}
-				builder.append(str);
-				builder.append("\r\n");
-			}
-			FileUtils.writeStringToFile(jad, builder.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
+//	private void changeJad(File jad, ApplicationSuite suite) {
+//		String url = getResourceService().getChapterImg(suite.getResourceId(),
+//				suite.getFilename());
+//		System.out.println("JAD:" + url);
+//		try {
+//			List<String> content = FileUtils.readLines(jad);
+//			StringBuilder builder = new StringBuilder();
+//			for (int i = 0; i < content.size(); i++) {
+//				String str = content.get(i);
+//				if (str.startsWith("MIDlet-Jar-URL")) {
+//					str = "MIDlet-Jar-URL:" + url.substring(0, url.lastIndexOf("."))+".jar";
+//				}
+//				builder.append(str);
+//				builder.append("\r\n");
+//			}
+//			FileUtils.writeStringToFile(jad, builder.toString());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
 
-	private void processOnlineVideo(File file, String resourceId) {
+	private void processApplication(File file, String resourceId) {
 		// ´¦ÀíUC²¥·ÅÆ÷
 
-		List<String> onlineFiles = new ArrayList<String>();
 		System.out.println(file.getAbsolutePath());
 		int i = getLastIndex();
 		if (file.exists() && file.isDirectory()) {
@@ -227,7 +226,7 @@ public abstract class EditApplicationPage extends EditPage implements
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							changeJad(app,suite);
+							getUploadService().changeJad(app,suite);
 
 						} else {
 							ApplicationSuite suite = new ApplicationSuite();
@@ -383,7 +382,7 @@ public abstract class EditApplicationPage extends EditPage implements
 					UnzipFile.unzip(file2, dir2);
 
 					if (dir2.isDirectory()) {
-						processOnlineVideo(dir2, video.getId());
+						processApplication(dir2, video.getId());
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

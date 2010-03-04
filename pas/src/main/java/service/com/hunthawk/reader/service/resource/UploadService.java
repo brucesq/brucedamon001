@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.hunthawk.reader.domain.resource.ApplicationSuite;
 import com.hunthawk.reader.domain.resource.ResourceReferen;
 import com.hunthawk.reader.domain.system.UserImpl;
 
@@ -95,4 +96,6 @@ public interface UploadService {
 	 * return 处理完后的图片名称
 	 */
 	public String resizeChapterImage(String destDir,String img,String chapterId);
+	
+	public void changeJad(File jad, ApplicationSuite suite) ;
 }
