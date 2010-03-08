@@ -33,6 +33,12 @@ public class AccessLog {
 		logger.info(date+SPLIT+mobile+SPLIT+bytes+SPLIT+verson+SPLIT+uaStr+SPLIT+ip+SPLIT+url+SPLIT+userAgent+SPLIT+refer);
 	}
 
+	public static void log(String mobile,Integer bytes,Integer verson,String uaStr,String ip,String url,String userAgent,String refer){
+		String date = ToolDateUtil.dateToString(new Date());
+		logger.info(date+SPLIT+mobile+SPLIT+bytes+SPLIT+verson+SPLIT+uaStr+SPLIT+ip+SPLIT+url+SPLIT+userAgent+SPLIT+refer);
+	}
+	
+	
 	public static String getIpAddr(HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.hunthawk.framework.HibernateGenericController;
 import com.hunthawk.framework.memcached.MemCachedClientWrapper;
+import com.hunthawk.reader.pps.AccessLog;
 import com.hunthawk.reader.pps.StatisticsLog;
 import com.hunthawk.reader.pps.StatisticsUALog;
 import com.hunthawk.reader.pps.VoteResultLog;
@@ -44,6 +45,9 @@ public class ResourceVisitsUpdateJob {
 		StatisticsLog.logStat(99,"noop");
 		VoteResultLog.logVote(9, "10000001", "10000000000", 1);
 		StatisticsUALog.logUA("test", "test"); //添加一些数据让日志文件正常生成
+		
+		AccessLog.log("10000000000",0,1,"Test","127.0.0.1","http://127.0.0.1","Test","http://127.0.0.1");
+		
 //		Set<String> allKeys = resourceService.getAllResourceVisitKey();
 //		logger.info("ResourceVisitsUpdateJob start keys("+allKeys.size()+") startTime= "+new Date());
 //		long startTime = System.currentTimeMillis();
