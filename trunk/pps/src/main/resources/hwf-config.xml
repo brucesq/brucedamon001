@@ -499,4 +499,9 @@
 		<desc>软件下载列表</desc>
 	</tag>
 	
+	<tag>
+		<name>redirect</name>
+		<classname>com.hunthawk.reader.pps.basic.RedirectTag</classname>
+		<desc>友链</desc>
+	</tag>
 </configs>
