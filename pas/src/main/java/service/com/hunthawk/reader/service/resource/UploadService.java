@@ -98,4 +98,6 @@ public interface UploadService {
 	public String resizeChapterImage(String destDir,String img,String chapterId);
 	
 	public void changeJad(File jad, ApplicationSuite suite) ;
+
+	public  String getVideoResourceDirectory(String resourceId);
 }

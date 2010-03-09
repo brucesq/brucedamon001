@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1109,6 +1110,71 @@ public class UploadServiceImpl implements UploadService {
 			tNameDir.mkdirs();
 		return tName;
 	}
+
+	public static List<String> execCmd(String cmd){
+		try{
+			System.out.println("EXEC CMD:"+cmd);
+			Process process = Runtime.getRuntime().exec(cmd);
+			InputStream in = process.getInputStream();  
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));  
+			String line = null;  
+			List<String> builder = new ArrayList<String>();
+			while (null != (line = reader.readLine())) {  
+				builder.add(line);  
+			}  
+			System.out.println("EXEC RESPONSE:"+builder.toString());
+			return builder;
+		}catch(Exception e){
+			e.printStackTrace();
+			return new ArrayList();
+		}
+	}
+
+	public static void changeUcsResourceURL(String ucsfile,String targetUrl,SystemService sysService){
+		Variables var = sysService.getVariables("ucs_geturl_tool");
+		String geturlCMD = var.getValue()+" "+ucsfile;
+		List<String> urls = execCmd(geturlCMD);
+		Variables var1 = sysService.getVariables("ucs_replaceurl_tool");
+		for(String url : urls){
+			String fileName = url.substring(url.lastIndexOf("/"));
+			String filePath = ucsfile.substring(0,ucsfile.lastIndexOf(File.separator));
+			File mp4File = new File(filePath+fileName);
+			if(mp4File.exists()){
+				String relCMD = var1.getValue()+" "+ucsfile+" "+ucsfile+" "+url+" "+targetUrl+mp4File.getName();
+				execCmd(relCMD);
+			}
+			
+		}
+	}
+	public  String getVideoResourceDirectory(String resourceId){
+		StringBuilder url = new StringBuilder();
+		url.append(systemService.getVariables("video_url").getValue());
+		Integer resourceType = Integer.parseInt(resourceId.substring(0, 1));
+		String key = "notfound";
+		if (ResourceAll.RESOURCE_TYPE_BOOK.equals(resourceType)) {
+			key = "ebook";
+		} else if (ResourceAll.RESOURCE_TYPE_COMICS.equals(resourceType)) {
+			key = "comics";
+		} else if (ResourceAll.RESOURCE_TYPE_MAGAZINE.equals(resourceType)) {
+			key = "magazine";
+		} else if (ResourceAll.RESOURCE_TYPE_NEWSPAPER.equals(resourceType)) {
+			key = "newspaper";
+		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
+			key = "video";
+		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
+			key = "infomation";
+		}
+		url.append(key);
+		url.append("/");
+		int id = Integer.parseInt(resourceId.substring(1));
+		url.append(id / 1000);
+		url.append("/");
+		url.append(resourceId);
+		url.append("/");
+		return url.toString();
+	}
+
+
 	private void parseApplication(String fileDir,String resourceId,Integer type){
 		String appDir = fileDir+File.separator+"application";
 		File file = new File(appDir);
@@ -1227,9 +1293,47 @@ public class UploadServiceImpl implements UploadService {
 		}
 		
 	}
+//	private void parseVideo(String fileDir,String resourceId,Integer type){
+//		String videoDir = fileDir+File.separator+"video";
+//		processOnlineVideo(fileDir);
+//		File file = new File(videoDir);
+//		if(file.exists() && file.isDirectory()){
+//			File[] videos = file.listFiles();
+//			int i = 0;
+//			for(File vf : videos){
+//				i++;
+//				VideoSuite vs = new VideoSuite();
+//				int index = vf.getName().lastIndexOf("_");
+//				if(index > 0){
+//					String filedesc = vf.getName().substring(index+1);
+//					index = filedesc.indexOf(".");
+//					filedesc = filedesc.substring(0,index);
+//					vs.setFiledesc(filedesc);
+//				}else{
+//					vs.setFiledesc("");
+//				}
+//				vs.setFilename(vf.getName());
+//				
+//				vs.setResourceId(resourceId);
+//				vs.setSize(((Long)vf.length()).intValue());
+//				vs.setType(getFileExtName(vf.getName()));
+//				vs.setChapterIndex(i);
+//				try{
+//					String destfile = vf.getAbsolutePath().replaceAll(vf.getName(), vs.getFilename());
+//					if(!destfile.equals(vf.getAbsolutePath())){
+//						FileUtils.moveFile(vf, new File(destfile));
+//					}
+//					resourceService.addResourceChapter(vs, type);
+//				}catch(Exception e){
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	}
+
 	private void parseVideo(String fileDir,String resourceId,Integer type){
 		String videoDir = fileDir+File.separator+"video";
-		processOnlineVideo(fileDir);
+//		processOnlineVideo(fileDir);
 		File file = new File(videoDir);
 		if(file.exists() && file.isDirectory()){
 			File[] videos = file.listFiles();
@@ -1252,6 +1356,9 @@ public class UploadServiceImpl implements UploadService {
 				vs.setSize(((Long)vf.length()).intValue());
 				vs.setType(getFileExtName(vf.getName()));
 				vs.setChapterIndex(i);
+				if(vs.getType().equalsIgnoreCase("ucs")){
+					changeUcsResourceURL(vf.getAbsolutePath(),getVideoResourceDirectory(resourceId),systemService);
+				}
 				try{
 					String destfile = vf.getAbsolutePath().replaceAll(vf.getName(), vs.getFilename());
 					if(!destfile.equals(vf.getAbsolutePath())){
