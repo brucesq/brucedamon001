@@ -1,82 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
-	
-  <display-name>reader</display-name>
-  
-   <context-param>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+
+	<display-name>reader</display-name>
+
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/classes/applicationContext*.xml</param-value>
+		<param-value>
+			/WEB-INF/classes/applicationContext*.xml
+		</param-value>
 	</context-param>
-    
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-	
-	
-	
-	
-    
-    
-  	<servlet>
-	  	<servlet-name>reader</servlet-name>
-	    <servlet-class>com.hunthawk.reader.pps.ActionServlet</servlet-class>
-	  	<load-on-startup>0</load-on-startup>
-  	</servlet>
-  	
-  	<servlet>
-	  	<servlet-name>download</servlet-name>
-	    <servlet-class>com.hunthawk.reader.pps.DownloadServlet</servlet-class>
-	  	<load-on-startup>0</load-on-startup>
-  	</servlet>
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+
+
+
+
 
 	<servlet>
-	  	<servlet-name>redirect</servlet-name>
-	    <servlet-class>com.hunthawk.reader.pps.FeeRedirectServlet</servlet-class>
-	  	<load-on-startup>0</load-on-startup>
-  	</servlet>
+		<servlet-name>reader</servlet-name>
+		<servlet-class>
+			com.hunthawk.reader.pps.ActionServlet
+		</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
 	<servlet>
-		<description>
-		</description>
-		<display-name>
-		unfee</display-name>
+		<servlet-name>download</servlet-name>
+		<servlet-class>
+			com.hunthawk.reader.pps.DownloadServlet
+		</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>redirect</servlet-name>
+		<servlet-class>
+			com.hunthawk.reader.pps.FeeRedirectServlet
+		</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+
+	<servlet>
+		<servlet-name>urlredirect</servlet-name>
+		<servlet-class>
+			com.hunthawk.reader.pps.RedirectServlet
+		</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<description></description>
+		<display-name>unfee</display-name>
 		<servlet-name>unfee</servlet-name>
 		<servlet-class>
-		com.hunthawk.reader.pps.IphoneUnfeeServlet</servlet-class>
+			com.hunthawk.reader.pps.IphoneUnfeeServlet
+		</servlet-class>
 	</servlet>
-     
-  	<servlet-mapping>
-	  	<servlet-name>reader</servlet-name>
-	  	<url-pattern>*.py</url-pattern>
-  	</servlet-mapping> 
-  	
-  	<servlet-mapping>
-	  	<servlet-name>download</servlet-name>
-	  	<url-pattern>/download</url-pattern>
-  	</servlet-mapping> 
-  
-	  <servlet-mapping>
-	  	<servlet-name>redirect</servlet-name>
-	  	<url-pattern>*.index</url-pattern>
-  	</servlet-mapping>
-	  <servlet-mapping>
-	  	<servlet-name>unfee</servlet-name>
-	  	<url-pattern>/unfee</url-pattern>
-	  </servlet-mapping> 
-	
-	 <filter>
-		<filter-name>fee</filter-name>
-		<filter-class>
-			com.hunthawk.reader.pps.FeeFilter
-		</filter-class>
-	</filter>
 
-	<filter-mapping>
-		<filter-name>fee</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	  
+	<servlet-mapping>
+		<servlet-name>reader</servlet-name>
+		<url-pattern>*.py</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>download</servlet-name>
+		<url-pattern>/download</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>redirect</servlet-name>
+		<url-pattern>*.index</url-pattern>
+	</servlet-mapping>
 	
-  
+	<servlet-mapping>
+		<servlet-name>urlredirect</servlet-name>
+		<url-pattern>/redirect</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>unfee</servlet-name>
+		<url-pattern>/unfee</url-pattern>
+	</servlet-mapping>
+
+
 </web-app>
