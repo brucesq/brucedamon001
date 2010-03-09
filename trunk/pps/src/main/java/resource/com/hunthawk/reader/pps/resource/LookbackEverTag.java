@@ -123,6 +123,10 @@ public class LookbackEverTag extends BaseTag {
 		for(Iterator it=rprs.iterator();it.hasNext();){
 			ResourcePackReleation rpr=(ResourcePackReleation)it.next();
 			ResourceAll resourceAll = getResourceService(request).getResource(rpr.getResourceId());
+			
+			if(resourceAll==null)
+				continue;
+			
 			StringBuilder sb = new StringBuilder();
 			sb.append(request.getContextPath());
 			Map feeMap=null;
