@@ -31,8 +31,8 @@ public class RedirectServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		// long startTime = System.currentTimeMillis();
 
-		request.setCharacterEncoding("UTF-8");
-		RequestUtil.setRequest(request,response);
+//		request.setCharacterEncoding("UTF-8");
+//		RequestUtil.setRequest(request,response);
 		AccessLog.log(request, 0, RequestUtil.getNeedWapType());
 		String url = request.getParameter("gourl");
 		response.sendRedirect(url);
