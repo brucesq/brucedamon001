@@ -1,0 +1,32 @@
+#if(${isQuickSearch})
+<a href="${url}">${title}</a>
+#else 
+	<form name="searchForm" action="s.do" method="get" accept-charset="UTF-8">
+	<table>
+	<tr valign="middle" align="center">
+		#if(!${isQuickSearch})
+			<td>
+				<input type="text" name="key" size="12" value="" style="border:1px #000000 solid;background-color:white;color:black;font-size:13.5px;line-height:23px;text-decoration:none;"  maxlength="20"/>
+			</td>
+			<td>
+				<select name="st">
+				<option value="1">按书名</option>
+				<option value="2">按作者</option>
+				<option value="4">按关键字</option>
+				<option value="5">按出版社</option>
+				</select>
+			</td>
+		#end
+		<td align="left">
+			#foreach(${obj} in ${objs})
+			<input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+			#end
+			#if(${isQuickSearch})
+				<input type="hidden" name="qkey" value="${qvalue}"/>
+			#end
+			<input type="submit" value="${title}" style="valign:middle;font-size:13.5px;line-height:15px;border:1.5px #000000 solid;width:50px;height:20px;"/>
+		</td>
+	</tr>
+	</table>
+	</form>
+#end

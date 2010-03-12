@@ -1,0 +1,12 @@
+#set($space="")
+#foreach( $obj in $objs )
+<a href="$!{obj.get("url")}">$!{obj.get("value")}</a> $space 
+#if($showdel)
+<a href="$!{obj.get("urldel")}">$!{obj.get("valuedel")}</a>
+#end
+#if(${velocityCount} < $objs.size())
+<br/>
+#end
+#end
+${msg} <br/>
+
