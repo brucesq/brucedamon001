@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -211,11 +212,20 @@ public abstract class EditVideoPage extends EditPage implements
 		return tName;
 	}
 
+
 	@Override
 	protected boolean persist(Object object) {
 		try {
 			String errorMessage = "";
 			Video video = (Video) object;
+			
+			if(video.getPublishTime() == null){
+				video.setPublishTime(new Date());
+			}
+			if(video.getCpId() == null || video.getCpId() == 0){
+				video.setCpId(5000);
+			}
+			
 			if (isModelNew()) {
 				video.setCreatorId(this.getUser().getId());
 				getResourceService()
@@ -307,33 +317,56 @@ public abstract class EditVideoPage extends EditPage implements
 					UnzipFile.unzip(file2, dir2);
 
 					if (dir2.isDirectory()) {
-						processOnlineVideo(dir2);
+						// processOnlineVideo(dir2);
 						File[] videos = dir2.listFiles();
 						int i = getLastIndex();
+						Map<String,String> mp4FilesMap = new HashMap<String,String>(); 
 						for (File vf : videos) {
 							i++;
 							VideoSuite vs = new VideoSuite();
 							vs.setResourceId(video.getId());
 							vs.setSize(((Long) vf.length()).intValue());
 							int index = vf.getName().lastIndexOf("_");
-							if(index > 0){
-								String filedesc = vf.getName().substring(index+1);
+							if (index > 0) {
+								String filedesc = vf.getName().substring(
+										index + 1);
 								index = filedesc.indexOf(".");
-								filedesc = filedesc.substring(0,index);
+								filedesc = filedesc.substring(0, index);
 								vs.setFiledesc(filedesc);
-							}else{
+							} else {
 								vs.setFiledesc("");
 							}
 							vs.setChapterIndex(i);
 							String vfilename = vf.getName();
 							vs.setFilename(vfilename);
-							while (getResourceService().isVideoFileNameExists(
-									vs)) {
-								vfilename = i + vfilename;
-								vs.setFilename(vfilename);
+							// while
+							// (getResourceService().isVideoFileNameExists(
+							// vs)) {
+							// vfilename = i + vfilename;
+							// vs.setFilename(vfilename);
+							// }
+							vs.setType(UploadServiceImpl.getFileExtName(vs
+									.getFilename()));
+							if (vs.getType().equalsIgnoreCase("ucs")) {
+								List<String> mp4Files = new ArrayList<String>();
+								String targetUrl = getUploadService()
+										.getVideoResourceDirectory(
+												vs.getResourceId());
+								Long size = UploadServiceImpl.changeUcsResourceURL(vf
+										.getAbsolutePath(), targetUrl,
+										getSystemService(),mp4Files);
+								
+								if(size>0L){
+									vs.setSize(size.intValue());
+								}
+								String relFiles = "";
+								for(String mp4File : mp4Files){
+									mp4FilesMap.put(mp4File, vs.getFiledesc());
+									relFiles += mp4File +";";
+								}
+								vs.setRelfiles(relFiles);
+								
 							}
-							vs.setType(UploadServiceImpl.getFileExtName(vs.getFilename()));
-
 							try {
 								File destFile = new File(getResourceService()
 										.getChapterAddress(video.getId())
@@ -343,14 +376,28 @@ public abstract class EditVideoPage extends EditPage implements
 								}
 								getResourceService().addResourceChapter(vs,
 										ResourceType.TYPE_VIDEO);
-								
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
+						
+						
+						try{
+							List<VideoSuite> videoSuites = getResourceService().getResourceChapter(VideoSuite.class, video.getId());
+							for(VideoSuite suite : videoSuites){
+								if(mp4FilesMap.containsKey(suite.getFilename())){
+									suite.setFiledesc(mp4FilesMap.get(suite.getFilename()));
+									getResourceService().updateResourceChapter(suite);
+								}
+							}
+						}catch(Exception e){
+							e.printStackTrace();
+						}
+						
 					}
-					getUploadService().rsyncDirectry(new File(getResourceService()
-							.getChapterAddress(video.getId())));
+					getUploadService().rsyncDirectry(
+							new File(getResourceService().getChapterAddress(
+									video.getId())));
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -395,6 +442,7 @@ public abstract class EditVideoPage extends EditPage implements
 		return true;
 	}
 
+	
 	public IPropertySelectionModel getResourceYesNoList() {
 		return new MapPropertySelectModel(Constants.getResourceYesNo());
 	}

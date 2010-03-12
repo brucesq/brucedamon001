@@ -1130,11 +1130,12 @@ public class UploadServiceImpl implements UploadService {
 		}
 	}
 
-	public static void changeUcsResourceURL(String ucsfile,String targetUrl,SystemService sysService){
+	public static Long changeUcsResourceURL(String ucsfile,String targetUrl,SystemService sysService,List<String> relFiles){
 		Variables var = sysService.getVariables("ucs_geturl_tool");
 		String geturlCMD = var.getValue()+" "+ucsfile;
 		List<String> urls = execCmd(geturlCMD);
 		Variables var1 = sysService.getVariables("ucs_replaceurl_tool");
+		Long fileSize = 0L;
 		for(String url : urls){
 			String fileName = url.substring(url.lastIndexOf("/"));
 			String filePath = ucsfile.substring(0,ucsfile.lastIndexOf(File.separator));
@@ -1142,10 +1143,14 @@ public class UploadServiceImpl implements UploadService {
 			if(mp4File.exists()){
 				String relCMD = var1.getValue()+" "+ucsfile+" "+ucsfile+" "+url+" "+targetUrl+mp4File.getName();
 				execCmd(relCMD);
+				relFiles.add(fileName.substring(1));
+				fileSize += mp4File.length();
 			}
 			
 		}
+		return fileSize;
 	}
+	
 	public  String getVideoResourceDirectory(String resourceId){
 		StringBuilder url = new StringBuilder();
 		url.append(systemService.getVariables("video_url").getValue());
@@ -1293,47 +1298,12 @@ public class UploadServiceImpl implements UploadService {
 		}
 		
 	}
-//	private void parseVideo(String fileDir,String resourceId,Integer type){
-//		String videoDir = fileDir+File.separator+"video";
-//		processOnlineVideo(fileDir);
-//		File file = new File(videoDir);
-//		if(file.exists() && file.isDirectory()){
-//			File[] videos = file.listFiles();
-//			int i = 0;
-//			for(File vf : videos){
-//				i++;
-//				VideoSuite vs = new VideoSuite();
-//				int index = vf.getName().lastIndexOf("_");
-//				if(index > 0){
-//					String filedesc = vf.getName().substring(index+1);
-//					index = filedesc.indexOf(".");
-//					filedesc = filedesc.substring(0,index);
-//					vs.setFiledesc(filedesc);
-//				}else{
-//					vs.setFiledesc("");
-//				}
-//				vs.setFilename(vf.getName());
-//				
-//				vs.setResourceId(resourceId);
-//				vs.setSize(((Long)vf.length()).intValue());
-//				vs.setType(getFileExtName(vf.getName()));
-//				vs.setChapterIndex(i);
-//				try{
-//					String destfile = vf.getAbsolutePath().replaceAll(vf.getName(), vs.getFilename());
-//					if(!destfile.equals(vf.getAbsolutePath())){
-//						FileUtils.moveFile(vf, new File(destfile));
-//					}
-//					resourceService.addResourceChapter(vs, type);
-//				}catch(Exception e){
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//	}
 
-	private void parseVideo(String fileDir,String resourceId,Integer type){
+
+private void parseVideo(String fileDir,String resourceId,Integer type){
 		String videoDir = fileDir+File.separator+"video";
 //		processOnlineVideo(fileDir);
+		Map<String,String> mp4FilesMap = new HashMap<String,String>(); 
 		File file = new File(videoDir);
 		if(file.exists() && file.isDirectory()){
 			File[] videos = file.listFiles();
@@ -1357,7 +1327,17 @@ public class UploadServiceImpl implements UploadService {
 				vs.setType(getFileExtName(vf.getName()));
 				vs.setChapterIndex(i);
 				if(vs.getType().equalsIgnoreCase("ucs")){
-					changeUcsResourceURL(vf.getAbsolutePath(),getVideoResourceDirectory(resourceId),systemService);
+					List<String> mp4Files = new ArrayList<String>();
+					Long size = changeUcsResourceURL(vf.getAbsolutePath(),getVideoResourceDirectory(resourceId),systemService,mp4Files);
+					if(size>0L){
+						vs.setSize(size.intValue());
+					}
+					String relFiles = "";
+					for(String mp4File : mp4Files){
+						mp4FilesMap.put(mp4File, vs.getFiledesc());
+						relFiles += mp4File +";";
+					}
+					vs.setRelfiles(relFiles);
 				}
 				try{
 					String destfile = vf.getAbsolutePath().replaceAll(vf.getName(), vs.getFilename());
@@ -1369,6 +1349,17 @@ public class UploadServiceImpl implements UploadService {
 					e.printStackTrace();
 				}
 			}
+		}
+		try{
+			List<VideoSuite> videos = resourceService.getResourceChapter(VideoSuite.class, resourceId);
+			for(VideoSuite suite : videos){
+				if(mp4FilesMap.containsKey(suite.getFilename())){
+					suite.setFiledesc(mp4FilesMap.get(suite.getFilename()));
+					resourceService.updateResourceChapter(suite);
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 
@@ -1773,7 +1764,7 @@ public class UploadServiceImpl implements UploadService {
 		String srcFile = destDir + File.separator + coverImg;
 		String destFile1 = destDir + File.separator + "cover75." + extName;
 		String destFile2 = destDir + File.separator + "cover180." + extName;
-		String destFile3 = destDir + File.separator + "cover90." + extName;
+		String destFile3 = destDir + File.separator + "cover120." + extName;
 		String destFile4 = destDir + File.separator + "cover60." + extName;
 		String destFile5 = destDir + File.separator + "cover81." + extName;
 		String destFile6 = destDir + File.separator + "cover51." + extName;
@@ -1789,8 +1780,8 @@ public class UploadServiceImpl implements UploadService {
 					.replaceAll("\\\\", "/"), 75);
 //			ImageTool.resizeImage(srcFile.replaceAll("\\\\", "/"), destFile2
 //					.replaceAll("\\\\", "/"), 180);
-//			ImageTool.resizeImage(srcFile.replaceAll("\\\\", "/"), destFile3
-//					.replaceAll("\\\\", "/"), 90);
+			ImageTool.resizeImage(srcFile.replaceAll("\\\\", "/"), destFile3
+					.replaceAll("\\\\", "/"), 120);
 //			ImageTool.resizeImage(srcFile.replaceAll("\\\\", "/"), destFile4
 //					.replaceAll("\\\\", "/"), 60);
 //			ImageTool.resizeImage(srcFile.replaceAll("\\\\", "/"), destFile5
