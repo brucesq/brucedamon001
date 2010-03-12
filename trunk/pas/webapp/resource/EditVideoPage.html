@@ -69,7 +69,7 @@
 											<td width="15%" align="right">日期<br>
 												</td>
 												<td width="85%">
-													<input name="textfield" type="text" class="inputMain" translator="translator:date"  jwcid="publishTime@DatePicker" value="ognl:model.publishTime" validators="validators:required" displayName="literal:出版日期"/>
+													<input name="textfield" type="text" class="inputMain" translator="translator:date"  jwcid="publishTime@DatePicker" value="ognl:model.publishTime" displayName="literal:出版日期"/>
 												</td>
 											</tr>
 					 						<tr>
@@ -102,10 +102,10 @@
 												</td>
 												<td width="85%">
 												<select jwcid="expNum@PropertySelection" model="ognl:resourceExpList" value="ognl:model.expNum"></select>
-												&nbsp;&nbsp;CP：<select jwcid="cpId@PropertySelection" model="ognl:cpList" value="ognl:model.cpId" validators="validators:required" displayName="literal:CP"></select>
+												&nbsp;&nbsp;CP：<select jwcid="cpId@PropertySelection" model="ognl:cpList" value="ognl:model.cpId"  displayName="literal:CP"></select>
 												&nbsp;&nbsp;第几部:<input name="textfield" type="text" class="input-text"   jwcid="division@TextField" value="ognl:model.division" />
 												&nbsp;&nbsp;健康指数：<select jwcid="healthNum@PropertySelection" model="ognl:resourceExpList" value="ognl:model.healthNum"></select>
-												&nbsp;&nbsp;时长：<input name="textfield" type="text" class="input-text"   jwcid="playTime@TextField" value="ognl:model.playTime" translator="translator:integer"  displayName="literal:时长"/>&nbsp;&nbsp;<font color="red">(单位秒)</font>
+												&nbsp;&nbsp;时长：<select jwcid="hours@PropertySelection" model="ognl:timeListModel" value="ognl:timeHours"  displayName="literal:小时"></select>时<select jwcid="minutes@PropertySelection" model="ognl:timeListModel" value="ognl:timeMinutes"   displayName="literal:分"></select>分<select jwcid="seconds@PropertySelection" model="ognl:timeListModel" value="ognl:timeSeconds"  displayName="literal:秒"></select>秒
 												&nbsp;&nbsp;语言:<input name="textfield" type="text" class="input-text"   jwcid="bLanguage@TextField" value="ognl:model.bLanguage" validators="validators:required" displayName="literal:语言"/>&nbsp;&nbsp;<font color="red">多种语言以"/"分开</font>							
 												</td>
 											</tr>
