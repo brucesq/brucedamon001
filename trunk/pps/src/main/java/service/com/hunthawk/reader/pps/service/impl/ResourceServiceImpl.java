@@ -2528,67 +2528,64 @@ public class ResourceServiceImpl implements ResourceService {
 	private List<ResourcePackReleation> getDivisionsBesidesMagazine(
 			int listCount, List<ResourcePackReleation> rels,
 			ResourceAll resource) {
-		if (listCount >= rels.size()) {
-			for (ResourcePackReleation rpr : rels) {
-				if (rpr.getResourceId().equals(resource.getId())) {
-					rels.remove(rpr);
-					return rels;
-				}
-			}
+		if(listCount>=rels.size()){
+			for (Iterator it = rels.iterator();it.hasNext();){    
+				ResourcePackReleation rpr = (ResourcePackReleation)it.next();   
+		        	if (rpr.getResourceId().equals(resource.getId())){ 
+		        	 	it.remove();
+		        	 	rels.remove(rpr); 
+		         	}   
+		     	}   
+			return rels;
 		}
-		/** 向前取的个数 */
-		int before_count = 0;
-		/** 向后取的个数 */
-		int end_count = 0;
-		if (listCount % 2 == 0) {// 偶数
-			before_count = end_count = listCount / 2;
-		} else {
-			before_count = (listCount + 1) / 2 - 1;
-			end_count = (listCount + 1) / 2;
+		/**向前取的个数*/
+		int before_count=0;
+		/**向后取的个数*/
+		int end_count=0;
+		if(listCount%2==0){//偶数
+			before_count=end_count=listCount/2;
+		}else{
+			before_count=(listCount+1)/2-1;
+			end_count=(listCount+1)/2;
 		}
-		System.out.println("前取" + before_count + "个 : 后取" + end_count + "个");
-		List<ResourcePackReleation> result = new ArrayList<ResourcePackReleation>();
-		/** 升序 */
-		for (int j = 0; j < rels.size(); j++) {
-			ResourcePackReleation releation = rels.get(j);
-			if (resource.getId().equals(releation.getResourceId())) {
-				int B_INDEX = j == 0 ? rels.size() : j;// 开始索引 如果当前索引为0
-														// B_INDEX重置为最后一个
-				int E_INDEX = j == rels.size() - 1 ? 0 : j;// 结束索引
-
-				for (int b = before_count; b > 0; b--) {
-					if (j - b < 0) {
-						if (j != 0)
-							result.add(rels.get(rels.size() - (b - j)));
-						else
-							// 说明是第一个
-							result.add(rels.get(B_INDEX - b));
-					} else {
-						result.add(rels.get(j - b));
+		System.out.println("前取"+before_count+"个 : 后取"+end_count+"个");
+		List<ResourcePackReleation> result=new ArrayList<ResourcePackReleation>();
+		/**升序*/
+		for(int j=0;j<rels.size();j++){
+			ResourcePackReleation releation=rels.get(j);
+			if(resource.getId().equals(releation.getResourceId())){
+				int B_INDEX=j==0?rels.size():j;//开始索引    如果当前索引为0  B_INDEX重置为最后一个
+				int E_INDEX=j==rels.size()-1?0:j;//结束索引
+			
+				for(int b=before_count;b>0;b--){
+					if(j-b<0){
+						if(j!=0)
+							result.add(rels.get(rels.size()-(b-j)));
+						else//说明是第一个
+							result.add(rels.get(B_INDEX-b));
+					}else{
+						result.add(rels.get(j-b));
 					}
 				}
-				for (int e = 1; e <= end_count; e++) {
-					if (j + e > rels.size() - 1) {
-						if (j != rels.size() - 1) {
-							result.add(rels.get((e - 1)
-									- ((rels.size() - 1) - E_INDEX)));
-						} else
-							// 说明是最后一个
-							result.add(rels.get(E_INDEX + (e - 1)));
-					} else {
-						result.add(rels.get(j + e));
+				for(int e=1;e<=end_count;e++){
+					if(j+e>rels.size()-1){
+						if(j!=rels.size()-1){
+							result.add(rels.get((e-1)-((rels.size()-1)-E_INDEX)));
+						}else//说明是最后一个
+							result.add(rels.get(E_INDEX+(e-1)));
+					}else{
+						result.add(rels.get(j+e));
 					}
 				}
 				break;
 			}
 		}
-
-		// System.out.println("结果====================");
-		// for(Iterator it=result.iterator();it.hasNext();){
-		// ResourceAll
-		// r=this.getResource(((ResourcePackReleation)it.next()).getResourceId());
-		// System.out.println(r.getId()+"."+r.getName());
-		// }
+		
+//		System.out.println("结果====================");
+//		for(Iterator it=result.iterator();it.hasNext();){
+//			ResourceAll r=this.getResource(((ResourcePackReleation)it.next()).getResourceId());
+//			System.out.println(r.getId()+"."+r.getName());
+//		}
 		return result;
 	}
 
