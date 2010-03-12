@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+ <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+ <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  <set name="features">
+		'scrollbars=no,width=400,height=450'
+  </set>
+	</bean>
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!id:编号:id,!name:版权方名称:name,!identifier:标识:identifier,!contactName:联系人:contactName,=providername,=begin,=end,!referenStatus:状态:referenStatus,!showModifyTimeName:修改日期:showModifyTimeName,=username,!download:版权文件:download,!delete:删除:delete,!validate:维护:validate,!detail:详情:detail"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="tablePageSize"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentProduct"/>
+  </component>
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  <component id="deleteColumnValue" type="Block"/>
+  <component id="deleteLink" type="DirectLink">
+    <binding name="listener" value="listener:onDelete"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  
+   <component id="validateColumnValue" type="Block"/>
+   <component id="validateLink" type="DirectLink">
+    <binding name="listener" value="listener:onEdit"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+   
+  <component id="downloadColumnValue" type="Block"/>
+   <component id="downloadLink" type="DirectLink">
+    <binding name="listener" value="listener:onDownload"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+    <binding name="renderer" value="bean:popupRender"/>
+   </component>
+   
+  <component id="statuspublish" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="0"/>
+  </component>
+  
+    <component id="statuspause" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="1"/>
+  </component>
+  
+  <component id="searchCreateBeginDate" type="DatePicker">
+    <binding name="value" value="beginTime"/>
+    <binding name="translator" value="translator:date,pattern=yyyy-MM-dd HH"/>
+  </component>
+  <component id="searchCreateEndDate" type="DatePicker">
+    <binding name="value" value="endTime"/>
+    <binding name="translator" value="translator:date,pattern=yyyy-MM-dd HH"/>
+  </component>
+ 
+  <component id="detailColumnValue" type="Block"/>
+  <component id="detailLink" type="DirectLink">
+     <binding name="listener" value="listener:onDetail"/>
+     <binding name="parameters" value="components.tableFormRows.tableRow"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+ 
+</page-specification>    
