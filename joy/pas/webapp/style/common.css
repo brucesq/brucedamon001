@@ -1,0 +1,18 @@
+/*定义整体风：字体、边界、滚动条...*/
+BODY{font-size:9pt;color:#000000/*#0155A9*/;margin:1px;background-color:#f3f5f7;
+
+	scrollbar-3dlight-color:#C5D9E8;
+	scrollbar-arrow-color:#333333;
+	scrollbar-base-color:#F5F7F9;
+	scrollbar-darkshadow-color:#FFFFFF;
+	scrollbar-face-color:#F5F7F9;
+	scrollbar-highlight-color:#FFFFFF;
+	scrollbar-shadow-color:#C5D9E8/*#B4B4B4*/;
+		
+ }
+		
+/*链接样式*/
+A{text-decoration:none}
+A:link {color:#113e65/*#FF6000*/ ; text-decoration: none;}
+A:visited {color:#113e65; text-decoration: none; }
+A:hover {color: #003cff/*#007FFF*/; text-decoration: underline;}

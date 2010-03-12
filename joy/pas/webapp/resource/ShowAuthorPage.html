@@ -1,0 +1,131 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="作者列表"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<title>无标题文档</title>
+	<style>
+		#enlarge_images{position:absolute;display:none;z-index:2;border:5px solid #f4f4f4}
+	</style>
+</head>
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<form jwcid="productForm@Form"  clientValidationEnabled="true">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditAuthorPage">新增作者</a></td>
+					<td class="ToolbarLine"><img src="../img/icon_del.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@bayeux:LinkSubmitOnce" action="listener:onBatchDelete" onclick="return getConfirmation();" >删除选中</a></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">		
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" jwcid="table" >
+						<tr>
+							<td style="padding:5px 10px;">
+								<table id="Searchbar" width="100%" border="0" cellpadding="0" cellspacing="2" class="search_bg" style="display:block">
+										<tr>
+											<td style="color:#622f04; padding:5px;">
+											作者名称：<input name="name" type="text" class="Template-text" jwcid="name@TextField" value="ognl:name" />
+											&nbsp;
+											作者笔名：<input name="name" type="text" class="Template-text" jwcid="penName@TextField" value="ognl:penName" />
+											&nbsp;
+											首字母：
+											<select jwcid="initialLetter@PropertySelection" model="ognl:initialLetterList" value="ognl:initialLetter"></select>
+											&nbsp;
+											<input name="Submit3" type="submit" class="button-search" value="搜 索" jwcid="searchS@Submit" listener="listener:search"/>
+										 </td>						
+										</tr>
+									</table>
+							</td>
+						</tr>
+						<tr>
+							<td height="26" align="right" valign="bottom"><span jwcid="customPages"/>&nbsp;</td>
+						</tr>
+						<tr>
+							<td valign="top" style="padding:10px;">
+							    <span jwcid="checkboxGroup">
+								<table id="box1" width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#d5d9dc"  style="border-collapse:collapse;">
+									<tr>									
+										<td align="center" bgcolor="#DFDFDF"><span  jwcid="controlCheckbox"/></td>  
+										<td jwcid="@contrib:TableColumns" class="title"/>
+									</tr>
+									<tr align="center" jwcid="tableFormRows" class="ognl:beans.evenOdd.next">
+                                      	 <td><span jwcid="delete"/></td>
+                                          <td jwcid="@contrib:TableValues"/>
+									</tr> 	
+								</table>
+                                </span>
+							</td>
+						</tr>
+						<tr>
+							<td height="22" align="right"><span jwcid="customPagesDown"/>&nbsp;</td>
+						</tr>
+					</table>
+			</div>
+		</td>
+	</tr>
+</table>
+
+  <span jwcid="booksColumnValue">
+    <a href="#" jwcid="bookLink">
+    <img src="../img/icon_04.png" width="16" height="16" align="absmiddle" />
+    </a>
+  </span>
+  <span jwcid="deleteColumnValue">
+    <a href="#" jwcid="deleteLink" onclick="return getConfirmation()">
+    <img src="../img/icon_06.png" width="16" height="16" align="absmiddle" />
+    </a>
+  </span>
+   <span jwcid="validateColumnValue">
+    <a href="#" jwcid="validateLink">
+    <img src="../img/icon_01.png" width="16" height="16" align="absmiddle" />
+    </a>
+  </span>
+  <span jwcid="preColumnValue">
+                      
+                     <img   jwcid="@Any"  src="ognl:preAddress" width="40" height="40" align="absmiddle" id="srcImg" />
+                     
+    </span>
+    
+     <span jwcid="detailColumnValue">
+                       <a href jwcid="detailLink" >
+                     <img src="../img/icon_03.png" width="16" height="16" align="absmiddle" />
+                      </a>
+     </span>
+</form>
+ <div id="enlarge_images"></div>
+</body>
+<script language="javascript">
+	var gg = document.getElementsByTagName("img");
+		var ei = document.getElementById("enlarge_images");
+ 
+		for(i=0; i<gg.length; i++){
+			var ts = gg[i];
+			if(gg[i].id=="srcImg")
+			{
+				ts.onmousemove = function(event){ 
+				event = event || window.event;
+				ei.style.display = "block";
+				ei.innerHTML = '<img src="' + this.src + '" />';
+				ei.style.top  = document.body.scrollTop + event.clientY + 10 + "px";
+				ei.style.left = document.body.scrollLeft + event.clientX + 10 + "px";
+				}
+						
+			ts.onmouseout = function(){
+				ei.innerHTML = "";
+				ei.style.display = "none";
+			}
+		}
+}
+</script>
+</html>
