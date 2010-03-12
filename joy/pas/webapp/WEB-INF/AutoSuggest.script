@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE script PUBLIC
+  "-//Apache Software Foundation//Tapestry Script Specification 3.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Script_3_0.dtd">
+<script>
+<input-symbol key="id" required="yes" />
+<input-symbol key="name" required="yes" />
+<input-symbol key="props" required="yes" />
+<input-symbol key="form" required="yes" />
+<input-symbol key="widget" required="yes" />
+    <body>
+        <unique>
+         
+        </unique>
+    </body>
+    <initialization>
+           var ${id}prop=${props};
+           var as_json = new bsn.AutoSuggest("${name}", ${id}prop);
+        
+	        if (${id}prop["label"] &amp;&amp; ${id}prop["value"]){
+	            document.getElementById("${name}").value=${id}prop["label"];
+	            document.getElementById("${name}_value").value=${id}prop["value"];
+	        }
+    </initialization>
+</script>
