@@ -1,0 +1,56 @@
+package com.hunthawk.reader
+
+import com.hunthawk.framework.security.PermissionCheck;
+import com.hunthawk.framework.domain.PersistentObject;
+import com.hunthawk.reader.domain.system.UserImpl;
+import com.hunthawk.reader.domain.bussiness.*;
+global com.hunthawk.reader.security.PowerUtil power;
+
+rule "common"
+	when
+		check: PermissionCheck(name == "common", granted == false)
+		user: UserImpl()
+		domain: PersistentObject()
+	then 
+		 power.hasPowerForDrl(check.getAction(),domain,check,user);
+		
+		
+end
+
+rule "edit_product"
+	when
+		check: PermissionCheck(name == "product",action=="edit", granted == false)
+		domain: Product(status != 3)
+		user: UserImpl()
+	then 
+		 power.hasPowerForDrl("edit",domain,check,user);		
+end
+
+rule "audit_product"
+	when
+		check: PermissionCheck(name == "product",action=="audit", granted == false)
+		user: UserImpl()
+		domain: Product()
+	then 
+		 power.hasPowerForDrl("edit",domain,check,user);				
+end
+
+rule "edit_pagegroup"
+	when
+		check: PermissionCheck(name == "pagegroup",action=="edit", granted == false)
+		domain: PageGroup(pkStatus != 3)
+		user: UserImpl()
+	then 
+		 power.hasPowerForDrl("edit",domain,check,user);		
+end
+
+rule "audit_pagegroup"
+	when
+		check: PermissionCheck(name == "pagegroup",action=="audit", granted == false)
+		user: UserImpl()
+		domain: PageGroup()
+	then 
+		 power.hasPowerForDrl("edit",domain,check,user);				
+end
+
+
