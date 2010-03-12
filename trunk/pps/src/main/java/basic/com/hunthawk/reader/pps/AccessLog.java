@@ -3,6 +3,7 @@
  */
 package com.hunthawk.reader.pps;
 
+import java.net.URLDecoder;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import com.hunthawk.reader.enhance.util.ToolDateUtil;
-
 /**
  * @author BruceSun
  * 
@@ -24,7 +24,12 @@ public class AccessLog {
 	public static void log(HttpServletRequest request, Integer bytes,
 			Integer verson) {
 		String date = ToolDateUtil.dateToString(new Date());
-		String url = request.getRequestURL() +"?"+ request.getQueryString();
+		String url = "";
+		try{
+			url = request.getRequestURL() +"?"+ URLDecoder.decode(request.getQueryString(),"utf-8");
+		}catch(Exception e){
+			url = request.getRequestURL() +"?"+request.getQueryString();
+		}
 		String uaStr = RequestUtil.getUa();
 		String userAgent = request.getHeader("user-agent");
 		String mobile = RequestUtil.getMobile();
