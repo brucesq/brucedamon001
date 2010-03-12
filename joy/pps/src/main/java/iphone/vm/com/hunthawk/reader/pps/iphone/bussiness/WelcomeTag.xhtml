@@ -1,0 +1,17 @@
+<!--一级分类（图书、杂志等）及订购、余额开始 -->
+<table width="100%" height="36" border="0" cellspacing="0" cellpadding="0" background="./images/iphone-bgmenu01.png"> 
+  <tr><td align="center">
+	<table width="98%" border="0" cellspacing="1" cellpadding="0"> 
+      <tr>
+	  #if(${mobile}=="10000000000")
+	  	<td width="96%" align="left" valign="middle" class="white_font_14"></td> 
+	  	<td width="2%" align="center" valign="middle"><a href="${loginUrl}"><img src="./images/denglu.png" width="70" height="32" border="0"></a></td> 
+	 	<td width="2%" align="center" valign="middle"><a href="${loginUrl}"><img src="./images/zhuce.png" width="70" height="32" border="0"></a></td></tr> 
+  	  #else
+  	  	<td width="96%" align="left" valign="middle" class="white_font_14">欢迎您 ${mobile} :)</td> 
+  	  	<td width="2%" align="center" valign="middle"><a href="${recordUrl}"><img src="./images/btnorder.png" width="70" height="32" border="0"></a></td> 
+	  	<td width="2%" align="center" valign="middle"><a href="${balanceUrl}"><img src="./images/btncheck.png" width="70" height="32" border="0"></a></td></tr> 
+  	  #end
+  	</table></td>
+  </tr> 
+</table>
