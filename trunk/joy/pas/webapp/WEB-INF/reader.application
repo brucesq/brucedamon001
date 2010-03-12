@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE application PUBLIC 
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN" 
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+	
+<application name="reader">
+		<meta key="org.apache.tapestry.page-class-packages" value="com.hunthawk.reader.page"/>
+   		<meta key="org.apache.tapestry.disable-caching" value="false"/>
+    	<meta key="org.apache.tapestry.default-page-class" value="true"/>
+        <meta key="org.apache.tapestry.component-class-packages" value="com.hunthawk.reader.page.component"/>
+ 
+ 		<library id="hunthawk" specification-path="classpath:/com/hunthawk/framework/tapestry/component/Hunthawk.library"/> 
+		<library id="contrib" specification-path="classpath:/org/apache/tapestry/contrib/Contrib.library"/>
+		<library id="bayeux" specification-path="/com/nordija/tapestry/bayeux/bayeux.library"/>
+		<library id="tacos" specification-path="/net/sf/tacos/Tacos.library"/>    
+        <library id="dojo" specification-path="/net/sf/tacos/Dojo.library"/>
+        <library id="ManSH" specification-path="classpath:/man/library/ManSH.library"/>
+
+</application>
