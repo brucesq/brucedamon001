@@ -1,0 +1,12 @@
+<!DOCTYPE library-specification PUBLIC 
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN" 
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+	
+<library-specification>
+
+  <meta key="org.apache.tapestry.component-class-packages" 
+  		value="com.hunthawk.framework.tapestry.component"/>
+  		
+  <component-type type="TablePages" specification-path="TablePages.jwc"/>
+  
+</library-specification>

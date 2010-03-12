@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-autowire="byName" default-lazy-init="false">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:configure.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- oracle configure 
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>oracle.jdbc.driver.OracleDriver</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${db.url}</value>
+		</property>
+		<property name="user">
+			<value>${db.user}</value>
+		</property>
+		<property name="password">
+			<value>${db.password}</value>
+		</property>
+
+		<property name="initialPoolSize">
+			<value>5</value>
+		</property>
+		<property name="minPoolSize">
+			<value>3</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>15</value>
+		</property>
+		<property name="checkoutTimeout">
+			<value>5000</value>
+		</property>
+		<property name="maxIdleTime">
+			<value>1800</value>
+		</property>
+		<property name="idleConnectionTestPeriod">
+			<value>3000</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>2</value>
+		</property>
+		<property name="autoCommitOnClose">
+			<value>false</value>
+		</property>
+	</bean>
+	-->
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${db.url}</value>
+		</property>
+		<property name="user">
+			<value>${db.user}</value>
+		</property>
+		<property name="password">
+			<value>${db.password}</value>
+		</property>
+
+		<property name="initialPoolSize">
+			<value>5</value>
+		</property>
+		<property name="minPoolSize">
+			<value>3</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>15</value>
+		</property>
+		<property name="checkoutTimeout">
+			<value>5000</value>
+		</property>
+		<property name="maxIdleTime">
+			<value>1800</value>
+		</property>
+		<property name="idleConnectionTestPeriod">
+			<value>3000</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>2</value>
+		</property>
+		<property name="autoCommitOnClose">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>
+					com.hunthawk.reader.domain.system.UserImpl
+				</value>
+				<value>com.hunthawk.reader.domain.system.Group</value>
+				<value>
+					com.hunthawk.reader.domain.system.Privilege
+				</value>
+				<value>com.hunthawk.reader.domain.system.Role</value>
+				<value>com.hunthawk.reader.domain.system.Menu</value>
+				<value>com.hunthawk.reader.domain.system.Log</value>
+				<value>
+					com.hunthawk.reader.domain.system.Variables
+				</value>
+				<value>
+					com.hunthawk.reader.domain.partner.Channel
+				</value>
+				<value>
+					com.hunthawk.reader.domain.partner.ChannelChild
+				</value>
+				<value>com.hunthawk.reader.domain.partner.Fee</value>
+				<value>
+					com.hunthawk.reader.domain.partner.Provider
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.TemplateType
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.DefaultTemplateSet
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.TemplateCatalog
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.Product
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.Columns
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.PageGroup
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.SysTag
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.UserDefTag
+				</value>
+				<value>
+					com.hunthawk.reader.domain.bussiness.Template
+				</value>
+
+				<value>
+					com.hunthawk.reader.domain.bussiness.PackGroupProvinceRelation
+				</value>
+
+				<value>com.hunthawk.reader.domain.resource.Ebook</value>
+				<value>
+					com.hunthawk.reader.domain.resource.EbookChapter
+				</value>
+
+				<value>
+					com.hunthawk.reader.domain.resource.EbookTome
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.ResourceAll
+				</value>
+
+				<value>
+					com.hunthawk.reader.domain.resource.Comics
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.ComicsChapter
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.Magazine
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.MagazineChapter
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.NewsPapers
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.NewsPapersChapter
+				</value>
+
+				<value>
+					com.hunthawk.reader.domain.resource.ResourceAuthor
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.ResourceReferen
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.ResourceType
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.ResourcePack
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.ResourcePackReleation
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.ResourceResType
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.MaterialCatalog
+				</value>
+				<value>
+					com.hunthawk.reader.domain.resource.Material
+				</value>
+
+				<value>
+					com.hunthawk.reader.domain.device.MobileInfo
+				</value>
+				<value>
+					com.hunthawk.reader.domain.device.PersonGroup
+				</value>
+				<value>
+					com.hunthawk.reader.domain.device.PersonInfo
+				</value>
+				<value>com.hunthawk.reader.domain.device.UAGroup</value>
+				<value>
+					com.hunthawk.reader.domain.device.UAGroupRelation
+				</value>
+				<value>com.hunthawk.reader.domain.device.UAInfo</value>
+
+				<value>com.hunthawk.reader.domain.custom.UserBuy</value>
+				
+				<value>com.hunthawk.reader.domain.custom.UserInfo</value>
+				
+				<value>com.hunthawk.reader.domain.inter.MsgBoard</value>
+				<value>
+					com.hunthawk.reader.domain.inter.MsgRecord
+				</value>
+				<value>
+					com.hunthawk.reader.domain.inter.MsgOperateLog
+				</value>
+				<value>
+					com.hunthawk.reader.domain.inter.Reservation
+				</value>
+				<value>
+					com.hunthawk.reader.domain.inter.Remind
+				</value>
+				<value>
+					com.hunthawk.reader.domain.inter.RemindMobile
+				</value>
+				<value>
+					com.hunthawk.reader.domain.system.KeyWord
+				</value>
+				<value>com.hunthawk.reader.domain.resource.EbookKeyWord</value>
+				
+				 <value>com.hunthawk.reader.domain.inter.VoteAct</value>
+	      		 <value>com.hunthawk.reader.domain.inter.VoteItem</value>
+	       		 <value>com.hunthawk.reader.domain.inter.VoteSubItem</value>
+	       		 <value>com.hunthawk.reader.domain.OffLineLog</value>
+	       		 <value>com.hunthawk.reader.domain.system.KeyWordType</value>
+	       		 
+	       		 <value>com.hunthawk.reader.domain.statistics.StatData</value>
+	       		 <value>com.hunthawk.reader.domain.statistics.DataReport</value>
+	       		 <value>com.hunthawk.reader.domain.statistics.LogData</value>
+	       		  <value>com.hunthawk.reader.domain.statistics.URLConfigGroup</value>
+	       		 <value>com.hunthawk.reader.domain.statistics.URLConfig</value>
+	       		  <value>com.hunthawk.reader.domain.statistics.URLDataReport</value>
+	       		   <value>com.hunthawk.reader.domain.statistics.URLHourDataReport</value>
+	       		 
+	       		 <value>com.hunthawk.reader.domain.bussiness.TagTemplate</value>
+	       		 <value>com.hunthawk.reader.domain.custom.Favorites</value>
+	       		 <value>com.hunthawk.reader.domain.vote.VoteResult</value>
+	       		 
+	       		 <!-- 适配器 penglei end -->
+				<value>com.hunthawk.reader.domain.adapter.Adapter</value>
+				<value>com.hunthawk.reader.domain.adapter.AdapterType</value>
+				<value>com.hunthawk.reader.domain.adapter.AdapterRule</value>
+				<!-- 适配器 penglei end -->
+				
+				<value>com.hunthawk.reader.domain.resource.ReCheck</value>
+				
+				<value>com.hunthawk.reader.domain.resource.VideoSuite</value>
+				<value>com.hunthawk.reader.domain.resource.Video</value>
+	       		 <value>com.hunthawk.reader.domain.resource.Infomation</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<!--<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop> -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">${db.show_sql}</prop>
+				<prop key="current_session_context_class">thread</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.transaction.factory_class">
+					org.hibernate.transaction.JDBCTransactionFactory
+				</prop>
+				<prop key="hibernate.jdbc.fetch_size">30</prop>
+				<prop key="hibernate.jdbc.batch_size">25</prop>
+				<prop key="hibernate.max_fetch_depth">0</prop>
+				<prop key="hibernate.cache.provider_class">
+					org.hibernate.cache.EhCacheProvider
+				</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+		   	  <!-- 	 <prop key="hibernate.hbm2ddl.auto">update</prop>  -->  
+			</props>
+		</property>
+		<property name="entityCacheStrategies">
+			<props>
+				<prop
+					key="com.hunthawk.reader.domain.system.UserImpl">
+					read-write
+				</prop>
+				<prop key="com.hunthawk.reader.domain.system.Group">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.system.Privilege">
+					read-write
+				</prop>
+				<prop key="com.hunthawk.reader.domain.system.Role">
+					read-write
+				</prop>
+
+				<prop key="com.hunthawk.reader.domain.system.Menu">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.system.Variables">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.partner.Channel">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.partner.ChannelChild">
+					read-write
+				</prop>
+
+				<prop key="com.hunthawk.reader.domain.partner.Fee">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.partner.Provider">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.DefaultTemplateSet">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.TemplateCatalog">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.Product">
+					read-write
+				</prop>
+
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.Columns">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.PageGroup">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.TemplateType">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.SysTag">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.Template">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.UserDefTag">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.bussiness.PackGroupProvinceRelation">
+					read-write
+				</prop>
+
+
+
+				
+
+				<prop
+					key="com.hunthawk.reader.domain.resource.ResourceAll">
+					read-write
+				</prop>
+				
+				
+				
+				<prop
+					key="com.hunthawk.reader.domain.resource.ResourceAuthor">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.resource.ResourceReferen">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.resource.ResourceType">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.resource.ResourcePack">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.resource.ResourcePackReleation">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.resource.ResourceResType">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.resource.MaterialCatalog">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.resource.Material">
+					read-write
+				</prop>
+
+			</props>
+		</property>
+		<property name="collectionCacheStrategies">
+			<props>
+				<prop
+					key="com.hunthawk.reader.domain.system.UserImpl.roles">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.system.UserImpl.groups">
+					read-write
+				</prop>
+				<prop
+					key="com.hunthawk.reader.domain.system.Role.privileges">
+					read-write
+				</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="hibernateTemplate"
+		class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+		<property name="cacheQueries" value="true" />
+	</bean>
+	<bean name="hibernateGenericController"
+		class="com.hunthawk.framework.HibernateGenericController">
+		<property name="hibernateTemplate">
+			<ref local="hibernateTemplate" />
+		</property>
+		<property name="cacheQueries" value="true" />
+	</bean>
+
+</beans>
+
