@@ -1,0 +1,167 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="标签向导"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="false">
+<base target="_self">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>标签向导</title>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<body jwcid="@Body">
+<span jwcid="insertGuideScript" />
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="openWindowBg">
+<tr>
+	<td valign="top">
+		<table width="580" height="380" border="0" cellpadding="0" cellspacing="0" class="openWindow-outerborder">
+			<tr>
+					<th valign="top">标签参数向导</th>
+			</tr>
+
+			<tr>
+				<td valign="top" style="padding:20px 10px;">
+			
+				<form jwcid="guide@Form"  clientValidationEnabled="true">	
+				<span jwcid="parameter@Hidden" value="ognl:parameter" />
+				<span jwcid="tagname@Hidden" value="ognl:tagName" />	
+				<span jwcid="@Hidden" value="ognl:num" />
+				<span jwcid="@Hidden" value="ognl:parameterValue" />
+					<table width="100%" border="0" cellpadding="0" cellspacing="4">
+										
+					 				
+									
+									
+									
+									
+									
+
+									
+									
+									<span jwcid="@If" condition="ognl:(showMutiSelect && !needReturn)">		
+											<tr>
+												<td width="28%" align="right"><span jwcid="@Insert" value="ognl:mutiSelectTitle"/>
+												</td>
+												
+												<td width="72%">
+													 <span jwcid="@contrib:Palette" sort="literal:USER" displayName="ognl:mutiSelectTitle" tableClass="literal:palette" selected="ognl:selectedItems"  model="ognl:mutiSelectMode" />
+														
+												</td>
+												
+											</tr>
+									</span>
+									
+									
+									
+									
+									
+								
+									
+									
+								
+									
+								
+									
+									<span jwcid="selectModel@For" source="ognl:selectList" value="ognl:currentSelect">
+										<tr>
+												<td width="28%" align="right">
+												<span jwcid="@Insert" value="ognl:currentSelect.title"/>
+												</td>
+												
+												<td width="72%">
+													  <select jwcid="@PropertySelection" model="ognl:currentSelect.propertySelectionModel" value="ognl:currentSelect.value" >
+													  </select>
+												</td>
+												 <span jwcid="@InvokeListener" listener="listener:updateSelect" />
+										</tr>
+									</span>
+									
+									
+									<tr style="display:none">
+												<td width="28%" align="right">
+												
+												</td>
+												
+												<td width="72%">
+													  <Input type="text" value=""  />
+												</td>
+												
+									</tr>
+									
+									
+									<span jwcid="textInput@For" source="ognl:textList" value="ognl:currentSelect">
+										<tr>
+												<td width="28%" align="right">
+												<span jwcid="@Insert" value="ognl:currentSelect.title"/>
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="@TextField" displayName="ognl:currentSelect.title" value="ognl:currentSelect.value" validators="validators:$textValidator" /><!-- validators="ognl:'validators:'+currentSelect.validators" -->
+													
+												</td>
+												 <span jwcid="@InvokeListener" listener="listener:updateSelect" />
+										</tr>
+									</span>
+									
+										<span jwcid="@If" condition="ognl:(showColumn && !needReturn)">		
+											<tr>
+												
+												<td align="right"><span jwcid="@Insert" value="ognl:columnTitle" />：</td>
+												<td>
+													<input name="textfield2" type="text" readonly="true" jwcid="columnId@TextField" value="ognl:columnId"  />
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择栏目" onClick="ognl:columnURL"/>
+												</td>
+												
+											</tr>
+									</span>
+								
+									<span jwcid="@If" condition="ognl:(showTemplate && !needReturn)">		
+											<tr>
+												
+												<td align="right"><span jwcid="@Insert" value="ognl:templateTitle" />：</td>
+												<td>
+													<input name="textfield2" type="text" readonly="true" jwcid="templateId@TextField" value="ognl:templateId"  />
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择模板" onClick="ognl:templateURL"/>
+												</td>
+												
+											</tr>
+									</span>
+									
+									<span jwcid="@If" condition="ognl:(showTMD && !needReturn)">		
+											<tr>
+												
+												<td align="right"><span jwcid="@Insert" value="ognl:TMDTitle" />：</td>
+												<td>
+													<input name="textfield2" type="text" readonly="true" jwcid="TMDId@TextField" value="ognl:TMDId"  />
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="标签模板" onClick="ognl:tmdURL"/>
+												&nbsp;&nbsp;<font color="red">如果需要使用标签模板，请选择对应的标签模板，不使用不需要选</font>
+												</td>
+												
+											</tr>
+									</span>
+									
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" jwcid="@Submit" listener="listener:onSubmit"  class="buttonMain" value="确  定" />
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="close" type="button" class="buttonCustom"  onclick ="javascript:window.close();return false;" value="关 闭"/>
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+							</table>
+						</form>
+					</td>
+					</tr>
+					</table>
+					</td>
+					</tr>
+					</table>
+				
+					
+</body>
+</html>

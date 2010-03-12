@@ -1,0 +1,140 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="标签向导"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="false">
+<base target="_self">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>标签向导</title>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<body jwcid="@Body">
+<span jwcid="insertGuideScript" />
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="openWindowBg">
+<tr>
+	<td valign="top">
+		<table width="580" height="380" border="0" cellpadding="0" cellspacing="0" class="openWindow-outerborder">
+			<tr>
+					<th valign="top">标签参数向导</th>
+			</tr>
+
+			<tr>
+				<td valign="top" style="padding:20px 10px;">
+			
+				<form jwcid="guide@Form"  clientValidationEnabled="true">	
+				<span jwcid="parameter@Hidden" value="ognl:parameter" />
+				<span jwcid="tagname@Hidden" value="ognl:tagName" />	
+				
+					<table width="100%" border="0" cellpadding="0" cellspacing="4">
+										
+	
+									<tr>
+										<td width="28%" align="right">
+												是否分页:
+												</td>
+												
+												<td width="72%">
+													 <select jwcid="noPageLink@PropertySelection" model="ognl:noPageLinkList" value="ognl:noPageLink"  onChange="literal:tapestry.form.submit(this.form)"></select>									
+											
+												</td>	 
+										</tr>
+										<span jwcid="@If" condition="ognl:showPageSize">
+										<tr>
+												<td width="28%" align="right">
+												条/页:
+												</td>
+												
+												<td width="72%">
+													  <select jwcid="pageSize@PropertySelection" model="ognl:pageSizeList" value="ognl:pageSize"></select>									
+												</td>
+										</tr>
+										</span>
+										<tr>
+												<td width="28%" align="right">
+												留言类型:
+												</td>
+												
+												<td width="72%">
+													 <select jwcid="msgType@PropertySelection" model="ognl:msgTypeList" value="ognl:msgType"  onChange="literal:tapestry.form.submit(this.form)"></select>									
+											
+												</td>	 
+										</tr>
+									<span jwcid="@If" condition="ognl:showCustom">
+										<tr>
+												<td width="28%" align="right">
+												用户定制ID:
+												</td>
+												
+												<td width="72%">
+													 <Input jwcid="customId@TextField"   readonly="true" value="ognl:customId" validators="validators:required" displayName="literal:用户定制ID"/>
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择用户ID" onClick="ognl:recordURL"/>
+												</td>	 
+										</tr>
+										</span>
+										<tr>
+										<td width="28%" align="right">
+												显示返回链接:
+												</td>
+												
+												<td width="72%">
+													 <select jwcid="showBack@PropertySelection" model="ognl:noPageLinkList" value="ognl:showBack"  onChange="literal:tapestry.form.submit(this.form)"></select>									
+											
+												</td>	 
+										</tr>
+										<span jwcid="@If" condition="ognl:showLink">
+										<tr>
+												<td width="28%" align="right">
+												返回链接文字:
+												</td>
+												
+												<td width="72%">
+													  <Input jwcid="title@TextField" value="ognl:title"  />
+													
+												</td>
+												 
+										</tr>
+										</span>	
+										<tr>
+												<td align="right">版块ID：</td>
+												<td>
+													<input name="textfield2" type="text"  readonly="true" jwcid="boardId@TextField" value="ognl:boardId" />
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择版块" onClick="ognl:boardURL"/>
+												</td>	 
+											</tr>
+									
+								<tr>
+												
+												<td align="right">选择标签模板：</td>
+												<td>
+													<input name="textfield2" type="text" readonly="true" jwcid="tmdId@TextField" value="ognl:tmdId"  />
+												&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="标签模板" onClick="ognl:tmdURL"/>
+												&nbsp;&nbsp;<font color="red">如果需要使用标签模板，请选择对应的标签模板，不使用不需要选</font>
+												</td>
+												
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" jwcid="@Submit" listener="listener:onSubmit"  class="buttonMain" value="确  定" />
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="close" type="button" class="buttonCustom"  onclick ="javascript:window.close();return false;" value="关 闭"/>
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+							</table>
+						</form>
+					</td>
+					</tr>
+					</table>
+					</td>
+					</tr>
+					</table>
+				
+					
+</body>
+</html>

@@ -1,0 +1,233 @@
+<html jwcid="@Shell" title="页面组列表" doctype="" browserLogLevel="DEBUG"
+	consoleEnabled="true" debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body" onload="changeShowType(-1)">
+
+<div jwcid="warn@hunthawk:Warning" /><span
+	jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#"
+			jwcid="menulist@PageLink" page="bussiness/ShowPageGroupPage">产品列表</a>－》维护产品</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+		<table height="22" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+			<tr>
+				<td class="ToolbarLine"><img src="../img/icon_Add.png"
+					width="11" height="11" align="absmiddle">&nbsp;维护产品</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+		<div style="width: 100%; height: 100%; overflow: auto;">
+		<form jwcid="userForm@Form" clientValidationEnabled="true"><input
+			type="hidden" jwcid="model@Hidden" value="ognl:model" /> <br>
+		<br>
+		<table width="100%" border="0" cellspacing="6" cellpadding="0">
+			<tr>
+				<td width="15%" align="right">名称：<br>
+				</td>
+				<td width="85%"><input name="textfield" type="text"
+					class="inputMain" validators="validators:required"
+					jwcid="sysName@TextField" value="ognl:model.pkName" /></td>
+			</tr>
+			<tr>
+				<td width="15%" align="right">类型：<br>
+				</td>
+				<td width="85%">
+				<span jwcid="@If" condition="ognl:modelNew">
+				<select jwcid="bTypes@PropertySelection"
+					model="ognl:bussinessTypeList" value="ognl:model.showType" onChange="changeShowType(this.options[this.options.selectedIndex].value)">
+				</select>
+				</span>
+				<span jwcid="@Else">
+				
+				<input name="bTypes" type="hidden"
+					jwcid="showType@Hidden" value="ognl:model.showType" />
+				<span jwcid="@InsertText" value="ognl:model.showTypeName" raw="true" />
+				
+				</span>
+				</td>
+			</tr>
+			
+			<tr>
+				<td width="15%" align="right">首页模板配置：<br>
+				</td>
+				<td width="85%">
+					<table><tr><td>
+					<input name="WP1" type="text" style="height:20px;width:50px;"
+					class="inputMain" jwcid="pkOneTempId@TextField" 
+					value="ognl:model.pkOneTempId"
+					displayName="literal:WAP1.X模板设置" /> &nbsp;&nbsp; <input name="WP1Submit"
+					jwcid="tmpl1@Any" type="button" class="buttonMain" value="WML1.X模板"
+					onClick="choiceTemplate('tmpl1')" url="ognl:getTemplateSetURLByParams(1,1,'pkOneTempId')" />&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+					<td>
+					<div id="pro_two" style="display:">
+					<input name="WP2" type="text" size="30" style="height:20px;width:50px;"
+					class="inputMain" jwcid="pkSecondTempId@TextField"
+					value="ognl:model.pkSecondTempId"
+					displayName="literal:WAP2.0模板设置" /> &nbsp;&nbsp; <input name="Submit"
+					jwcid="tmpl2@Any" type="button" class="buttonMain" value="WML2.0模板"
+					onClick="choiceTemplate('tmpl2')" url="ognl:getTemplateSetURLByParams(1,2,'pkSecondTempId')" />
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					
+					<input name="WP3" type="text" size="30" style="height:20px;width:50px;"
+					class="inputMain" jwcid="pkThirdTempId@TextField"
+					value="ognl:model.pkThirdTempId"
+					displayName="literal:3G模板设置" /> &nbsp;&nbsp; <input name="Submit" 
+					jwcid="tmpl3@Any" type="button" class="buttonMain" value="3G模板"
+					onClick="choiceTemplate('tmpl3')" url="ognl:getTemplateSetURLByParams(1,3,'pkThirdTempId')" />&nbsp;
+					</div>
+						</td>
+				</tr>
+				</table>	
+				</td>
+			</tr>
+			<!-- 隐藏 不需要
+			 <tr>
+				<td width="15%" align="right">资源详情模板配置：</td>
+				<td width="85%">
+				<table><tr><td>
+					<input name="WR1" type="text" 
+					class="inputMain" jwcid="resOneTempId@TextField"  style="height:20px;width:50px;"
+					value="ognl:model.resOneTempId"
+					displayName="literal:WAP1.X模板设置" /> &nbsp;&nbsp; <input name="WR1Submit"
+					jwcid="tmpl4@Any" type="button" class="buttonMain" value="WML1.X模板"
+					onClick="choiceTemplate('tmpl4')" url="ognl:getTemplateSetURLByParams(4,1,'resOneTempId')" />&nbsp;<font color="red"><strong>*必选项</strong></font>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+					<td>
+					<div id="res_two" style="display:">
+					<input name="WR2" type="text"
+					class="inputMain" jwcid="resSecondTempId@TextField" style="height:20px;width:50px;"
+					value="ognl:model.resSecondTempId"
+					displayName="literal:WAP2.0模板设置" /> &nbsp;&nbsp; <input name="Submit"
+					jwcid="tmpl5@Any" type="button" class="buttonMain" value="WML2.0模板"
+					onClick="choiceTemplate('tmpl5')" url="ognl:getTemplateSetURLByParams(4,2,'resSecondTempId')" />
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					
+					<input name="WR3" type="text"
+					class="inputMain" jwcid="resThirdTempId@TextField" style="height:20px;width:50px;"
+					value="ognl:model.resThirdTempId"
+					displayName="literal:3G模板设置" /> &nbsp;&nbsp; <input name="Submit"
+					jwcid="tmpl6@Any" type="button" class="buttonMain" value="3G模板"
+					onClick="choiceTemplate('tmpl6')" url="ognl:getTemplateSetURLByParams(4,3,'resThirdTempId')" />&nbsp;
+					</div>
+					</td>
+				</tr>
+				</table>	
+				</td>
+			</tr>  -->
+			<tr>
+				<td width="15%" align="right">页面组描述：<br>
+				</td>
+				<td width="85%">
+				<input name="textfield" type="TextArea"  style="width:500;height:150"
+					class="inputMain" validators="validators:required"
+					jwcid="pkComment@TextArea" value="ognl:model.pkComment" />
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td><input name="Submit2" type="submit" class="buttonMain"
+					value="确  定" jwcid="submitUser@Submit"
+					listener="listener:saveAndReturn" /> &nbsp;&nbsp;&nbsp;&nbsp;<input
+					name="Submit2" type="Reset" class="buttonMain" value="重  置">
+
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+
+		</form>
+		</div>
+		</td>
+	</tr>
+</table>
+</body>
+<script language="javascript">
+
+function changeShowType(typeId){
+	var sType = '0';
+	if(typeId=-1){
+		var temp=1;
+		if(document.getElementById("showType")!=null){
+			temp=document.getElementById("showType").value;
+			if(temp==1){
+				typeId=0;
+			}else if(temp==2){
+				typeId=2;
+			}else{
+				typeId=1;
+			}
+		}else{
+			temp=document.getElementById("bTypes").value;
+			typeId=temp;
+		}
+	}
+if(typeId == 0){//wap
+	sType = '1';
+	//显示后两个选项
+	document.getElementById("pro_two").style.display="";
+	//document.getElementById("res_two").style.display="";
+	//更改按钮文字 
+	document.getElementsByName("WP1Submit")[0].value="WML1.X模版";
+	//document.getElementsByName("WR1Submit")[0].value="WML1.X模版";
+}else if(typeId == 1){//手持终端
+	sType = '3';
+	//隐藏后两个选项
+	document.getElementById("pro_two").style.display="none";
+	//document.getElementById("res_two").style.display="none";
+	//更改按钮文字
+	document.getElementsByName("WP1Submit")[0].value="3G模版";
+	//document.getElementsByName("WR1Submit")[0].value="3G模版";
+}else{//客户端
+	sType = '2';
+	//隐藏后两个选项
+	document.getElementById("pro_two").style.display="none";
+	//document.getElementById("res_two").style.display="none";
+	//更改按钮文字
+	document.getElementsByName("WP1Submit")[0].value="3G模版";
+	//document.getElementsByName("WR1Submit")[0].value="3G模版";
+}
+changeTmpl('tmpl1',sType);
+changeTmpl('tmpl2',sType);
+changeTmpl('tmpl3',sType);
+changeTmpl('tmpl4',sType);
+changeTmpl('tmpl5',sType);
+changeTmpl('tmpl6',sType);
+}
+
+function changeTmpl(id,value){
+	if(document.getElementById(id)!=null){
+		var node = document.getElementById(id).getAttributeNode('url');
+		var url = node.value;
+		var urls = url.split('sp=');
+		urls[urls.length-1] = value + urls[urls.length-1].substring(1);
+		url = urls.join('sp=');
+		node.value = url;
+	}
+}
+
+function choiceTemplate(id){
+	var node = document.getElementById(id).getAttributeNode('url');
+	eval(node.value);
+}
+
+</script>
+</html>
