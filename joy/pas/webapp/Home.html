@@ -1,0 +1,145 @@
+<html jwcid="@Shell"   stylesheet="asset:stylesheet" title="管理平台"  doctype=""
+	  browserLogLevel="ERROR"
+	  consoleEnabled="true"
+	  debugEnabled="false">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>CMS管理平台</title>
+<script src="js/common.js" type="text/javascript" charset="gbk"></script>
+<script language="JavaScript" type="text/javascript">
+<!--
+
+  window.onbeforeunload   =   function()     //author:   meizz   
+  {   
+      var   n   =   window.event.screenX   -   window.screenLeft;   
+      var   b   =   n   >   document.documentElement.scrollWidth-20;   
+      if(b   &&   window.event.clientY   <   0   ||   window.event.altKey)   
+      {   
+          deletecookies();
+         // window.event.returnValue   =   "";     //这里可以放置你想做的操作代码   
+      }   
+  }   
+function openHelpDiaglog(){
+
+         var screenWidth = screen.width;
+
+         var screenHeight = screen.height;
+
+         window.open('help/help.html', 'newWin', 'dialogbox', '700', screenHeight-66, "0", screenWidth-710, true, true).focus();
+
+}
+
+function setCookie(name, value) 
+{ 
+    var argv = setCookie.arguments; 
+    var argc = setCookie.arguments.length; 
+    var expires = (argc > 2) ? argv[2] : null; 
+    if(expires!=null) 
+    { 
+        var LargeExpDate = new Date (); 
+        LargeExpDate.setTime(LargeExpDate.getTime() + (expires*1000*3600*24));         
+    } 
+    document.cookie = name + "=" + escape (value)+((expires == null) ? "" : ("; expires=" +LargeExpDate.toGMTString())); 
+}
+
+
+
+function deletecookies()
+{
+
+    var expdate = new Date(); 
+    expdate.setTime(expdate.getTime() - (86400 * 1000 * 1)); 
+    setCookie("userName", "", expdate); 
+	//setCookie("password", "", expdate); 
+
+
+
+}
+//-->
+</script>
+</head>
+<body jwcid="@Body" style="overflow:hidden;">
+<span jwcid="insertMenuScript"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="index_Head">
+	<tr id="logo">
+		<td height="50" class="index_Head02">
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td><img src="img/index_head_img_logo.png" width="236" height="50"></td>
+					<td align="right">
+						<table width="100%" height="50" border="0" cellpadding="0" cellspacing="2">
+							<tr>
+								<td align="right" valign="top">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="deletecookies();"   jwcid="userExit">退出</a>&nbsp;&nbsp;</td>
+							</tr>
+							<tr>
+								<td align="right"><img src="img/icon_home.png" align="absmiddle">&nbsp;<a href="Center.page" target="main">首页</a>&nbsp;&nbsp; &nbsp;&nbsp;<img src="img/icon_user.png" align="absmiddle">&nbsp;<a href="#"  jwcid="modifyPerson">个人信息&nbsp;&nbsp;</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" style=" padding-right:3px; padding-bottom:3px; padding-left:3px;">
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td height="29" background="img/menu_bg01.png">
+						<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td id="menuBox" width="933"></td>
+								<td><a id="SearchButton" href="#" onClick="SearchControler(this)" class="Search_normal"></a></td>
+								<td>&nbsp;</td>
+								<td align="right"><a href="#" onClick="logoControler(this)" class="arrow-up"></a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td height="20" valign="top" class="statusbar">
+						<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top" class="statusbar_02"><img src="img/index_bg03.png" width="3" height="20" align="absmiddle">&nbsp;&nbsp;&nbsp;&nbsp; <span jwcid="username"/>&nbsp;&nbsp;&nbsp; 欢迎登录管理平台</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td width="9" height="6"><img src="img/corner_left01.png" width="9" height="6"></td>
+								<td background="img/corner_topbg.png"></td>
+								<td width="9" height="6"><img src="img/corner_right01.png" width="9" height="6"></td>
+							</tr>
+							<tr>
+								<td background="img/corner_leftbg.png">&nbsp;</td>
+								 <td id="test">
+									 <iframe name="main" height="100%" width="100%" frameborder="0" src="Center.page" scrolling="no" ></iframe>
+								</td>
+							
+							<!-- <td width="10%">
+									<iframe name="main" id="userList" height="100%" width="100%" frameborder="0" src="ShowUserList.page" scrolling="no" ></iframe>
+								</td>
+								<td id="test">
+									<iframe name="main" id="pend" height="100%" width="100%" frameborder="0" src="PendPage.page" scrolling="no" ></iframe>
+								</td>
+								-->
+								<td background="img/corner_rightbg.png">&nbsp;</td>
+							</tr>
+							<tr>
+								<td height="23"><img src="img/corner_left02.png" width="9" height="23"></td>
+								<td align="center" background="img/corner_bottombg.png" style="color:#3e71ca;">版权所有
+									Copyright(C)2009 </td>
+								<td><img src="img/corner_right02.png" width="9" height="23"></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
