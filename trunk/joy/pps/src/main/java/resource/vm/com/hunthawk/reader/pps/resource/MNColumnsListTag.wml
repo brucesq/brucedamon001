@@ -1,0 +1,15 @@
+#if(${byTomeId})
+>>${tomeTitle}<br/>
+#end
+#foreach(${obj} in ${objs})
+#if(!${byTomeId})
+#if(!${isTomeList})
+[<a href="">$!{obj.get("tomeTitle")}</a>].
+#end
+#end
+<a href="$!{obj.get("url")}">$!{obj.get("title")}</a>
+#if(${velocityCount}<${objs.size()})
+<br/>
+#end
+#end
+
