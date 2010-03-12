@@ -1,0 +1,138 @@
+<html jwcid="@Shell" stylesheet="asset:stylesheet" title="栏目列表"
+	doctype="" browserLogLevel="DEBUG" consoleEnabled="true"
+	debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<title>无标题文档</title>
+</head>
+<script type="text/javascript"><!--
+function templateChoose()
+{
+  //alert(document.all.templateTypeFlag.value);
+  if (document.all.chooseFlag.value == "Strue" && document.all.chooseValue.value != "X" )
+  {   
+   		window.opener.document.getElementById(document.all.returnElement.value.substr(1)).value = document.all.chooseValue.value.substr(1);
+   		window.close();
+  }
+  
+}
+// --></script>
+<body jwcid="@Body" onload="templateChoose()">
+<div jwcid="warn@hunthawk:Warning" /><span
+	jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+<form jwcid="userForm@Form" clientValidationEnabled="true"><span
+	jwcid="opg@Hidden" value="ognl:pageGroup" /> <span
+	jwcid="parent@Hidden" value="ognl:parent" />
+<span jwcid="chooseFlag"/>
+<span jwcid="chooseValue"/>
+<span jwcid="returnElement"/>
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0">
+	 <tr>
+                <td height="20">
+                	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+						<tr>
+							<td height="40" class="search_bg">
+							编号：
+							<input name="textfield5" type="text" class="Template-text02" jwcid="searchId"/>
+							&nbsp;&nbsp;&nbsp;
+							名称：
+							
+								<input name="textfield" type="text" class="Template-text02" jwcid="name"/>
+                            产品：
+							<select name="select" jwcid="pageGroups">
+							</select>
+							
+							
+							
+							&nbsp;&nbsp;
+							<span jwcid="bSearch@Hidden" value="ognl:search" />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+							<input name="Submit2" type="submit" class="buttonMain" value="搜  索" jwcid="searchTemplate"/>
+							</td>
+						</tr>
+					</table>
+                </td>
+              </tr>
+	<tr>
+		<td valign="top">
+		<div style="width: 100%; height: 100%; overflow: auto;">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			jwcid="table">
+
+			<tr>
+				<td height="26" align="right" valign="bottom"><span
+					jwcid="customPages" />&nbsp;</td>
+			</tr>
+			<tr>
+				<td valign="top" style="padding: 10px;">
+				<span jwcid="checkboxGroup">
+				
+					<table id="box1" width="100%" border="1" cellpadding="0"
+						cellspacing="0" bordercolor="#d5d9dc"
+						style="border-collapse: collapse;">
+						<tr>
+							<td align="center" bgcolor="#DFDFDF"><span
+								jwcid="controlCheckbox" /></td>
+							<td jwcid="@contrib:TableColumns" class="title" />
+						</tr>
+						<tr align="center" jwcid="tableFormRows"
+							class="ognl:beans.evenOdd.next">
+							<td><span jwcid="delete" /></td>
+							<td jwcid="@contrib:TableValues" />
+						</tr>
+					</table>
+					
+				</span>
+				</td>
+			</tr>
+			<tr>
+				<td height="22" align="right"><span jwcid="customPagesDown" />&nbsp;</td>
+			</tr>
+			<tr>
+			 <td height="40" align="center" valign="middle" style=" border-top:none 0px;"><input name="Submit" type="submit" class="buttonCustom" value="选择" jwcid="chooseSubmit"/>
+			</tr>	
+		</table>
+		</div>
+		</td>
+	</tr>
+</table>
+   <span jwcid="detailColumnValue">
+                       <a href jwcid="detailLink" >
+                     <img src="../img/icon_03.png" width="16" height="16" align="absmiddle" />
+                      </a>
+     </span>
+     <!--     <span jwcid="nameColumnValue">
+					   <a href="#" jwcid="nameLink"><span jwcid="channelID">ID</span></a>
+   </span>  -->
+</form>
+</body>
+<script type="text/javascript"><!--
+function getCheckBoxValues(){
+	var columnids="";
+	for ( var n=0; n< document.getElementsByTagName("input").length; n++ ) 
+	{
+			var e = document.getElementsByTagName("input")[n];
+			if ( (e.type=='checkbox') &&(!e.disabled) ) 
+			{
+				  if ( e.checked ) {
+			  		columnids+=e.value+"-";
+				  }
+			}
+	}
+	return columnids.substring(0,columnids.lastIndexOf("-"));
+}
+function doSubmit(){
+	if(getCheckBoxValues()==""){
+		alert('至少要选择一个栏目!');
+	}else{
+		window.opener.document.getElementById(document.all.returnElement.value.substr(1)).value =  getCheckBoxValues();
+		window.close();
+	}
+	
+}
+// --></script>
+</html>

@@ -1,0 +1,306 @@
+<html jwcid="@Shell" title="栏目列表" doctype="" browserLogLevel="DEBUG"
+	consoleEnabled="true" debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body" onload="changeShowType()">
+<div jwcid="warn@hunthawk:Warning" /><span
+	jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#"
+			jwcid="sysUserList@DirectLink" listener="listener:cancel">栏目列表</a>－》维护栏目信息</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+		<table height="22" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+			<tr>
+				<td class="ToolbarLine"><img src="../img/icon_Add.png"
+					width="11" height="11" align="absmiddle">&nbsp;栏目维护</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+		<div style="width: 100%; height: 100%; overflow: auto;">
+		<form jwcid="userForm@Form" clientValidationEnabled="true"><input
+			type="hidden" jwcid="model@Hidden" value="ognl:model" /> <input
+			type="hidden" jwcid="channel@Hidden" value="ognl:parent" /> <input
+			type="hidden" jwcid="pageGroup@Hidden" value="ognl:pageGroup" /> <input
+			name="bTypes" jwcid="showType@Hidden" value="ognl:showType" /> <br>
+		<br>
+		<table width="100%" border="0" cellspacing="6" cellpadding="0">
+
+			<tr>
+				<td width="15%" align="right">名称(*)：<br>
+				</td>
+				<td width="85%"><input name="textfield" type="text"
+					class="inputMain" jwcid="name@TextField" value="ognl:model.name"
+					validators="validators:required" displayName="literal:名称" /></td>
+			</tr>
+
+			<tr>
+				<td width="15%" align="right">图标：<br>
+				</td>
+				<td width="85%"> 
+					 <Input jwcid="imgid@TextField"   displayName="literal:图片ID" value="ognl:imageId"  />
+														  &nbsp;&nbsp; 
+					 <input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择图片" onClick="ognl:chooseImageURL"/>
+				</td>
+			</tr>
+			<tr>
+				<td width="15%" align="right">使用本地素材：<br>
+				</td>
+				<td width="85%">
+					<input name="textfield44" jwcid="productinfo@Upload" file="ognl:uploadFile" type="file" onKeyDown="return   false;"/>
+													 &nbsp;&nbsp;
+					<input name="Submit" jwcid="@Submit" type="submit" listener="listener:uploadMaterial" class="buttonMain" value="上传"/>
+				</td>		
+				<input type="hidden" jwcid="imgUrl@Hidden" value="ognl:imgUrl"/>										
+			</tr>
+
+
+			<tr>
+				<td width="15%" align="right">资源包：<br>
+				</td>
+				<td><input name="textfield" type="text" class="inputMain"
+					translator="translator:integer" jwcid="pricepackId@TextField"
+					value="ognl:model.pricepackId" /> &nbsp;&nbsp; <input
+					name="Submit" jwcid="@Any" type="button" class="buttonMain"
+					value="选择资源包" onClick="ognl:packURL" /></td>
+			</tr>
+			<tr>
+				<td width="15%" align="right">栏目模板：<br>
+				</td>
+				<td width="85%">
+
+				<table>
+					<tr>
+						<td><input name="WP1" type="text" size="10"
+							jwcid="onepage@TextField" translator="translator:integer"
+							 value="ognl:model.colOneTempId"
+							displayName="literal:栏目默认模板" /> <input name="WP1Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="默认模板"
+							onClick="ognl:getTemplateURL(2,1,'onepage')" /> &nbsp;&nbsp;</td>
+						<td>
+						<div id="pro_two" style="display: "><input name="WP2"
+							type="text" size="10" jwcid="twopage@TextField"
+							translator="translator:integer"
+							value="ognl:model.colSecondTempId"
+							displayName="literal:栏目WAP2.0模板" /> <input name="Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="WAP2.0模板"
+							onClick="ognl:getTemplateURL(2,2,'twopage')" /> &nbsp;&nbsp; <input
+							name="WP3" type="text" size="10" jwcid="threepage@TextField"
+							translator="translator:integer" value="ognl:model.colThirdTempId"
+							displayName="literal:栏目3G模板" /> <input name="Submit" jwcid="@Any"
+							type="button" class="buttonMain" value="3G模板"
+							onClick="ognl:getTemplateURL(2,3,'threepage')" /></div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="15%" align="right">资源模板：<br>
+				</td>
+				<td width="85%">
+
+				<table>
+					<tr>
+						<td><input name="WR1" type="text" size="10"
+							jwcid="one@TextField" translator="translator:integer"
+							 value="ognl:model.resOneTempId"
+							displayName="literal:资源默认模板" /> <input name="WR1Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="默认模板"
+							onClick="ognl:getTemplateURL(3,1,'one')" /> &nbsp;&nbsp;</td>
+						<td>
+						<div id="res_two" style="display: "><input name="WR2"
+							type="text" size="10" jwcid="two@TextField"
+							translator="translator:integer"
+							value="ognl:model.resSecondTempId"
+							displayName="literal:资源WAP2.0模板" /> <input name="Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="WAP2.0模板"
+							onClick="ognl:getTemplateURL(3,2,'two')" /> &nbsp;&nbsp; <input
+							name="WR3" type="text" size="10" jwcid="three@TextField"
+							translator="translator:integer" value="ognl:model.resThirdTempId"
+							displayName="literal:资源3G模板" /> <input name="Submit" jwcid="@Any"
+							type="button" class="buttonMain" value="3G模板"
+							onClick="ognl:getTemplateURL(3,3,'three')" /></div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="15%" align="right">详情模板：</td>
+				<td width="85%">
+				<table>
+					<tr>
+						<td><input name="DE1" type="text" size="10"
+							jwcid="del1@TextField" translator="translator:integer"
+							value="ognl:model.delOneTempId"
+							displayName="literal:详情默认模板" /> <input name="DE1Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="默认模板"
+							onClick="ognl:getTemplateURL(4,1,'del1')" /> &nbsp;&nbsp;</td>
+						<td>
+						<div id="del_two" style="display: "><input name="DE2"
+							type="text" size="10" jwcid="del2@TextField"
+							translator="translator:integer"
+							value="ognl:model.delSecondTempId"
+							displayName="literal:详情WAP2.0模板" /> <input name="Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="WAP2.0模板"
+							onClick="ognl:getTemplateURL(4,2,'del2')" /> &nbsp;&nbsp; <input
+							name="DE3" type="text" size="10" jwcid="del3@TextField"
+							translator="translator:integer" value="ognl:model.delThirdTempId"
+							displayName="literal:详情3G模板" /> <input name="Submit" jwcid="@Any"
+							type="button" class="buttonMain" value="3G模板"
+							onClick="ognl:getTemplateURL(4,3,'del3')" /></div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		<tr>
+				<td width="15%" align="right">排序规则：<br>
+				</td>
+				<td width="85%"> 
+				<select jwcid="orderType@PropertySelection" model="ognl:orderTypeList" value="ognl:model.orderType" ></select>
+				</td>
+			</tr>	
+		
+		<tr>
+				<td width="15%" align="right">栏目类型：<br>
+				</td>
+				<td width="85%"> 
+				<select jwcid="columnType@PropertySelection" model="ognl:columnTypeList" value="ognl:model.columnType" onclick="showResourceType()"></select>
+				</td>
+			</tr>
+			<tbody  style="display:none" id="resourceType">
+			<tr>
+				<td width="15%" align="right">分类：<br>
+				</td>
+				<td width="85%"> 
+				<select jwcid="resourceType@PropertySelection" model="ognl:resourceTypeList" value="ognl:resourceType" onChange="literal:tapestry.form.submit(this.form)"></select>
+				</td>
+			</tr>
+			<tr>
+				<td width="15%" align="right">分类列表：<br>
+				</td>
+				<td width="85%"> 
+				<select jwcid="resourceTypeId@PropertySelection" model="ognl:resourceTypeIdList" value="ognl:resourceTypeId"></select>
+				</td>
+			</tr>
+			</tbody>
+			<tr>
+				<td width="15%" align="right">栏目描述：<br>
+				</td>
+				<td>
+					<textarea name="textfield3" cols="85"
+							rows="20" maxlength="600" jwcid="comment@TextArea"
+							value="ognl:model.comment"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td><input name="Submit2" type="submit" class="buttonMain"
+					value="确  定" jwcid="submitUser@Submit"
+					listener="listener:saveAndReturn" /> &nbsp;&nbsp;&nbsp;&nbsp;<input
+					name="Submit2" type="Reset" class="buttonMain" value="重  置">
+
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+
+		</form>
+		</div>
+		</td>
+	</tr>
+</table>
+</body>
+
+<script type="text/javascript">
+function showResourceType(){
+	if(document.getElementById("columnType").value==1)
+		document.getElementById("resourceType").style.display="block";
+	else
+	  	document.getElementById("resourceType").style.display="none";
+	}
+function changeShowType(){
+	showResourceType();
+	var sType = '0';
+
+		var temp=1;
+		if(document.getElementById("showType")!=null){
+			temp=document.getElementById("showType").value;
+			if(temp==1){
+				typeId=0;
+			}else if(temp==2){
+				typeId=2;
+			}else{
+				typeId=1;
+			}
+		}
+
+	if(typeId == 0){//wap
+		sType = '1';
+		//显示后两个选项
+		document.getElementById("pro_two").style.display="";
+		document.getElementById("res_two").style.display="";
+		document.getElementById("del_two").style.display="";
+		//更改按钮文字 
+		document.getElementsByName("WP1Submit")[0].value="WML1.X模版";
+		document.getElementsByName("WR1Submit")[0].value="WML1.X模版";
+		document.getElementsByName("DE1Submit")[0].value="WML1.X模版";
+	}else if(typeId == 1){//手持终端
+		sType = '3';
+		//隐藏后两个选项
+		document.getElementById("pro_two").style.display="none";
+		document.getElementById("res_two").style.display="none";
+		document.getElementById("del_two").style.display="none";
+		//更改按钮文字
+		document.getElementsByName("WP1Submit")[0].value="3G模版";
+		document.getElementsByName("WR1Submit")[0].value="3G模版";
+		document.getElementsByName("DE1Submit")[0].value="3G模版";
+	}else{//客户端
+		sType = '2';
+		//隐藏后两个选项
+		document.getElementById("pro_two").style.display="none";
+		document.getElementById("res_two").style.display="none";
+		document.getElementById("del_two").style.display="none";
+		//更改按钮文字
+		document.getElementsByName("WP1Submit")[0].value="3G模版";
+		document.getElementsByName("WR1Submit")[0].value="3G模版";
+		document.getElementsByName("DE1Submit")[0].value="3G模版";
+	}
+	changeTmpl('tmpl1',sType);
+	changeTmpl('tmpl2',sType);
+	changeTmpl('tmpl3',sType);
+	changeTmpl('tmpl4',sType);
+	changeTmpl('tmpl5',sType);
+	changeTmpl('tmpl6',sType);
+}
+
+function changeTmpl(id,value){
+	if( document.getElementById(id)!=null){
+		var node = document.getElementById(id).getAttributeNode('url');
+		var url = node.value;
+		var urls = url.split('sp=');
+		urls[urls.length-1] = value + urls[urls.length-1].substring(1);
+		url = urls.join('sp=');
+		node.value = url;
+	}
+}
+</script>
+</html>
