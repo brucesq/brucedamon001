@@ -1,0 +1,5 @@
+#foreach(${obj} in ${objs})
+<a href="$!{obj.get("url")}">$!{obj.get("title")}</a>
+#if(${velocityCount}%6==0)
+<br />
+#end #end
