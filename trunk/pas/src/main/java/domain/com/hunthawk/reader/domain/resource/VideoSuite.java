@@ -3,11 +3,15 @@
  */
 package com.hunthawk.reader.domain.resource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -47,6 +51,10 @@ public class VideoSuite extends PersistentObject {
 	 * 文件具体描述，如高潮版，IPHONE版等信息
 	 */
 	private String filedesc;
+	/**
+	 * 真实的文件名字
+	 */
+	private String relfiles = "";
 
 	/**
 	 * 文件大小
@@ -110,5 +118,20 @@ public class VideoSuite extends PersistentObject {
 		this.filedesc = filedesc;
 	}
 	
-	
+	@Column(name = "rel_files")
+	public String getRelfiles() {
+		return relfiles;
+	}
+	public void setRelfiles(String relfiles) {
+		this.relfiles = relfiles;
+	}
+	@Transient
+	public List<String> getRelfilelist(){
+		String[] files = relfiles.split(";");
+		List<String> fs = new ArrayList<String>();
+		for(String file : files){
+			fs.add(file);
+		}
+		return fs;
+	}
 }
