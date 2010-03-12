@@ -64,6 +64,7 @@ public class VideoListTag extends BaseTag {
 		Map velocityMap = new HashMap();
 		velocityMap.put("objs", videos);
 		velocityMap.put("dir", sb.toString());
+		velocityMap.put("strUtil", new StrUtil());
 		Map resultMap = new HashMap();
 		String result = DBVmInstance.getInstance().parseVM(velocityMap, this,tagTem);
 		resultMap.put(TagUtil.makeTag(tagName), result);
