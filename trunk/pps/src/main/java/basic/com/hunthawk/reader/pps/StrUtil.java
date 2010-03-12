@@ -19,6 +19,46 @@ import com.hunthawk.reader.domain.resource.ResourceType;
  */
 public class StrUtil {
 
+	/**
+	 * 大于1M转成MB，小于转成KB
+	 * @param size
+	 * @return
+	 */
+	public static String smartToSize(Integer size,int limit){
+		if(size > 1024*1024){
+			return toMbSize(size,limit)+"M";
+		}
+		return toKbSize(size)+"K";
+	}
+	
+	public static String toKbSize(Integer size){
+		Integer kb = size / 1024;
+		return kb.toString();
+	}
+	/**
+	 * 
+	 * @param size
+	 * @param limit 保留小数点后几位
+	 * @return
+	 */
+	public static String toMbSize(Integer size,int limit){
+		Double mb = size.doubleValue() / (1024*1024);
+		String str =  mb.toString();
+		int index = str.indexOf(".");
+		String result = str;
+		if(index > 0){
+			String prefix = str.substring(0,index);
+			String suffix = str.substring(index+1);
+			if(suffix.length()>limit){
+				suffix = suffix.substring(0,limit);
+			}
+			result = prefix +"."+ suffix;
+		}
+		result = StringUtils.removeEnd(result, "0");
+		result = StringUtils.removeEnd(result, ".");
+		return result;
+	}
+
 	public static String urlEncode(String content, String encode) {
 		try {
 			return URLEncoder.encode(content, encode);
