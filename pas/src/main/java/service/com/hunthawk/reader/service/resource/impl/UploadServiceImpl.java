@@ -894,9 +894,48 @@ public class UploadServiceImpl implements UploadService {
 			return strToDate(value, isNeed, prefixInfo);
 		case 'N':
 			return getIntValue(value, isNeed, prefixInfo);
+		case 'T':
+			return getTimeValue(value, isNeed, prefixInfo);
 		}
 		return null;
 	}
+
+	/**
+	 * 时间格式转成数字
+	 * @param value
+	 * @param isNeed
+	 * @param errInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public Integer getTimeValue(String value, boolean isNeed, String errInfo)
+			throws Exception {
+		try {
+			String timeStr = value.replaceAll("：", ":");
+			String[] strs = timeStr.split(":");
+			Integer time = 0;
+			int factor = 1;
+			int length = strs.length;
+			for (int i = 0; i < length; i++) {
+				String str = strs[length - i - 1];
+				try {
+					int sd = Integer.parseInt(str);
+					time += sd * factor;
+					factor = factor*60;
+				} catch (Exception e) {
+					if (isNeed)
+						throw new Exception(errInfo + "[" + value + "]格式错误");
+				}
+			}
+			return time;
+
+		} catch (Exception e) {
+			if (isNeed)
+				throw new Exception(errInfo + "[" + value + "]格式错误");
+		}
+		return 0;
+	}
+
 
 	private Integer getIntValue(String value, boolean isNeed, String errInfo)
 			throws Exception {

@@ -39,6 +39,7 @@ import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.framework.tapestry.EditPage;
 import com.hunthawk.framework.tapestry.form.MapPropertySelectModel;
 import com.hunthawk.framework.tapestry.form.ObjectPropertySelectionModel;
+import com.hunthawk.framework.util.OrderedMap;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.partner.Provider;
 import com.hunthawk.reader.domain.resource.ResourceAll;
@@ -142,6 +143,18 @@ public abstract class EditVideoPage extends EditPage implements
 
 	public abstract String getAuthorIDs();
 
+	public abstract Integer getTimeSeconds();
+
+	public abstract Integer getTimeMinutes();
+
+	public abstract Integer getTimeHours();
+	
+	public abstract void setTimeSeconds(Integer i);
+
+	public abstract void setTimeMinutes(Integer i);
+
+	public abstract void setTimeHours(Integer i);
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -152,52 +165,53 @@ public abstract class EditVideoPage extends EditPage implements
 		return Video.class;
 	}
 
-	private void processOnlineVideo(File file) {
-		// 处理UC播放器
-
-		List<String> onlineFiles = new ArrayList<String>();
-		System.out.println(file.getAbsolutePath());
-		if (file.exists() && file.isDirectory()) {
-			File[] videos = file.listFiles();
-			for (File vf : videos) {
-				if (vf.getName().endsWith(".ucs")) {
-					String filename = vf.getName();
-					int index = filename.lastIndexOf("_");
-					String targetFileName;
-					if (index > 0) {
-						targetFileName = filename.substring(0, index) + ".mp4";
-					
-					} else {
-						targetFileName = vf.getName().replaceAll("ucs", "mp4");
-					}
-					logger.info("targetFileName:" + targetFileName);
-					onlineFiles.add(UploadServiceImpl.getFilePathDir(vf
-							.getAbsolutePath())
-							+ File.separator + targetFileName);
-				}
-			}
-		}
-		String onlineDir = getOnlineVideoDir() + File.separator;
-		for (String online : onlineFiles) {
-			File srcFile = new File(online);
-			// String filename = srcFile.getName();
-			// int index = filename.lastIndexOf("_");
-			// String targetFileName = filename;
-			// if(index > 0){
-			// targetFileName =
-			// filename.substring(0,index)+"."+UploadServiceImpl.getFileExtName(filename);
-			// }
-			if (srcFile.exists()) {
-				File destFile = new File(onlineDir + srcFile.getName());
-				try {
-					FileUtils.moveFile(srcFile, destFile);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
-	}
+	// private void processOnlineVideo(File file) {
+	// // 处理UC播放器
+	//
+	// List<String> onlineFiles = new ArrayList<String>();
+	// System.out.println(file.getAbsolutePath());
+	// if (file.exists() && file.isDirectory()) {
+	// File[] videos = file.listFiles();
+	// for (File vf : videos) {
+	// if (vf.getName().endsWith(".ucs")) {
+	// String filename = vf.getName();
+	// int index = filename.lastIndexOf("_");
+	// String targetFileName;
+	// if (index > 0) {
+	// targetFileName = filename.substring(0, index) + ".mp4";
+	//					
+	// } else {
+	// targetFileName = vf.getName().replaceAll("ucs", "mp4");
+	// }
+	// logger.info("targetFileName:" + targetFileName);
+	// onlineFiles.add(UploadServiceImpl.getFilePathDir(vf
+	// .getAbsolutePath())
+	// + File.separator + targetFileName);
+	// }
+	// }
+	// }
+	// String onlineDir = getOnlineVideoDir() + File.separator;
+	// for (String online : onlineFiles) {
+	// File srcFile = new File(online);
+	// // String filename = srcFile.getName();
+	// // int index = filename.lastIndexOf("_");
+	// // String targetFileName = filename;
+	// // if(index > 0){
+	// // targetFileName =
+	// //
+	// filename.substring(0,index)+"."+UploadServiceImpl.getFileExtName(filename);
+	// // }
+	// if (srcFile.exists()) {
+	// File destFile = new File(onlineDir + srcFile.getName());
+	// try {
+	// FileUtils.moveFile(srcFile, destFile);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	//
+	// }
+	// }
 
 	private String getOnlineVideoDir() {
 		// 从数据库配置信息中得到服务器存放上传文件的路径
@@ -212,20 +226,21 @@ public abstract class EditVideoPage extends EditPage implements
 		return tName;
 	}
 
-
 	@Override
 	protected boolean persist(Object object) {
 		try {
 			String errorMessage = "";
 			Video video = (Video) object;
-			
-			if(video.getPublishTime() == null){
+
+			if (video.getPublishTime() == null) {
 				video.setPublishTime(new Date());
 			}
-			if(video.getCpId() == null || video.getCpId() == 0){
+			if (video.getCpId() == null || video.getCpId() == 0) {
 				video.setCpId(5000);
 			}
 			
+			video.setPlayTime(this.getTimeHours()*3600+this.getTimeMinutes()*60+this.getTimeSeconds());
+
 			if (isModelNew()) {
 				video.setCreatorId(this.getUser().getId());
 				getResourceService()
@@ -320,7 +335,7 @@ public abstract class EditVideoPage extends EditPage implements
 						// processOnlineVideo(dir2);
 						File[] videos = dir2.listFiles();
 						int i = getLastIndex();
-						Map<String,String> mp4FilesMap = new HashMap<String,String>(); 
+						Map<String, String> mp4FilesMap = new HashMap<String, String>();
 						for (File vf : videos) {
 							i++;
 							VideoSuite vs = new VideoSuite();
@@ -352,20 +367,21 @@ public abstract class EditVideoPage extends EditPage implements
 								String targetUrl = getUploadService()
 										.getVideoResourceDirectory(
 												vs.getResourceId());
-								Long size = UploadServiceImpl.changeUcsResourceURL(vf
-										.getAbsolutePath(), targetUrl,
-										getSystemService(),mp4Files);
-								
-								if(size>0L){
+								Long size = UploadServiceImpl
+										.changeUcsResourceURL(vf
+												.getAbsolutePath(), targetUrl,
+												getSystemService(), mp4Files);
+
+								if (size > 0L) {
 									vs.setSize(size.intValue());
 								}
 								String relFiles = "";
-								for(String mp4File : mp4Files){
+								for (String mp4File : mp4Files) {
 									mp4FilesMap.put(mp4File, vs.getFiledesc());
-									relFiles += mp4File +";";
+									relFiles += mp4File + ";";
 								}
 								vs.setRelfiles(relFiles);
-								
+
 							}
 							try {
 								File destFile = new File(getResourceService()
@@ -380,20 +396,24 @@ public abstract class EditVideoPage extends EditPage implements
 								e.printStackTrace();
 							}
 						}
-						
-						
-						try{
-							List<VideoSuite> videoSuites = getResourceService().getResourceChapter(VideoSuite.class, video.getId());
-							for(VideoSuite suite : videoSuites){
-								if(mp4FilesMap.containsKey(suite.getFilename())){
-									suite.setFiledesc(mp4FilesMap.get(suite.getFilename()));
-									getResourceService().updateResourceChapter(suite);
+
+						try {
+							List<VideoSuite> videoSuites = getResourceService()
+									.getResourceChapter(VideoSuite.class,
+											video.getId());
+							for (VideoSuite suite : videoSuites) {
+								if (mp4FilesMap
+										.containsKey(suite.getFilename())) {
+									suite.setFiledesc(mp4FilesMap.get(suite
+											.getFilename()));
+									getResourceService().updateResourceChapter(
+											suite);
 								}
 							}
-						}catch(Exception e){
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						
+
 					}
 					getUploadService().rsyncDirectry(
 							new File(getResourceService().getChapterAddress(
@@ -442,7 +462,6 @@ public abstract class EditVideoPage extends EditPage implements
 		return true;
 	}
 
-	
 	public IPropertySelectionModel getResourceYesNoList() {
 		return new MapPropertySelectModel(Constants.getResourceYesNo());
 	}
@@ -607,6 +626,78 @@ public abstract class EditVideoPage extends EditPage implements
 	@InjectObject("spring:partnerService")
 	public abstract PartnerService getPartnerService();
 
+	private Map getTimeList(){
+		Map<String, Integer> map = new OrderedMap<String, Integer>();
+		map.put("00",0);
+		map.put("01",1);
+		map.put("02",2);
+		map.put("03",3);
+		map.put("04",4);
+		map.put("05",5);
+		map.put("06",6);
+		map.put("07",7);
+		map.put("08",8);
+		map.put("09",9);
+		map.put("10",10);
+		map.put("11",11);
+		map.put("12",12);
+		map.put("13",13);
+		map.put("14",14);
+		map.put("15",15);
+		map.put("16",16);
+		map.put("17",17);
+		map.put("18",18);
+		map.put("19",19);
+		map.put("20",20);
+		map.put("21",21);
+		map.put("22",22);
+		map.put("23",23);
+		map.put("24",24);
+		map.put("25",25);
+		map.put("26",26);
+		map.put("27",27);
+		map.put("28",28);
+		map.put("29",29);
+		map.put("30",30);
+		map.put("31",31);
+		map.put("32",32);
+		map.put("33",33);
+		map.put("34",34);
+		map.put("35",35);
+		map.put("36",36);
+		map.put("37",37);
+		map.put("38",38);
+		map.put("39",39);
+		map.put("40",40);
+		map.put("41",41);
+		map.put("42",42);
+		map.put("43",43);
+		map.put("44",44);
+		map.put("45",45);
+		map.put("46",46);
+		map.put("47",47);
+		map.put("48",48);
+		map.put("49",49);
+		map.put("50",50);
+		map.put("51",51);
+		map.put("52",52);
+		map.put("53",53);
+		map.put("54",54);
+		map.put("55",55);
+		map.put("56",56);
+		map.put("57",57);
+		map.put("58",58);
+		map.put("59",59);
+		return map;
+	}
+	
+	public IPropertySelectionModel getTimeListModel() {
+		
+		MapPropertySelectModel mapPro = new MapPropertySelectModel(getTimeList(), false,
+				"");
+		return mapPro;
+	}
+
 	public IPropertySelectionModel getCpList() {
 		Collection<HibernateExpression> expressions = new ArrayList<HibernateExpression>();
 		List<Provider> list = getPartnerService().findProvider(1,
@@ -711,6 +802,11 @@ public abstract class EditVideoPage extends EditPage implements
 	public void pageBeginRender(PageEvent event) {
 		if (getModel() == null) {
 			setModel(new Video());
+		}else{
+			Video video = (Video) getModel();
+			setTimeHours(video.getPlayTime()/3600);
+			setTimeMinutes((video.getPlayTime()%3600)/60);
+			setTimeSeconds((video.getPlayTime()%3600)%60);
 		}
 		// 初始化那个版权的名称：
 		ResourceAll resource = (ResourceAll) getModel();

@@ -48,7 +48,7 @@ public class Video extends ResourceAll{
 	public String getFormatPlayTime(){
 		int hour = playTime/3600;
 		int minute = (playTime%3600)/60;
-		int second = ((playTime%3600)%60)/60;
+		int second = (playTime%3600)%60;
 		String s = "";
 //		if(hour>0){
 			s=StringUtils.leftPad(""+hour,2,'0')+":";
