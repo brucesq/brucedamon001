@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="init" basedir=".">
+  <property name="srcDir" location="src"/>
+  <property name="buildDir" location="build"/>
+  <property name="dist.lib" location="dist\WEB-INF\lib"/>
+  <property name="distDir" location="dist"/>
+  <property name="lib.dir" location="webapp\WEB-INF\lib"/>
+  <property name="webDir" location="webapp"/>
+  <!-- =================================================================== -->
+  <!-- Initialization target                                               -->
+  <!-- =================================================================== -->
+  <target name="init">
+    <tstamp/>
+    <echo message="${lib.dir}"/>
+    <mkdir dir="${buildDir}" />
+  	<mkdir dir="${distDir}" />
+  	<mkdir dir="${dist.lib}" />
+    <path id="classpath">
+        <pathelement path="${classpath}"/>
+        <fileset dir="${lib.dir}">
+           <include name="**/*.jar"/>
+        </fileset>
+    </path>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Compiles the source directory                                       -->
+  <!-- =================================================================== -->
+  <target name="compile" depends="init">
+    <javac srcdir="${srcDir}"
+           destdir="${buildDir}"
+		   debug="true">
+        <classpath refid="classpath"/>
+     </javac>
+  </target>
+
+    <target name="dist" depends="compile">
+	<jar destfile="${dist.lib}/reader-pps.jar" basedir="${buildDir}" />
+  	<copy todir="${distDir}">
+  	  	  		<fileset dir="${webDir}" >
+  	  	  			<exclude name="WEB-INF/classes/**"/>
+  	  	  		</fileset>
+  	</copy>
+  	<copy todir="${distDir}/WEB-INF/classes">
+  				<fileset dir="${srcDir}/main/resources">
+  					<include name="**/*.properties" />
+  					<include name="**/*.xml" />
+  					<include name="**/*.txt" />
+  				</fileset>
+  				<fileset dir="${srcDir}/main/java/basic">
+  		  					<include name="vm/**" />
+  		  		</fileset>
+  				<fileset dir="${srcDir}/main/java/resource">
+  		  		  					<include name="vm/**" />
+  		  		 </fileset>
+  				<fileset dir="${srcDir}/main/java/interactive">
+  		  		  		  					<include name="vm/**" />
+  		  		  		 </fileset>
+  				<fileset dir="${srcDir}/main/java/iphone">
+  		  		  					<include name="vm/**" />
+  		  		 </fileset>
+  				
+  	</copy>
+  </target>
+
+   <target name="clean" >
+	<delete dir="${buildDir}"/>
+	<delete dir="${distDir}"/>
+  </target>
+</project>
