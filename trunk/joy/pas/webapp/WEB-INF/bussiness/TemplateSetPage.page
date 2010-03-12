@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+<asset name="stylesheet" path="css.css"/>
+<bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+  <component id="templateType" type="PropertySelection">
+    <binding name="model" value="templateTypeList"/>
+    <binding name="value" value="templateType"/>
+  </component>
+  <component id="versionType" type="PropertySelection">
+    <binding name="model" value="versionTypeList"/>
+    <binding name="value" value="versionType"/>
+  </component>
+  <component id="templateForm" type="Form">
+  </component>
+  <component id="templateName" type="TextField">
+    <binding name="value" value="templateName"/>
+  </component>
+  <component id="table" type="contrib:TableView">
+    <binding name="source" value="chooseTemplates"/>
+    <binding name="columns" value="literal:!id:编号:id,!title:名称:title,=displayStatus"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="10"/>
+  </component>
+  <component id="templateRadio" type="Radio">
+    <binding name="value" value="components.rows.tableRow"/>
+  </component>
+  <component id="tamplateRadioGroup" type="RadioGroup">
+    <binding name="selected" value="template"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="chooseSubmit" type="Submit">
+    <binding name="listener" value="listener:chooseSubmit"/>
+  </component>
+  <component id="chooseFlag" type="Hidden">
+    <binding name="value" value="choose"/>
+  </component>
+  <component id="searchTemplate" type="Submit">
+    <binding name="listener" value="listener:searchTemplate"/>
+  </component>
+  <component id="chooseValue" type="Hidden">
+    <binding name="value" value="radioValue"/>
+  </component>
+  <component id="error" type="Delegator">
+    <binding name="delegate" value="beans.delegate.firstError"/>
+  </component>
+  <component id="templateTypeFlag" type="Hidden">
+    <binding name="value" value="templateTypeFlag"/>
+  </component>
+  <component id="returnElement" type="Hidden">
+    <binding name="value" value="returnElement"/>
+  </component>
+  <component id="showTemplateType" type="Hidden">
+    <binding name="value" value="showTemplateType"/>
+  </component>
+  <component id="corpsTemplateType" type="Hidden">
+    <binding name="value" value="templateType"/>
+  </component>
+  
+   <component id="showVersionType" type="Hidden">
+    <binding name="value" value="showVersionType"/>
+  </component>
+  <component id="corpsVersionType" type="Hidden">
+    <binding name="value" value="versionType"/>
+  </component>
+  <component id="searchStatus" type="PropertySelection">
+    <binding name="model" value="templateStatus"/>
+    <binding name="value" value="searchStatus"/>
+    <binding name="translator" value="translator:number"/>
+  </component>
+  <component id="searchId" type="TextField">
+    <binding name="value" value="searchId"/>
+    <binding name="translator" value="translator:number"/>
+    <binding name="displayName" value="literal:编号"/>
+  </component>
+</page-specification>
