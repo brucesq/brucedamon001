@@ -1,0 +1,56 @@
+<html jwcid="@Shell"   title="Access Denied"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<style>
+.status {
+		display:block;
+		clear:both;
+		width:70%;
+		height: 50px;
+		overflow:auto;
+		font-family:Arial;
+		font-size:12pt;
+		padding: 0.4em;
+		border:1px solid  #D6AE33;
+	}
+</style>
+<body  jwcid="@Body">
+
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" >
+  <tr>
+    <td align="center">
+	</td>
+  </tr>
+
+  <span jwcid="@If" condition="ognl:vindicateErrors">
+  <tr>
+    <td align="center">
+	<div jwcid="vindicateerror@Any" class="status" >
+		<img jwcid="@Any" src="ognl:warnIcon" /><span jwcid="@Insert" value="ognl:vindicateErrors" />
+	</div>
+	</td>
+  </tr>
+  </span>
+  <span jwcid="@Else">
+    <tr>
+    <td align="center">
+	<div jwcid="error@Any" class="status" >
+		<img jwcid="@Any" src="ognl:warnIcon"/><span jwcid="@Insert" value="ognl:errors" />
+	</div>
+	</td>
+  </tr>
+  </span>
+  <tr>
+    <td align="center">
+	<span jwcid="@If" condition="ognl:!popWindow">
+	<input name="Submit2" type="button" class="buttonMain" onclick="javascript:history.back();" value="·µ  »Ø">
+	</span>
+	<span jwcid="@Else">
+	<input name="Submit2" type="button" class="buttonMain" onclick="javascript:window.close();" value="¹Ø ±Õ">
+	</span>
+	</td>
+  </tr>
+</table>
+</body>
+</html>
