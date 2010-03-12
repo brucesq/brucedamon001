@@ -1,0 +1,296 @@
+<html jwcid="@Shell"  stylesheets="ognl:{getAsset('stylesheet'),getAsset('autosuggest_css')}" title="图书列表"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/show.js" type="text/javascript" charset="gbk"></script>  
+<script jwcid="@Any" type="text/javascript" src="asset:bsn_js"></script>
+<script type="text/javascript">
+function openEditauthor(url)
+{ 
+	var newWindow = window.open(url, "", "width=800,height=570,top=100,left=100,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no");
+		newWindow.focus();
+	     
+}
+
+</script>
+<title>无标题文档</title>
+	<style>
+		#enlarge_images{position:absolute;display:none;z-index:2;border:5px solid #f4f4f4}
+	</style>
+
+</head>
+<body jwcid="@Body" onload="showDifferent()">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<form jwcid="productForm@Form"  clientValidationEnabled="true">
+<span jwcid="pack@Hidden" value="ognl:pack" />
+<span jwcid="sortId@Hidden" value="ognl:sortId" />
+<span jwcid="otherPageToHere@Hidden" value="ognl:otherPageToHere" />
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditResourcePage">批量上传</a></td>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditInfoPage">添加新闻</a></td>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditVideoPage">添加视频</a></td>
+					
+					<span jwcid="@If" condition="ognl:!user.roleProvider">
+					<td class="ToolbarLine"><img src="../img/icon_del.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@bayeux:LinkSubmitOnce" action="listener:onBatchDelete" onclick="return showConfirmation('删除');" >删除选中</a></td>
+					<span jwcid="@If" condition="ognl:hasRole('auditpause')">
+						<td class="ToolbarLine"><img src="../img/icon_012.png" width="15" height="15" align="absmiddle">&nbsp;<a href="#" jwcid="statuspause" onclick="return showConfirmation('暂停');">暂停</a></td>
+					</span>
+					<span jwcid="@If" condition="ognl:hasRole('auditpublish')">
+						<td class="ToolbarLine"><img src="../img/icon_015.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="statuspublish" onclick="return showConfirmation('商用');">商用</a></td>
+					</span>
+					<span jwcid="@If" condition="ognl:hasRole('auditagin')">
+						<td class="ToolbarLine"><img src="../img/icon_08.png" width="15" height="15" align="absmiddle">&nbsp;<a href="#" jwcid="statusagin" onclick="return showConfirmation('复审');">复审</a></td>
+					</span>
+					<span jwcid="@If" condition="ognl:hasRole('auditfalse')">
+						<td class="ToolbarLine"><img src="../img/iconWarning.gif" width="14" height="14" align="absmiddle"> <a href="#" jwcid="statusfalse" onclick="return showConfirmation('否决');">否决</a></td>
+					</span>
+					<span jwcid="@If" condition="ognl:hasRole('execTop')">
+						<td class="ToolbarLine"><img src="../img/icon_05.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="top" onclick="return showConfirmation('置顶');">置顶</a></td>
+						<td class="ToolbarLine"><img src="../img/icon_013.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="down" onclick="return showConfirmation('不置顶');">不置顶</a></td>
+					</span>
+					<td class="ToolbarLine"><img src="../img/icon_016.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="@bayeux:LinkSubmitOnce" action="listener:chooseResources">加入资源包</a></td>		
+					
+					<td class="ToolbarLine"><img src="../img/icon_018.png" width="14" height="14" align="absmiddle"> <a href="#" jwcid="@bayeux:LinkSubmitOnce" action="listener:changeResourceType">批量修改</a></td>
+						
+					 <span jwcid="@If" condition="ognl:otherPageToHere">
+					<td class="ToolbarLine"><img src="../img/icon_014.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/ShowResourceTypePage">返回分类列表</a></td>
+					</span>	
+					</span>	
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">		
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" jwcid="table" >
+						<tr>
+							<td style="padding:5px 10px;" >
+								<table id="Searchbar" width="100%" border="0" cellpadding="0" cellspacing="2" class="search_bg" style="display:block">
+										<tr>
+											<td style="color:#622f04; padding:5px;">
+											<!--   <span jwcid="@If" condition="ognl:sortId==null">-->
+											<span jwcid="@If" condition="ognl:!otherPageToHere">
+											<select jwcid="resourcetype@PropertySelection" model="ognl:resourceTypeList" value="ognl:resourceType" onChange="changeShowType(this.options[this.options.selectedIndex].value)"></select>	
+											</span>	
+											<span jwcid="@Else">
+												<input name="resourceType" type="hidden" jwcid="resourceType@Hidden" value="ognl:resourceType" />
+											</span>	
+											&nbsp;
+											查询:
+											<select jwcid="SearchScope@PropertySelection" model="ognl:SearchScope" value="ognl:keyname" onChange="showDifferent();"></select>				
+											&nbsp;								
+												<input name="name" type="text" size="6" jwcid="name@TextField" value="ognl:name" style="display:inline"/>
+												<input jwcid="author@AutoSuggest" model="ognl:autocompleterModel" value="ognl:resourceAuthor" size="6" style="display:none"/>
+												<input type="text" size="6" jwcid="rKeyWord@TextField" value="ognl:rKeyWord" style="display:none"/>
+											&nbsp;&nbsp;
+											分类:
+											<select jwcid="sortList@PropertySelection" model="ognl:sortList" value="ognl:sortId"></select>
+											<!-- &nbsp;
+											作者:
+											<select jwcid="author@AutoSuggest" model="ognl:autocompleterModel" value="ognl:resourceAuthor"></select>
+											-->
+											&nbsp; 
+											作者：
+											<select jwcid="authorList@PropertySelection" model="ognl:autoList" value="ognl:authorListId"></select>					
+											&nbsp;
+											状态:
+											<select jwcid="StatusList@PropertySelection" model="ognl:StatusList" value="ognl:status"></select>
+											&nbsp;
+											<span jwcid="@If" condition="ognl:!user.roleProvider">
+											上传人:
+											<select jwcid="creator@PropertySelection" model="ognl:userList" value="ognl:creator"></select>
+											&nbsp;
+											合作方:
+											<select jwcid="cpList@PropertySelection" model="ognl:cpList" value="ognl:cp"></select>
+											&nbsp;
+											推荐指数：
+											<select jwcid="expNum@PropertySelection" model="ognl:expNumList" value="ognl:expNum"></select>
+											&nbsp;
+											健康指数：
+											<select jwcid="healthNum@PropertySelection" model="ognl:expNumList" value="ognl:healthNum"></select>
+											&nbsp;
+												</span>
+											 </td>						
+										</tr>
+										<tr>
+										<td style="color:#622f04; padding:5px;">
+											<span jwcid="@If" condition="ognl:!user.roleProvider">
+											出版社：
+											<input jwcid="publisher@TextField" value="ognl:publisher" size="6"/>
+											&nbsp;
+											首字母：
+											<select jwcid="initialLetter@PropertySelection" model="ognl:initialLetterList" value="ognl:initialLetter"></select>
+											&nbsp;
+											是否首发：
+											<select jwcid="isFirstpublish@PropertySelection" model="ognl:isFirstpublishList" value="ognl:isFirstpublish"></select>
+											&nbsp;
+											是否置顶：
+											<select jwcid="isSearchTop@PropertySelection" model="ognl:isSearchTopList" value="ognl:isSearchTop"></select>
+											&nbsp;
+											是否有书部：
+											<select jwcid="isDivision@PropertySelection" model="ognl:isSearchTopList" value="ognl:isDivision"></select>
+											&nbsp;
+											是否出版：
+											<select jwcid="isOut@PropertySelection" model="ognl:isFirstpublishList" value="ognl:isOut"></select>
+											&nbsp;
+												连载/全本：
+											<select jwcid="isFinished@PropertySelection" model="ognl:isFinishedList" value="ognl:isFinished"></select>
+											&nbsp;
+											</span>
+											<input name="Submit3" type="submit" class="button-search" value="搜 索" jwcid="searchS@Submit" listener="listener:search"/>
+										
+										</td>
+										</tr>
+									</table>
+							</td>
+						</tr>
+						<tr>
+							<td height="26" align="right" valign="bottom"><span jwcid="customPages"/>&nbsp;</td>
+						</tr>
+						<tr>
+							<td valign="top" style="padding:10px;">
+							    <span jwcid="checkboxGroup">
+								<table id="box1" width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#d5d9dc"  style="border-collapse:collapse;">
+									<tr>									
+										<td align="center" bgcolor="#DFDFDF"><span  jwcid="controlCheckbox"/></td>  
+										<td jwcid="@contrib:TableColumns" class="title"/>
+									</tr>
+									<tr align="center" jwcid="tableFormRows" class="ognl:beans.evenOdd.next">
+                                      	 <td><span jwcid="delete"/></td>
+                                         <td jwcid="@contrib:TableValues"/>
+									</tr> 	
+								</table>
+                                </span>
+							</td>
+						</tr>
+						<tr>
+							<td height="22" align="right"><span jwcid="customPagesDown"/>&nbsp;</td>
+						</tr>
+					</table>
+			</div>
+		</td>
+	</tr>
+</table>
+<span jwcid="deleteColumnValue">
+   	<span jwcid="@If" condition="ognl:hasPermission('product','delete',currentProduct)">
+    <a href="#" jwcid="deleteLink" onclick="return getConfirmation()">
+    <img src="../img/icon_06.png" width="16" height="16" align="absmiddle" />
+    </a>
+    </span>
+  </span>
+   <span jwcid="validateColumnValue">
+    <a href="#" jwcid="validateLink">
+    <img src="../img/icon_01.png" width="16" height="16" align="absmiddle" />
+    </a>
+  </span>
+
+    <span jwcid="preColumnValue">
+              <img   jwcid="@Any"  src="ognl:preAddress" width="40" height="40" align="absmiddle" id="srcImg" />               
+    </span>
+
+
+
+    <span jwcid="detailColumnValue">
+                       <a href jwcid="detailLink" >
+                     <img src="../img/icon_03.png" width="16" height="16" align="absmiddle" />
+                      </a>
+     </span>
+     
+     <span jwcid="reCheckColumnValue">
+                       <a href jwcid="reCheckLink" >
+                     <img src="../img/icon_03.png" width="16" height="16" align="absmiddle" />
+                      </a>
+     </span>
+
+    <span jwcid="showColumnValue">
+     					<span jwcid="imageNames@InsertText" value="ognl:showPackMsg" raw="true"/>
+     </span>
+     
+    <span jwcid="authorsColumnValue">
+					 <span jwcid="authors@InsertText" value="ognl:authorNames" raw="true"/>
+   </span>
+		</form>
+
+ <span jwcid="ebookurl@Any" value="ognl:ebookTypeUrl" />
+ <span jwcid="magazineurl@Any" value="ognl:magazineTypeUrl" />
+ <span jwcid="comicsurl@Any" value="ognl:comicsTypeUrl" />
+ <span jwcid="newsurl@Any" value="ognl:newsPagersTypeUrl" />
+  <span jwcid="videourl@Any" value="ognl:videoTypeUrl" />
+   <span jwcid="infourl@Any" value="ognl:infoTypeUrl" />
+ <div id="enlarge_images"></div>
+</body>
+
+<script language="javascript">
+	var gg = document.getElementsByTagName("img");
+		var ei = document.getElementById("enlarge_images");
+ 
+		for(i=0; i<gg.length; i++){
+			var ts = gg[i];
+			if(gg[i].id=="srcImg")
+			{
+				ts.onmousemove = function(event){ 
+				event = event || window.event;
+				ei.style.display = "block";
+				ei.innerHTML = '<img src="' + this.src + '" />';
+				ei.style.top  = document.body.scrollTop + event.clientY + 10 + "px";
+				ei.style.left = document.body.scrollLeft + event.clientX + 10 + "px";
+				}
+						
+			ts.onmouseout = function(){
+				ei.innerHTML = "";
+				ei.style.display = "none";
+			}
+		}
+}
+function changeShowType(typeId){
+	var urlId = 'ebookurl';
+	if(typeId == 1){
+		urlId = 'newsurl';
+	}else if(typeId == 2){
+		urlId = 'magazineurl';
+	}else if(typeId == 3){
+		urlId = 'comicsurl';
+	}else if(typeId == 4){
+		urlId = 'videourl';
+	}else if(typeId == 5){
+	    urlId='infourl';
+	}
+	var url = document.getElementById(urlId).getAttributeNode('value').value;
+	window.location.href=url;
+}
+
+function showDifferent(){
+	if(document.getElementById("SearchScope").value==2){ //作者
+		document.getElementById("name").style.display="none";
+		document.getElementById("author").style.display="inline";
+		document.getElementById("rKeyWord").style.display="none";
+		document.getElementById("name").value="";
+		document.getElementById("rKeyWord").value="";
+	}else if(document.getElementById("SearchScope").value==3){ //关键字
+		document.getElementById("name").style.display="none";
+		document.getElementById("author").style.display="none";
+		document.getElementById("rKeyWord").style.display="inline";
+		document.getElementById("name").value="";
+		document.getElementById("author").value="";
+	}else{
+		document.getElementById("name").style.display="inline";
+		document.getElementById("author").style.display="none";
+		document.getElementById("rKeyWord").style.display="none";	
+		document.getElementById("author").value="";
+		document.getElementById("rKeyWord").value="";
+	}
+	
+
+}
+</script>
+</html>

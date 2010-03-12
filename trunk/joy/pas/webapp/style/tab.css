@@ -1,0 +1,61 @@
+@CHARSET "UTF-8";
+ul#tabnav{
+	list-style-type:none;
+	margin:0px 8px 0px 5px;
+	padding-left:0px;
+	padding-bottom:25px;
+	/*border-bottom:1px solid #DEB684;*//*#11a3ff*/
+	font:bold 12px verdana,arial;
+
+}
+ul#tabnav li{
+	float:left;
+	height:20px;
+	background-color:#E2E2E2;/*#a3dbff*/
+	margin:0px 3px 0px 0px;
+	border:1px solid  #000000;/*#11a3ff*/
+}
+
+ul#tabnav a:link, ul#tabnav a:visited{
+	display:block;
+	color:#0C519D;/*#006eb3*/
+	text-decoration:none;
+	padding:5px 10px 0px 10px;
+
+}
+ul#tabnav a:hover{
+	background-color:#306AB8;/*#006eb3*/
+	color:#FFFFFF;
+}
+#video li.vid, #picture li.pic,
+#music li.mus , #game li.gam,
+#audio li.aud, #text li.tex,#info li.inf,
+#all li.all
+{
+	border-bottom:1px solid  #FFFFFF;
+	color:#000000;
+	background-color:#FFFFFF;
+}
+#all li.all a:link, #all li.all a:visited, 
+#video li.vid a:link, #video li.vid a:visited, 
+#picture li.pic a:link, #picture li.pic a:visited, 
+#music li.mus a:link, #music li.mus a:visited,
+#game li.gam a:link, #game li.gam a:visited,
+#audio li.aud a:link, #audio li.aud a:visited,
+#info li.inf a:link, #info li.inf a:visited,
+#text li.tex a:link, #text li.tex a:visited
+{
+	color:#000000;
+	background-color:#FFFFFF;
+}
+
+#video li.vid a:hover,#picture li.pic a:hover,
+#music li.mus a:hover, #game li.gam a:hover,#info li.inf a:hover,
+#audio li.aud a:hover,#text li.tex a:hover
+{
+	color:#CE6D00;/*#006eb3*/
+	text-decoration:underline;
+}
+
+
+#enlarge_images{position:absolute;display:none;z-index:2;border:5px solid #f4f4f4}

@@ -1,0 +1,183 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="资源分类列表"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link rel="stylesheet" href="../style/tab.css"
+	type="text/css" media="all" />
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<script type="text/javascript" src="../js/jquery/jquery.js"></script>
+<title>无标题文档</title>
+</head>
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<form jwcid="productForm@Form"  clientValidationEnabled="true">
+<span jwcid="showType@Hidden" value="ognl:showType" />
+<span jwcid="parent@Hidden" value="ognl:parent" />
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@DirectLink" listener="listener:onAddResourceType" parameters="ognl:parent">新增资源分类</a></td>
+					<td class="ToolbarLine"><img src="../img/icon_del.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@bayeux:LinkSubmitOnce" action="listener:onBatchDelete" onclick="return getConfirmation();" >删除选中</a></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">		
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" jwcid="table" >
+						<tr>
+							<td style="padding:5px 10px;">
+								<table id="Searchbar" width="100%" border="0" cellpadding="0" cellspacing="2" class="search_bg" style="display:none">
+										<tr>
+											<td style="color:#622f04; padding:5px;">
+											资源分类名称：<input name="name" type="text" class="Template-text" jwcid="name@TextField" value="ognl:name" />
+											&nbsp;
+											<input name="Submit3" type="submit" class="button-search" value="搜 索" jwcid="searchS@Submit" listener="listener:search"/>
+										 </td>						
+										</tr>
+									</table>
+							</td>
+						</tr>
+						<tr>
+							<td height="26" align="right" valign="bottom"><span jwcid="customPages"/>&nbsp;</td>
+						</tr>
+						<tr>
+							<td valign="top" style="padding:10px;">
+							    <span jwcid="checkboxGroup">
+							    <div id="video">
+	<ul id="tabnav">
+			<li class="vid"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="1">图书</a></li>
+			<li class="aud"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="2">报纸</a></li>
+			<li class="pic"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="3">杂志</a></li>
+			<li class="tex"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="4">漫画</a></li>
+			<li class="gam"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="5">铃声</a></li>
+			<li class="mus"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="6">视频</a></li>
+			<li class="inf"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="7">新闻</a></li>
+			
+	</ul>
+</div>
+								<table id="box1" width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#d5d9dc"  style="border-collapse:collapse;">
+									<tr>									
+										<td align="center" bgcolor="#DFDFDF"><span  jwcid="controlCheckbox"/></td>  
+										<td jwcid="@contrib:TableColumns" class="title"/>
+									</tr>
+									<tr align="center" jwcid="tableFormRows" class="ognl:beans.evenOdd.next">
+                                      	 <td><span jwcid="delete"/></td>
+                                          <td jwcid="@contrib:TableValues"/>
+									</tr> 	
+								</table>
+                                </span>
+							</td>
+						</tr>
+						<tr>
+							<td height="22" align="right"><span jwcid="customPagesDown"/>&nbsp;</td>
+						</tr>
+					</table>
+			</div>
+		</td>
+	</tr>
+</table>
+
+<span jwcid="deleteColumnValue">
+   	<span jwcid="@If" condition="ognl:hasPermission('product','delete',currentProduct)">
+    <a href="#" jwcid="deleteLink" onclick="return getConfirmation()">
+    <img src="../img/icon_06.png" width="16" height="16" align="absmiddle" />
+    </a>
+    </span>
+  </span>
+   <span jwcid="validateColumnValue">
+    <a href="#" jwcid="validateLink">
+    <img src="../img/icon_01.png" width="16" height="16" align="absmiddle" />
+    </a>
+  </span>
+   <span jwcid="nameColumnValue">
+					   <a href="#" jwcid="nameLink"><span jwcid="channelID">ID</span></a>
+   </span>
+</form>
+</body>
+<script type="text/javascript">
+<!--
+jQuery.noConflict();
+jQuery(document).ready(function() { 
+	if(document.getElementById("showType")==null || document.getElementById("showType").value=='X'){
+		val=6;
+	}else{
+		val= document.getElementById("showType").value;
+	}
+   
+    if(val==1){
+    	jQuery("#audio").attr("id","video");
+		jQuery("#picture").attr("id","video");
+		jQuery("#game").attr("id","video");
+		jQuery("#text").attr("id","video");
+		jQuery("#music").attr("id","video");
+		jQuery("#info").attr("id","video");
+		jQuery("#tid").val("3");
+		
+	}
+	if(val==2){
+		jQuery("#video").attr("id","audio");
+		jQuery("#picture").attr("id","audio");
+		jQuery("#game").attr("id","audio");
+		jQuery("#text").attr("id","audio");
+		jQuery("#music").attr("id","audio");
+		jQuery("#info").attr("id","audio");
+		jQuery("#tid").val("2");
+	}
+	if(val==3){
+		jQuery("#video").attr("id","picture");
+		jQuery("#audio").attr("id","picture");
+		jQuery("#game").attr("id","picture");
+		jQuery("#text").attr("id","picture");
+		jQuery("#music").attr("id","picture");
+		jQuery("#info").attr("id","picture");
+		jQuery("#tid").val("1");
+	}
+	if(val==4){
+		jQuery("#audio").attr("id","text");
+		jQuery("#picture").attr("id","text");
+		jQuery("#game").attr("id","text");
+		jQuery("#video").attr("id","text");
+		jQuery("#music").attr("id","text");
+		jQuery("#info").attr("id","text");
+		jQuery("#tid").val("4");
+	}
+	if(val==5){
+		jQuery("#audio").attr("id","game");
+		jQuery("#picture").attr("id","game");
+		jQuery("#video").attr("id","game");
+		jQuery("#text").attr("id","game");
+		jQuery("#music").attr("id","game");
+		jQuery("#info").attr("id","game");
+		jQuery("#tid").val("5");
+	}
+	if(val==6){
+		jQuery("#audio").attr("id","music");
+		jQuery("#picture").attr("id","music");
+		jQuery("#game").attr("id","music");
+		jQuery("#video").attr("id","music");
+		jQuery("#text").attr("id","music");
+		jQuery("#info").attr("id","music");
+		jQuery("#tid").val("6");
+	}
+	
+	if(val==7){
+		jQuery("#audio").attr("id","info");
+		jQuery("#picture").attr("id","info");
+		jQuery("#game").attr("id","info");
+		jQuery("#video").attr("id","info");
+		jQuery("#text").attr("id","info");
+		jQuery("#music").attr("id","info");
+		jQuery("#tid").val("7");
+	}
+});  
+//-->
+</script>
+</html>

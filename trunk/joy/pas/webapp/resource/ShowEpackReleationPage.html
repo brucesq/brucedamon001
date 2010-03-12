@@ -1,0 +1,193 @@
+<html jwcid="@Shell" stylesheet="asset:stylesheet" title="批价包下资源列表"
+	doctype="" browserLogLevel="DEBUG" consoleEnabled="true"
+	debugEnabled="true">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+		<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+		<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+		<title>无标题文档</title>
+	</head>
+	<body jwcid="@Body">
+		<div jwcid="warn@hunthawk:Warning" />
+			<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+				<form jwcid="productForm@Form" clientValidationEnabled="true">
+					<span jwcid="sortId@Hidden" value="ognl:sortId" /> <span
+						jwcid="pack@Hidden" value="ognl:pack" /> <span
+							jwcid="parent@Hidden" value="ognl:parent" />
+								<table width="100%" height="100%" border="0" cellpadding="0"
+									cellspacing="0">
+									<tr>
+										<td height="22" valign="middle"
+											background="../img/Toolbar_bg.png">
+											<table height="22" border="0" cellpadding="0" cellspacing="0">
+												<tr>
+													<td class="ToolbarLine">
+														<img src="../img/icon_Add.png" width="11" height="11"
+															align="absmiddle">
+														&nbsp;
+														<a href="#" jwcid="@DirectLink"
+															listener="listener:editReleation" parameters="ognl:pack">新增资源到资源包</a>
+													</td>
+													<td class="ToolbarLine">
+														<img src="../img/icon_del.png" width="11" height="11"
+															align="absmiddle">
+														&nbsp;
+														<a href="#" jwcid="@bayeux:LinkSubmitOnce"
+															action="listener:onBatchDelete"
+															onclick="return getConfirmation();">删除选中资源</a>
+													</td>
+													
+				
+													<span jwcid="@If" condition="ognl:showChangeFee">
+													<td class="ToolbarLine">
+														<img src="../img/icon_018.png" width="14" height="14"
+															align="absmiddle">
+														<a href="#" jwcid="@bayeux:LinkSubmitOnce"
+															action="listener:changePackFee" parameters="ognl:pack">批量修改</a>
+													</td>
+													</span>
+													<td class="ToolbarLine">
+														<img src="../img/icon_018.png" width="14" height="14"
+															align="absmiddle">
+														<a href="#" jwcid="@bayeux:LinkSubmitOnce"
+															action="listener:copyPackReleation" parameters="ognl:pack">复制到资源包</a>
+													</td>
+													<td class="ToolbarLine">
+														<img src="../img/icon_017.png" width="14" height="14"
+															align="absmiddle">
+														<a href="#" jwcid="@bayeux:LinkSubmitOnce"
+															action="listener:insertOrder" parameters="ognl:pack">选择插入</a>
+													</td>
+													<td class="ToolbarLine">
+														<img src="../img/icon_014.png" width="11" height="11"
+															align="absmiddle">
+														&nbsp;
+														<a href="#" jwcid="@PageLink"
+															page="resource/ShowEpackPage">返回资源包列表</a>
+													</td>
+													<!-- 	<td class="ToolbarLine"><img src="../img/icon_014.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@DirectLink" listener="listener:showResourceAll" parameters="ognl:pack">资源列表添加到此批价包</a></td> -->
+													<span jwcid="@If" condition="ognl:parent!=null">
+													<td class="ToolbarLine">
+														<img src="../img/icon_014.png" width="11" height="11"
+															align="absmiddle">
+														&nbsp;
+														<a href="#" jwcid="@DirectLink"
+															listener="listener:showColumnsAll"
+															parameters="ognl:parent">返回栏目列表</a>
+													</td>
+													</span>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td valign="top">
+											<div style="width: 100%; height: 100%; overflow: auto;">
+												<table width="100%" border="0" cellpadding="0"
+													cellspacing="0" jwcid="table">
+													<tr>
+														<td style="padding: 5px 10px;">
+															<table id="Searchbar" width="100%" border="0"
+																cellpadding="0" cellspacing="2" class="search_bg"
+																style="display: block">
+																<tr>
+																	<td style="color: #622f04; padding: 5px;">
+																	类别：
+																<select jwcid="resourcetype@PropertySelection" model="ognl:resourceTypeList" value="ognl:resourceType" ></select>		
+																		&nbsp;名称：
+																		<input name="name" type="text" size="15"
+																			jwcid="name@TextField" value="ognl:name" />
+																		&nbsp; 分类：
+																		<select jwcid="sortList@PropertySelection"
+																			model="ognl:sortList" value="ognl:sortId"></select>
+																		&nbsp; 作者：
+																		<select jwcid="author@PropertySelection"
+																			model="ognl:authorList" value="ognl:authorId"></select>
+																		&nbsp; 状态：
+																		<select jwcid="resourceStatus@PropertySelection"
+																			model="ognl:statusList" value="ognl:resourceStatus"></select>
+																		&nbsp; SP/CP：
+																		<select jwcid="spcp"></select>
+																		&nbsp; 计费信息：
+																		<select jwcid="feelist"></select>
+																		&nbsp;反选：
+																		<select jwcid="tof@PropertySelection" model="ognl:toflist" value="ognl:tof"></select>
+																		&nbsp;
+																		排序规则:
+																		<select jwcid="order@PropertySelection" model="ognl:orderlist" value="ognl:order"></select>
+																		&nbsp;
+																		<!--  资源个数：
+											<input name="name1" type="text" size="6" jwcid="resourceCount@TextField" value="ognl:resourceCount"/>
+											&nbsp;
+											-->
+																		<input name="Submit3" type="submit"
+																			class="button-search" value="搜 索"
+																			jwcid="searchS@Submit" listener="listener:search" />
+																	</td>
+																</tr>
+															</table>
+														</td>
+													</tr>
+													<tr>
+														<td height="20" align="left" valign="bottom">
+														&nbsp;&nbsp;&nbsp; 当前资源包ID：<font color="red"><span jwcid="pack_Id@InsertText" value="ognl:pack.id" raw="false"/></font>
+														&nbsp;&nbsp;&nbsp;资源包名称：<font color="red"><span jwcid="pack_name@InsertText" value="ognl:pack.name" raw="false"/></font>
+														</td>
+													</tr>
+													<tr>
+														<td height="26" align="right" valign="bottom">
+															<span jwcid="customPages" />&nbsp; 
+														</td>
+													</tr>
+													<tr>
+														<td valign="top" style="padding: 10px;">
+															<span jwcid="checkboxGroup">
+																<table id="box1" width="100%" border="1" cellpadding="0"
+																	cellspacing="0" bordercolor="#d5d9dc"
+																	style="border-collapse: collapse;">
+																	<tr>
+																		<td align="center" bgcolor="#DFDFDF">
+																			<span jwcid="controlCheckbox" />
+																		</td>
+																		<td jwcid="@contrib:TableColumns" class="title" />
+																	</tr>
+																	<tr align="center" jwcid="tableFormRows"
+																		class="ognl:beans.evenOdd.next">
+																		<td>
+																			<span jwcid="delete" />
+																		</td>
+																		<td jwcid="@contrib:TableValues" />
+																	</tr>
+																</table> </span>
+														</td>
+													</tr>
+													<tr>
+														<td height="22" align="right">
+															<span jwcid="customPagesDown" />&nbsp; 
+														</td>
+													</tr>
+												</table>
+											</div>
+										</td>
+									</tr>
+								</table> <span jwcid="deleteColumnValue"> <a href="#"
+									jwcid="deleteLink" onclick="return getConfirmation()"> <img
+											src="../img/icon_06.png" width="16" height="16"
+											align="absmiddle" /> </a> </span> <span jwcid="validateColumnValue">
+									<a href="#" jwcid="validateLink"> <img
+											src="../img/icon_01.png" width="16" height="16"
+											align="absmiddle" /> </a> </span> <span jwcid="downloadColumnValue">
+									<a href="#" jwcid="downloadLink"> <img
+											src="../img/icon_04.png" width="16" height="16"
+											align="absmiddle" /> </a> </span> <span jwcid="detailColumnValue">
+									<a href jwcid="detailLink"> <img src="../img/icon_03.png"
+											width="16" height="16" align="absmiddle" /> </a> </span>
+		<span jwcid="execOrderColumnValue">
+           <a href="#" jwcid="topLink">top</a>
+           <a href="#" jwcid="upLink">up</a>
+           <a href="#" jwcid="downLink">down</a>
+           <a href="#" jwcid="buttomLink">buttom</a>
+   		 </span>
+				</form>
+	</body>
+</html>

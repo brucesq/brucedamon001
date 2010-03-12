@@ -1,0 +1,195 @@
+<html jwcid="@Shell"   title="报纸列表"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置： CMS系统－》<a href="#" jwcid="sysUserList@DirectLink" listener="listener:cancelPage">报纸列表</a>－》报纸维护</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+			  <tr >
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;报纸维护</td>					
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">
+				<form jwcid="userForm@Form" clientValidationEnabled="true">	
+				<input type="hidden" jwcid="model@Hidden" value="ognl:model" />
+				<input type="hidden" jwcid="resource@Hidden" value="ognl:resourceAll" />
+					<br>
+					<br>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					 						<tr>
+											<td width="15%" align="right">报纸名称<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="name@TextField" value="ognl:model.name" validators="validators:required" displayName="literal:报纸名称"/>
+												</td>
+											</tr>
+											<tr>
+											<td width="15%" align="right">ISBN<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="isbn@TextField" value="ognl:model.isbn"/>
+												</td>
+											</tr>
+											<tr>
+											<td width="15%" align="right">封面图片<br>
+												</td>
+												<td width="85%">
+													<span jwcid="imageNames@InsertText" value="ognl:preAddress" raw="true"/>
+												</td>
+											</tr>
+											<tr>
+											<td width="15%" align="right">封面图片替换：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="productinfo@Upload" file="ognl:uploadFileImage" type="file" onKeyDown="return   false;"/><font color="red">文件名称为cover.(gif/jpg/png)</font>
+												</td>												
+											</tr>
+												<tr>
+											<td width="15%" align="right">出版日期<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain" translator="translator:date"  jwcid="publishTime@DatePicker" extField" value="ognl:model.publishTime" validators="validators:required" displayName="literal:出版日期"/>
+												</td>
+											</tr>
+					 						<tr>
+											<td width="15%" align="right">出版地区<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="cArea@TextField" value="ognl:model.cArea"/>
+												</td>
+											</tr>
+												<tr>
+											<td width="15%" align="right">当前版权：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="copyRightName@TextField" value="ognl:copyRightName" readonly="true"/>
+												</td>
+											</tr>
+											<tr>
+												<td width="15%" align="right">替换版权方：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain"    jwcid="copyrightId@TextField"  value="ognl:copyrightId"/>
+													&nbsp;&nbsp; 
+												<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择版权方" onClick="ognl:copyrightURL"/>
+												</td>
+											</tr>
+											<tr>
+												<td width="15%" align="right">资源分类：<br>
+												</td>
+												<td width="85%"><input jwcid="@contrib:Palette" model="ognl:privileges" selected="ognl:selectedResourceTypes" tableClass="literal:palette" displayName="literal:资源类别" availableTitleBlock="ognl:roleList" selectedTitleBlock="ognl:roleExist"/></td>
+											</tr>	
+					 						<tr>
+												<td width="15%" align="right">推荐指数：<br>
+												</td>
+												<td width="85%">
+												<select jwcid="expNum@PropertySelection" model="ognl:resourceExpList" value="ognl:model.expNum"></select>
+												&nbsp;&nbsp;CP：<select jwcid="cpId@PropertySelection" model="ognl:cpList" value="ognl:model.cpId" validators="validators:required" displayName="literal:CP"></select>
+												&nbsp;&nbsp;首字母：<select jwcid="initialLetter@PropertySelection" model="ognl:initialLetterList" value="ognl:model.initialLetter"></select>
+												&nbsp;&nbsp;健康指数：<select jwcid="healthNum@PropertySelection" model="ognl:resourceExpList" value="ognl:model.healthNum"></select>											
+												</td>
+											</tr>		
+					 						<tr>
+											<td width="15%" align="right">关键字<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="rKeyword@TextField" value="ognl:model.rKeyword" validators="validators:required" displayName="literal:关键字"/>&nbsp;&nbsp;<font color="red">多个以"/"分开</font>
+												</td>
+											</tr>							
+					 						<tr>
+											<td width="15%" align="right">推荐语<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="bComment@TextField" value="ognl:model.bComment" validators="validators:required,maxLength=12" displayName="literal:推荐语"/>&nbsp;&nbsp;<font color="red">12字以内，包括12个字</font>
+												</td>
+											</tr>				
+					 						<tr>
+											<td width="15%" align="right">出版社<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="publisher@TextField" value="ognl:model.publisher" validators="validators:required" displayName="literal:出版社"/>
+												</td>
+											</tr>				
+					 						<tr>
+											<td width="15%" align="right">语言<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="bLanguage@TextField" value="ognl:model.bLanguage" validators="validators:required" displayName="literal:语言"/>&nbsp;&nbsp;<font color="red">多种语言以"/"分开</font>
+												</td>
+											</tr>	
+											
+											<tr>
+											<td width="15%" align="right">短简介：<br>
+												</td>
+												<td width="85%">
+												<textarea name="textfield3"  cols="60" rows="8"  maxlength="2000"  jwcid="cComment@TextArea" value="ognl:model.cComment"></textarea>
+												</td>
+											</tr>											
+											
+											<tr>
+											<td width="15%" align="right">长简介：<br>
+												</td>
+												<td width="85%">
+												<textarea name="textfield3"  cols="60" rows="12"  maxlength="4000"  jwcid="introLon@TextArea" value="ognl:model.introLon"></textarea>
+												</td>
+											</tr>																			
+												
+										<tr>
+											<td width="15%" align="right">报纸卷信息：<br>
+												</td>
+												<td width="85%">
+												<a href="#" jwcid="tomeLink">点击进入报纸卷信息维护</a>
+												</td>
+											</tr>																						
+										<tr>
+											<td width="15%" align="right">报纸栏目信息：<br>
+												</td>
+												<td width="85%">
+												<a href="#" jwcid="chapterLink">点击进入栏目信息维护</a>
+												</td>
+											</tr>																																										
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" class="buttonMain" value="确  定" jwcid="submitUser@Submit" listener="listener:savePage"/>
+													
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="Submit2" type="Reset" class="buttonMain"  value="重  置">
+													
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+					</table>	
+					<span jwcid="roleList@Block">
+                      分类列表
+                      </span>
+                      <span jwcid="roleExist@Block">
+                      已选列表
+                      </span>		
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
