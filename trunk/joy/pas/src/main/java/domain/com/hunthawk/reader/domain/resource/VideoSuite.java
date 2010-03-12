@@ -46,11 +46,11 @@ public class VideoSuite extends PersistentObject {
 	/**
 	 * 文件格式（文件扩展名）
 	 */
-	private String type;
+	private String type = "";
 	/**
 	 * 文件具体描述，如高潮版，IPHONE版等信息
 	 */
-	private String filedesc;
+	private String filedesc = "";
 	/**
 	 * 真实的文件名字
 	 */
