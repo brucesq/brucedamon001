@@ -1,0 +1,29 @@
+#if(${objs.size()}<1)
+<div class="col_text_content_2 font_color_1 font_size_1">对不起,您搜索的内容暂时无法提供,请重新搜索</div>
+#else
+<div class="col_text_content_2 font_color_1 font_size_1">搜索结果（${showTotal}条）</div>
+#end #foreach(${obj} in ${objs})
+<div class="col_1">
+<div class="col_1_content">
+<ul class="col_1_ul">
+	<li class="col_1_li_pic"><a href="$!{obj.get("url")}">$!{obj.get("preview")}</a></li>
+	<li class="col_1_li_text"><a href="$!{obj.get("url")}"> <span
+		class="font_color_2 font_size_1">$!{obj.get("linkname")}</span>
+	<br>
+	<span class="font_color_2 font_size_1">作者：$!{obj.get("author")}
+	</span><br>
+	<span class="font_color_2 font_size_1">
+	#if(${this.show}==1)
+		点击数：($!{obj.get("downnum")}) 
+	#else
+		搜索数：($!{obj.get("searchnum")})
+	#end
+	</span> </a></br>
+	</li>
+	<li class="col_1_li_op"><a href="$!{obj.get("url")}"><img
+		src="images/wap_tmp_1_btn_5.png" /></a></li>
+</ul>
+</div>
+</div>
+#end
+

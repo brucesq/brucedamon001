@@ -1,0 +1,31 @@
+#if(${isJump})
+	<form name="navform" action="s.do" method="get" accept-charset="UTF-8">
+		<input type="text" name="pn" size="5" maxlength="5" value="1"/>
+		#foreach(${obj} in ${objs})
+		<input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+		#end
+		<input type="submit" value="${title}"/>
+	</form>
+#else
+	#if(${total}>1)
+		#if(${flag}==1)
+			 <div class="col_2">
+				  <ul>
+				  #if(${current}==1)
+				  	<li class="col_2_left"><img src="images/wap_tmp_1_btn_6.png"/></li>
+				  #else
+			    	<li class="col_2_left"><a href="${prelink}"><img src="images/wap_tmp_1_btn_6.png"/></a></li>
+			      #end	
+					<li class="col_2_middle">${current}/${total}</li>
+				  #if(${current}==${total})
+				  	<li class="col_2_right"><img src="images/wap_tmp_1_btn_7.png"/></li>
+				  #else
+		 			<li class="col_2_right"><a href="${nextlink}"><img src="images/wap_tmp_1_btn_7.png"/></a></li>
+		 		  #end
+		 		  </ul>
+	   		 </div>
+		#else
+			<a href="${url}">${title}</a>
+		#end
+	#end
+#end

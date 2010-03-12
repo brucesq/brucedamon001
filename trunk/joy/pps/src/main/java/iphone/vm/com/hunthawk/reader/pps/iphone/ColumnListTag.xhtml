@@ -1,0 +1,32 @@
+#if(${flag}=="resource") #foreach(${obj} in ${objs})
+<div class="col_1">
+<div class="col_1_content">
+<ul class="col_1_ul">
+	<li class="col_1_li_pic"><a href="$!{obj.get("url")}">$!{obj.get("preview")}</a></li>
+	<li class="col_1_li_text"><a href="$!{obj.get("url")}"> <span
+		class="font_color_2 font_size_1">$!{obj.get("linkname")}$!{obj.get("status")}</span>
+	<br>
+	<span class="font_color_2 font_size_1">作者：$!{obj.get("author")}
+	</span><br>
+	<span class="font_color_2 font_size_1">
+	点击数：($!{obj.get("downnum")}) </span> </a></br>
+	</li>
+	<li class="col_1_li_op"><a href="$!{obj.get("url")}"><img
+		src="images/wap_tmp_1_btn_5.png" /></a></li>
+</ul>
+</div>
+</div>
+#end #else #foreach(${obj} in ${objs})
+<div class="col_1">
+<div class="col_1_content">
+<ul class="col_1_ul">
+	<li class="col_1_li_pic"><img src="$!{obj.get("preview")}" alt="$!{obj.get(" title")}"  height="64" /></li>
+	<li class="col_1_li_text_2"><a href="$!{obj.get("url")}"><span
+		class="font_color_2 font_size_2_bold">$!{obj.get("title")}
+	$!{obj.get("count")}</span></a></li>
+	<li class="col_1_li_op"><a href="$!{obj.get("url")}"><img
+		src="images/wap_tmp_1_btn_5.png" /></a></li>
+</ul>
+</div>
+</div>
+#end #end
