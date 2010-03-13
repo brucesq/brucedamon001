@@ -633,6 +633,9 @@ public class UploadServiceImpl implements UploadService {
 					File destDir = getUploadResourceDir(resourceType, resource
 							.getId());
 					File srcDir = new File(resDir + File.separator + "image");
+					if (ResourceType.TYPE_VIDEO.equals(resourceType)) {
+						srcDir = new File(resDir);
+					}
 					if (resourceType == ResourceType.TYPE_BOOK && !isNew) {
 						removeCoverImg(srcDir);
 						FileUtils.copyDirectory(srcDir, destDir);
@@ -642,8 +645,7 @@ public class UploadServiceImpl implements UploadService {
 								getCoverImg(resource));
 					}
 					if (resourceType == ResourceType.TYPE_VIDEO) {
-						File videoDir = new File(resDir + File.separator
-								+ "video");
+						File videoDir = new File(resDir);// + File.separator+ "video");
 						FileUtils.copyDirectory(videoDir, destDir);
 					}
 
@@ -748,7 +750,7 @@ public class UploadServiceImpl implements UploadService {
 		if (!contentDir.exists()) {
 			throw new Exception(prefixInfo + "内容目录不存在");
 		}
-		String imgDirStr = dir + File.separator + "image";
+//		String imgDirStr = dir + File.separator + "image";
 		checkChapter(dir, resourceType, prefixInfo);
 	}
 
@@ -770,6 +772,9 @@ public class UploadServiceImpl implements UploadService {
 		}
 		// 检查图片目录
 		String imgDirStr = dir + File.separator + "image";
+		if(resourceType.equals(ResourceType.TYPE_VIDEO)){
+			imgDirStr = dir;
+		}
 		File imgDir = new File(imgDirStr);
 		if (!imgDir.exists()) {
 			throw new Exception(prefixInfo + "图片目录不存在");
@@ -1223,7 +1228,7 @@ public class UploadServiceImpl implements UploadService {
 	}
 
 	private void parseVideo(String fileDir, String resourceId, Integer type) {
-		String videoDir = fileDir + File.separator + "video";
+		String videoDir = fileDir ;//+ File.separator + "video";
 		// processOnlineVideo(fileDir);
 		Map<String, String> mp4FilesMap = new HashMap<String, String>();
 		File file = new File(videoDir);
@@ -1231,6 +1236,11 @@ public class UploadServiceImpl implements UploadService {
 			File[] videos = file.listFiles();
 			int i = 0;
 			for (File vf : videos) {
+				String ext = getFileExtName(vf.getName());
+				if(isRightFormat(vf.getName().toLowerCase()) || "txt".equalsIgnoreCase(ext))
+				{
+					continue;
+				}
 				i++;
 				VideoSuite vs = new VideoSuite();
 				int index = vf.getName().lastIndexOf("_");
@@ -1730,7 +1740,7 @@ public class UploadServiceImpl implements UploadService {
 		return null;
 	}
 
-	private boolean isRightFormat(String fileName) {
+	public static  boolean isRightFormat(String fileName) {
 		String patt = "\\.(jpg|gif|png|bmp)$";
 		Pattern p = Pattern.compile(patt);
 		Matcher m = p.matcher(fileName);
