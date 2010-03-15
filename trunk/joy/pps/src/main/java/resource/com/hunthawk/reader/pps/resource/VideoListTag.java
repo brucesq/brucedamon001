@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -34,7 +35,12 @@ public class VideoListTag extends BaseTag {
 
 	@Override
 	public Map parseTag(HttpServletRequest request, String tagName) {
-		String resourceId = URLUtil.getResourceId(request);
+		
+		String resourceId = getParameter("resourceId","");
+		if(StringUtils.isEmpty(resourceId)){
+			resourceId = URLUtil.getResourceId(request);
+		}
+		
 		List<VideoSuite> videos = getResourceService(request).getVideoSuiteList(resourceId);
 		String dir = getResourceService(request).getVideoResourceDirectory(resourceId);
 		

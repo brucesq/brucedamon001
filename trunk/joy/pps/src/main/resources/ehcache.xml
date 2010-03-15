@@ -57,8 +57,8 @@
 	<cache name="longmemcache"
 		maxElementsInMemory="100000"
 		eternal="false"
-		timeToIdleSeconds="600"
-		timeToLiveSeconds="600"
+		timeToIdleSeconds="300"
+		timeToLiveSeconds="300"
 		overflowToDisk="true"/>	
 		
 	<cache name="mediummemcache"
