@@ -3,10 +3,13 @@
  */
 package com.hunthawk.reader.service.bussiness.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import com.hunthawk.framework.HibernateGenericController;
+import com.hunthawk.framework.hibernate.CompareExpression;
+import com.hunthawk.framework.hibernate.CompareType;
 import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.bussiness.DefaultTemplateSet;
@@ -17,8 +20,6 @@ import com.hunthawk.reader.domain.bussiness.Template;
 import com.hunthawk.reader.domain.bussiness.TemplateCatalog;
 import com.hunthawk.reader.domain.bussiness.TemplateType;
 import com.hunthawk.reader.domain.bussiness.UserDefTag;
-import com.hunthawk.reader.domain.device.PersonInfo;
-import com.hunthawk.reader.domain.device.PersonInfoPK;
 import com.hunthawk.reader.service.bussiness.TemplateService;
 
 /**
@@ -167,7 +168,14 @@ public class TemplateServiceImpl implements TemplateService {
 		 controller.save(type);
 	}
 
-	public void deleteTemplateCatalog(TemplateCatalog type) {
+	public void deleteTemplateCatalog(TemplateCatalog type)throws Exception {
+		List<HibernateExpression> expressions = new ArrayList<HibernateExpression>();
+		expressions.add(new  CompareExpression(
+						"templateCatalog", type,
+						CompareType.Equal));
+		List objs = findTemplate(1, 1, "id", true, expressions);
+		if(objs.size() > 0)
+			throw new Exception("该目录关联了模板，请删除关联模板后，才可以删除目录");
 		controller.delete(type);
 		
 	}

@@ -229,7 +229,7 @@ public abstract class EditTemplatePage extends EditPage implements
 
 	public String getPreContent() {
 		if (isShowPre()) {
-			return ParseTemplate.parse(((Template) getModel()).getContent(),
+			return ParseTemplate.parse(getContent(),
 					getTemplateService(), getExternalService());
 
 		} else {

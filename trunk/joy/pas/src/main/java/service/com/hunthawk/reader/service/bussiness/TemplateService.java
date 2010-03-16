@@ -95,7 +95,7 @@ public interface TemplateService {
 	@Logable(name = "TemplateCatalog", action = "update", property = { "id=ID,name=Ãû³Æ" })
 	public void updateTemplateCatalog(TemplateCatalog type);
 	@Logable(name = "TemplateCatalog", action = "delete", property = { "id=ID,name=Ãû³Æ" })
-	public void deleteTemplateCatalog(TemplateCatalog type);
+	public void deleteTemplateCatalog(TemplateCatalog type)throws Exception;
 	
 	public List<TemplateCatalog> getAllTemplateCatalog();
 	

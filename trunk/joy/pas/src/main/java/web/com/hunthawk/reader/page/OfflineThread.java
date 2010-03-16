@@ -157,9 +157,11 @@ public class OfflineThread extends Thread {
 						interactiveService.addLog(log);
 					}
 					// 获取资源包解开后文件夹名称，如book.zip解压后，得到的是book
-					String uploadFileDir = upFileTureName.substring(0,
-							upFileTureName.length() - 4);
-
+					String uploadFileDir = upFileTureName;
+					if(upFileTureName.length() > 4){
+						uploadFileDir = upFileTureName.substring(0,
+								upFileTureName.length() - 4);
+					}
 					// 解压目录
 					String unUploadFileDir = offLine.toString()
 							+ File.separator + uploadFileDir;
@@ -279,6 +281,7 @@ public class OfflineThread extends Thread {
 			}
 		} catch (Exception ioe) {
 			{ // 记录日志--错误----
+				ioe.printStackTrace();
 				OffLineLog log = new OffLineLog();
 				log.setValue("所有错误：" + errormessage);
 				log.setMark(mark);
