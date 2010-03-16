@@ -40,9 +40,9 @@ public abstract class CommonGuide extends SecurityPage implements IExternalPage 
 	private static final String ADAPTER = "ADAPTER";
 	private static final String MUL_RES = "MUL_RES";
 
-	private static final String MUTI_START = "<%";
-	private static final String MUTI_END = "%>";
-	private static final String MUTI_LETTER = "%><";
+	public static final String MUTI_START = "<%";
+	public static final String MUTI_END = "%>";
+	public static final String MUTI_LETTER = "%><";
 
 	public abstract String[] getParameter();
 

@@ -462,7 +462,9 @@ public class UploadServiceImpl implements UploadService {
 				lineNo++;
 				String resInfo = "文件" + csvFileName + "第" + lineNo + "行";
 				String[] cells = rec.split(",");
-
+				if(cells.length == 0 ){
+					continue;
+				}
 				boolean isNew = true;
 				// 如果是书续传，不更新书基本信息
 				boolean isUpdate = true;
@@ -474,9 +476,11 @@ public class UploadServiceImpl implements UploadService {
 				try {
 					for (int i = 0; i < column.length && i < cells.length; i++) {
 						if (column[i].startsWith("$")) {// ID
+//							System.out.println("$ID:"+cells[i]);
 							if (!cells[i].equals("0")) {
 								resource = resourceService.getResource(cells[i]
 										.trim(), resourceType);
+//								System.out.println("$Resource:"+resource);
 								if (resource == null) {
 									// 修改时资源ID必须有效
 									throw new Exception(resInfo
