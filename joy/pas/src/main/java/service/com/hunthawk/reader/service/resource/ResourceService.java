@@ -292,7 +292,7 @@ public interface ResourceService {
 	@Logable(name = "ResourceAll", action = "delete", property = { "id=资源ID,name=资源名称,authorId=作者ID,copyrightId=版权ID,lastCopyrightId=上传使用版权ID,isbn=ISBN,publishTime=出版日期,cpId=CP表中ID,status=资源状态,cArea=出版地区,"
 			+ "expNum=推荐指数,bComment=推荐语,rKeyword=关键字,division=书部,initialLetter=首字母,publisher=出版社,bLanguage=语言,isFirstpublish=是否首发,isUnique=是否专有,isOut=是否出版,isFinished=是否全本,"
 			+ "creatorId=创建者,modifierId=修改者,createTime=创建时间,modifyTime=修改时间,cComment=短简介,introLon=长简介" })
-	@Restrict(roles = { "resourceaudit" }, mode = Restrict.Mode.ROLE)
+	@Restrict(roles = { "resourcedelete" }, mode = Restrict.Mode.ROLE)
 	public void deleteResource(ResourceAll resource,UserImpl user) throws Exception;
 
 	/**
