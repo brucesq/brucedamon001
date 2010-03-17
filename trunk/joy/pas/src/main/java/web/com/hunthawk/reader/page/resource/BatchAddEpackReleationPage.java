@@ -483,7 +483,7 @@ public abstract class BatchAddEpackReleationPage extends SearchPage implements
 
 	public void pageBeginRender(PageEvent event) {
 		if (getResourceType() == null) {
-			setResourceType(ResourceType.TYPE_BOOK);
+			setResourceType(ResourceType.TYPE_VIDEO);
 		}
 		setFeeStrat(3);
 		setOrder(1);
