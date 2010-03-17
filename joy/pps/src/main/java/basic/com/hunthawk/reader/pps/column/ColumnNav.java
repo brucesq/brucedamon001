@@ -4,6 +4,7 @@
 package com.hunthawk.reader.pps.column;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,8 +81,12 @@ public class ColumnNav extends BaseTag {
 		if (tagTemplateId > 0) {
 			tagTem = getBussinessService(request).getTagTemplate(tagTemplateId);
 		}
+		List<Map> newObjs = new ArrayList<Map>(); 
+		for(int kk=0;kk<objs.size();kk++){
+			newObjs.add(objs.get(objs.size()-1-kk));
+		}
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("objs", objs);
+		map.put("objs", newObjs);
 		String result = DBVmInstance.getInstance().parseVM(map, this, tagTem);
 
 		Map resultMap = new HashMap();
