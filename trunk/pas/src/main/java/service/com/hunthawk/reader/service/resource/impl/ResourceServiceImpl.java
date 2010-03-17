@@ -478,10 +478,14 @@ public class ResourceServiceImpl implements ResourceService {
 			String name, String authorId, Integer childTypeId, boolean isTof,
 			Integer creatorId, ResourcePack pack, Set<String> set) {
 		List param = new ArrayList();
-		String hql = "select   count(distinct resource.id) from  ResourceResType restype, ResourceAll resource where   resource.status=0 ";
+		String hql = "select   count(distinct resource.id) from   ResourceAll resource where   resource.status=0 ";
 		/*
 		 * 分类反选 yuzs 2009-11-10
 		 */
+
+		if (childTypeId != null && childTypeId > 0) {
+			hql = "select   count(distinct resource.id) from  ResourceResType restype, ResourceAll resource where   resource.status=0 ";
+		}
 
 		if (isTof) { // 反选
 			if (childTypeId != null && childTypeId > 0) {
@@ -527,7 +531,7 @@ public class ResourceServiceImpl implements ResourceService {
 			// hql +=
 			// " and resource.id not in ( select releation.resourceId from
 			// ResourcePackReleation releation where releation.pack = ? )";
-			hql += " and not exists(select 'x' from ResourcePackReleation releation where resource.id = releation.resourceId  and releation.pack = ? )";
+			hql += " and not exists(select 'x' from ResourcePackReleation releation where releation.pack = ?   and resource.id = releation.resourceId )";
 			param.add(pack);
 
 		}
@@ -557,10 +561,13 @@ public class ResourceServiceImpl implements ResourceService {
 			Integer childTypeId, boolean isTof, Integer creatorId,
 			ResourcePack pack, Set<String> set, int pageNum, int pageSize) {
 		List param = new ArrayList();
-		String hql = "select distinct resource.id from ResourceResType restype,ResourceAll resource  where   resource.status=0";
-		/*
-		 * 分类反选 yuzs 2009-11-10
-		 */
+		String hql = "select distinct resource.id from ResourceAll resource  where   resource.status=0";
+
+		if (childTypeId != null && childTypeId > 0) {
+			hql = "select   distinct resource.id from  ResourceResType restype, ResourceAll resource where   resource.status=0 ";
+		}/*
+			 * 分类反选 yuzs 2009-11-10
+			 */
 		if (isTof) {// 反选
 			if (childTypeId != null && childTypeId > 0) {
 				// hql +=
@@ -602,7 +609,7 @@ public class ResourceServiceImpl implements ResourceService {
 			// hql +=
 			// " and resource.id not in ( select releation.resourceId from
 			// ResourcePackReleation releation where releation.pack = ? )";
-			hql += " and not exists(select 'x' from ResourcePackReleation releation where resource.id = releation.resourceId  and releation.pack = ? )";
+			hql += " and not exists(select 'x' from ResourcePackReleation releation where releation.pack = ?   and  resource.id = releation.resourceId)";
 			param.add(pack);
 
 		}
@@ -997,7 +1004,7 @@ public class ResourceServiceImpl implements ResourceService {
 			return controller.get(Video.class, resourceId);
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			return controller.get(Infomation.class, resourceId);
-		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
 			return controller.get(Application.class, resourceId);
 		}
 		return null;
@@ -1369,7 +1376,7 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "video";
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
-		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
 			key = "application";
 		}
 		url.append(key);
