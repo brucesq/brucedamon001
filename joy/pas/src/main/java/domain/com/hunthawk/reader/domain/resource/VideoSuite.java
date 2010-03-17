@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.hunthawk.framework.domain.PersistentObject;
@@ -130,7 +131,8 @@ public class VideoSuite extends PersistentObject {
 		String[] files = relfiles.split(";");
 		List<String> fs = new ArrayList<String>();
 		for(String file : files){
-			fs.add(file);
+			if(StringUtils.isNotEmpty(file))
+							fs.add(file);
 		}
 		return fs;
 	}
