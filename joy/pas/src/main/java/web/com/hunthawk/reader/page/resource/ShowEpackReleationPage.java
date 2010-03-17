@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -136,6 +135,7 @@ public abstract class ShowEpackReleationPage extends SearchPage {
 
 	public abstract void setResourceType(Integer type);
 
+	
 	public abstract Integer getResourceType();
 	
 	@Persist("session")
@@ -263,7 +263,7 @@ public abstract class ShowEpackReleationPage extends SearchPage {
 	public IPropertySelectionModel getSortList() {
 
 		Collection<HibernateExpression> hibernateExpressions = new ArrayList<HibernateExpression>();
-		Integer type = 1;
+		Integer type = 6;
 		if(getResourceType()!=null)
 			type = getResourceType();
 		HibernateExpression typeF = new CompareExpression("showType", type,
@@ -315,14 +315,14 @@ public abstract class ShowEpackReleationPage extends SearchPage {
 		return new MapPropertySelectModel(map);		
 	}
 	public IPropertySelectionModel getResourceTypeList() {
-		Map<String, Integer> types = new TreeMap<String, Integer>();
+		Map<String, Integer> types = new OrderedMap<String, Integer>();
+		types.put("视频", ResourceType.TYPE_VIDEO);
+		types.put("资讯", ResourceType.TYPE_INFO);
 		types.put("图书", ResourceType.TYPE_BOOK);
 		types.put("漫画", ResourceType.TYPE_COMICS);
 		types.put("报纸", ResourceType.TYPE_NEWSPAPERS);
 		types.put("杂志", ResourceType.TYPE_MAGAZINE);
-		types.put("视频", ResourceType.TYPE_VIDEO);
-		types.put("资讯", ResourceType.TYPE_INFO);
-
+	
 		return new MapPropertySelectModel(types, false, "");
 	}
 

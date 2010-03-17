@@ -1285,6 +1285,9 @@ public abstract class ShowEbookPage extends SearchPage implements
 					ResourceResType rrt = (ResourceResType) it.next();
 					ResourceType rt = getResourceService().getResourceType(
 							rrt.getResTypeId());
+					if(rt == null){
+						continue;
+					}
 					type.append(rt.getName());
 					type.append(";");
 				}
