@@ -3,8 +3,17 @@ package com.hunthawk.reader.page.guide;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.hivemind.HiveMind;
+import org.apache.oro.text.regex.MatchResult;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.PatternCompiler;
+import org.apache.oro.text.regex.PatternMatcher;
+import org.apache.oro.text.regex.PatternMatcherInput;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IRequestCycle;
+import org.apache.tapestry.annotations.InitialValue;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.engine.IEngineService;
 
@@ -15,7 +24,7 @@ import com.hunthawk.reader.service.resource.MaterialService;
 import com.hunthawk.reader.service.resource.ResourceService;
 import com.hunthawk.reader.service.system.SystemService;
 
-/***
+/*******************************************************************************
  *   ≈‰∆˜±Í«©œÚµº
  * 
  * @author penglei
@@ -65,9 +74,60 @@ public abstract class AdapterGuide extends SecurityPage implements
 
 	public abstract void setTmdId(Integer id);
 
+	public abstract Integer getNum();
+
+	public abstract void setNum(Integer num);
+
+	public abstract void setParameterValue(String str);
+
+	public abstract String getParameterValue();
+
 	public void activateExternalPage(java.lang.Object[] parameters,
 			IRequestCycle cycle) {
 		setTagName((String) parameters[1]);
+		if (parameters.length == 5) {
+			setNum((Integer) parameters[4]);
+			setParameterValue((String) parameters[3]);
+			parseParameterValue();
+		}
+	}
+
+	private Integer getInteger(String str) {
+		try {
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			return -999;
+		}
+	}
+
+	private void parseParameterValue() {
+		if (getParameterValue() != null) {
+			String[] strs = getParameterValue().split(",");
+			for (int i = 0; i < strs.length; i++) {
+
+				String[] kv = strs[i].split("=");
+				if (kv.length == 2) {
+					System.out.println(kv[0] + "{}" + kv[1]);
+					if ("adapterId".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setAdapterId(iv);
+						}
+					} else if ("adapterRuleId".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setAdapterRuleId(iv);
+						}
+					} else if ("tmd".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setTmdId(iv);
+						}
+					}
+				}
+
+			}
+		}
 	}
 
 	public void onSubmit(IRequestCycle cycle) {
@@ -89,7 +149,15 @@ public abstract class AdapterGuide extends SecurityPage implements
 		str += "#";
 		setReturnValue(str);
 		setNeedReturn(Boolean.TRUE);
+		if (getParameterValue() != null) {
+			setUpdate(true);
+		}
 	}
+
+	public abstract void setUpdate(boolean b);
+
+	@InitialValue("false")
+	public abstract boolean isUpdate();
 
 	public abstract String getReturnValue();
 
@@ -109,11 +177,13 @@ public abstract class AdapterGuide extends SecurityPage implements
 		}
 		map.put("needreturn", getNeedReturn());
 		map.put("content", getReturnValue());
-		map.put("update", Boolean.FALSE);
+		map.put("update", isUpdate());
 		String tagValue = getTagName();
-
-		map.put("tag", "$#imglink#");
-		map.put("num", 1);
+		if (HiveMind.isNonBlank(getParameterValue())) {
+			tagValue += "." + getParameterValue();
+		}
+		map.put("tag", "$#"+tagValue+"#");
+		map.put("num", getNum());
 		return map;
 	}
 

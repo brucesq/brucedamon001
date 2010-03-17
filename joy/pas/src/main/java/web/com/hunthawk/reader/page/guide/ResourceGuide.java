@@ -3,6 +3,7 @@
  */
 package com.hunthawk.reader.page.guide;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ public abstract class ResourceGuide extends SecurityPage implements
 
 				String[] kv = strs[i].split("=");
 				if (kv.length == 2) {
-					System.out.println(kv[0]+"{}"+kv[1]);
+				
 					if ("od".equals(kv[0])) {
 						Integer iv = getInteger(kv[1]);
 						if (iv != -999) {
@@ -202,6 +203,9 @@ public abstract class ResourceGuide extends SecurityPage implements
 								String value = result.group(0);
 								value = value.substring(CommonGuide.MUTI_START.length(),
 										result.length() - CommonGuide.MUTI_END.length());
+								if(getMixs() == null){
+									setMixs(new ArrayList());
+								}
 								getMixs().add(value);
 							}
 						} catch (Exception e) {
