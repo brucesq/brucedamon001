@@ -269,7 +269,7 @@ public class ResourceServiceImpl implements ResourceService {
 			hql += " and resource.creatorId=? ";
 			param.add(creatorId);
 		}
-		if (keyWord != null) {
+		if (StringUtils.isNotEmpty(keyWord)) {
 			hql += " and resource.RKeyword like? ";
 			param.add("%" + keyWord + "%");
 		}
@@ -318,7 +318,7 @@ public class ResourceServiceImpl implements ResourceService {
 			if (isDivision == 0) {
 				hql += "and (division is null)";
 			} else {
-				hql += "and division != null";
+				hql += "and division  !=  null";
 			}
 		}
 		/*
@@ -401,7 +401,7 @@ public class ResourceServiceImpl implements ResourceService {
 			hql += " and resource.creatorId=? ";
 			param.add(creatorId);
 		}
-		if (keyWord != null) {
+		if (StringUtils.isNotEmpty(keyWord)) {
 			hql += " and resource.RKeyword like? ";
 			param.add("%" + keyWord + "%");
 		}
@@ -477,11 +477,15 @@ public class ResourceServiceImpl implements ResourceService {
 			String name, String authorId, Integer childTypeId, boolean isTof,
 			Integer creatorId, ResourcePack pack, Set<String> set) {
 		List param = new ArrayList();
-		String hql = "select   count(distinct resource.id) from  ResourceResType restype, ResourceAll resource where   resource.status=0 ";
+		String hql = "select   count(distinct resource.id) from   ResourceAll resource where   resource.status=0 ";
 		/*
 		 * 分类反选 yuzs 2009-11-10
 		 */
 
+		if(childTypeId != null && childTypeId > 0){
+			hql = "select   count(distinct resource.id) from  ResourceResType restype, ResourceAll resource where   resource.status=0 ";
+		}
+		
 		if (isTof) { // 反选
 			if (childTypeId != null && childTypeId > 0) {
 				// hql +=
@@ -515,6 +519,7 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 
 		if (getOfflinePartnerIds().length() > 0) { // 很耗性能
+			System.out.println("进入低耗能区getOfflinePartnerIds>0");
 			// hql += " and resource.cpId not in "+getOfflinePartnerIds()+" ";
 			hql += " and not exists (select 'x' from Provider p where resource.cpId=p.id and p.status = 5) ";
 			// param.add(getOfflinePartnerIds());
@@ -526,11 +531,13 @@ public class ResourceServiceImpl implements ResourceService {
 			// hql +=
 			// " and resource.id not in ( select releation.resourceId from
 			// ResourcePackReleation releation where releation.pack = ? )";
-			hql += " and not exists(select 'x' from ResourcePackReleation releation where resource.id = releation.resourceId  and releation.pack = ? )";
+			System.out.println("进入低耗能区not exists pack");
+			hql += " and not exists(select 'x' from ResourcePackReleation releation where releation.pack = ?  and resource.id = releation.resourceId  )";
 			param.add(pack);
 
 		}
 		if (set != null && set.size() > 0) {// 耗性能
+			System.out.println("进入低耗能区resource ids");
 			hql += " and resource.id in (";
 			for (String str : set) {
 				hql += "'" + str + "',";
@@ -556,7 +563,11 @@ public class ResourceServiceImpl implements ResourceService {
 			Integer childTypeId, boolean isTof, Integer creatorId,
 			ResourcePack pack, Set<String> set, int pageNum, int pageSize) {
 		List param = new ArrayList();
-		String hql = "select distinct resource.id from ResourceResType restype,ResourceAll resource  where   resource.status=0";
+		String hql = "select distinct resource.id from ResourceAll resource  where   resource.status=0";
+		
+		if(childTypeId != null && childTypeId > 0){
+			hql = "select   distinct resource.id from  ResourceResType restype, ResourceAll resource where   resource.status=0 ";
+		}
 		/*
 		 * 分类反选 yuzs 2009-11-10
 		 */
@@ -601,7 +612,7 @@ public class ResourceServiceImpl implements ResourceService {
 			// hql +=
 			// " and resource.id not in ( select releation.resourceId from
 			// ResourcePackReleation releation where releation.pack = ? )";
-			hql += " and not exists(select 'x' from ResourcePackReleation releation where resource.id = releation.resourceId  and releation.pack = ? )";
+			hql += " and not exists(select 'x' from ResourcePackReleation releation where releation.pack = ?  and resource.id = releation.resourceId )";
 			param.add(pack);
 
 		}
