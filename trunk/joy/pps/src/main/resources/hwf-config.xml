@@ -288,7 +288,7 @@
 		<desc>用户自定义标签</desc>
 	</tag>
 	<tag>
-		<name>hotWord_roll</name>
+		<name>hotWord_Roll</name>
 		<classname>com.hunthawk.reader.pps.basic.HotWordRollTag</classname>
 		<desc>热词轮询标签</desc>
 	</tag>

@@ -1067,15 +1067,16 @@ public class ResourceServiceImpl implements ResourceService {
 			builder.append(" from ResourcePackReleation rel ");
 			if (isNotNext) {
 				builder
-						.append(" where rel.id < ? and rel.pack = ? and status = 0 order by rel.order desc,rel.id desc");
+						.append(" where rel.order > ? and rel.pack = ? and status = 0 order by rel.order asc,rel.id desc");
 
 			} else {
 				builder
-						.append(" where rel.id > ? and rel.pack = ? and status = 0 order by rel.order asc,rel.id asc");
+						.append(" where rel.order < ? and rel.pack = ? and status = 0 order by rel.order desc,rel.id asc");
 
 			}
+//			System.out.println(builder.toString()+" rel.getOrder()");
 			List<ResourcePackReleation> rels = controller.findBy(builder
-					.toString(), 1, 1, relId, rel.getPack());
+					.toString(), 1, 1, rel.getOrder(), rel.getPack());
 			if (rels.size() > 0) {
 				browseRel = rels.get(0);
 			}
