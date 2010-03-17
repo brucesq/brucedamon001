@@ -1,11 +1,21 @@
 package com.hunthawk.reader.page.guide;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.hivemind.HiveMind;
+import org.apache.oro.text.regex.MatchResult;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.PatternCompiler;
+import org.apache.oro.text.regex.PatternMatcher;
+import org.apache.oro.text.regex.PatternMatcherInput;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IRequestCycle;
+import org.apache.tapestry.annotations.InitialValue;
 import org.apache.tapestry.annotations.InjectComponent;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.components.Block;
@@ -54,9 +64,73 @@ public abstract class ColumnsRollGuide extends SecurityPage implements
 	public abstract Integer getPageSize();
 	public abstract void setPageSize(Integer size);
 	
+	public abstract Integer getNum();
+
+	public abstract void setNum(Integer num);
+
+	public abstract void setParameterValue(String str);
+
+	public abstract String getParameterValue();
+
 	public void activateExternalPage(java.lang.Object[] parameters,
 			IRequestCycle cycle) {
 		setTagName((String) parameters[1]);
+		if (parameters.length == 5) {
+			setNum((Integer) parameters[4]);
+			setParameterValue((String) parameters[3]);
+			parseParameterValue();
+		}
+	}
+	private Integer getInteger(String str) {
+		try {
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			return -999;
+		}
+	}
+
+	private void parseParameterValue() {
+		if (getParameterValue() != null) {
+			String[] strs = getParameterValue().split(",");
+			for (int i = 0; i < strs.length; i++) {
+
+				String[] kv = strs[i].split("=");
+				if (kv.length == 2) {
+//					System.out.println(kv[0] + "{}" + kv[1]);
+					if ("pageSize".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setPageSize(iv);
+						}
+					} else if ("columnids".equals(kv[0])) {
+						
+							setColumnids(kv[1]);
+						
+					} else if("mix".equals(kv[0])){
+						PatternCompiler compiler = new Perl5Compiler();
+						try {
+							Pattern pattern = compiler.compile(CommonGuide.MUTI_START
+									+ "[^\\" + CommonGuide.MUTI_LETTER + "]*" + CommonGuide.MUTI_END);
+							PatternMatcherInput input = new PatternMatcherInput(
+									kv[1]);
+							PatternMatcher matcher = new Perl5Matcher();
+							while (matcher.contains(input, pattern)) {
+								MatchResult result = matcher.getMatch();
+								String value = result.group(0);
+								value = value.substring(CommonGuide.MUTI_START.length(),
+										result.length() - CommonGuide.MUTI_END.length());
+								setMixs(new ArrayList());
+								getMixs().add(value);
+								System.out.println("mix:"+value);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+
+			}
+		}
 	}
 
 	public IPropertySelectionModel getMixList() {
@@ -92,7 +166,14 @@ public abstract class ColumnsRollGuide extends SecurityPage implements
 		sb.append("#");
 		setReturnValue(sb.toString());
 		setNeedReturn(Boolean.TRUE);
+		if (getParameterValue() != null) {
+			setUpdate(true);
+		}
 	}
+	public abstract void setUpdate(boolean b);
+
+	@InitialValue("false")
+	public abstract boolean isUpdate();
 
 	public abstract String getReturnValue();
 
@@ -112,11 +193,13 @@ public abstract class ColumnsRollGuide extends SecurityPage implements
 		}
 		map.put("needreturn", getNeedReturn());
 		map.put("content", getReturnValue());
-		map.put("update", Boolean.FALSE);
+		map.put("update", isUpdate());
 		String tagValue = getTagName();
-
-		map.put("tag", "$#imglink#");
-		map.put("num", 1);
+		if (HiveMind.isNonBlank(getParameterValue())) {
+			tagValue += "." + getParameterValue();
+		}
+		map.put("tag", "$#"+tagValue+"#");
+		map.put("num", getNum());
 		return map;
 	}
 

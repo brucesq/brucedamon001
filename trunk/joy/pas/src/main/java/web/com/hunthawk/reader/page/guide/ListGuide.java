@@ -13,8 +13,10 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hivemind.HiveMind;
 import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IRequestCycle;
+import org.apache.tapestry.annotations.InitialValue;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.engine.IEngineService;
 import org.apache.tapestry.form.IPropertySelectionModel;
@@ -85,13 +87,79 @@ public abstract class ListGuide extends SecurityPage implements IExternalPage {
 	public abstract void setTmdId(Integer id);
 	
 	public abstract Boolean getNeedReturn();
+	
+	public abstract Integer getNum();
+
+	public abstract void setNum(Integer num);
+
+	public abstract void setParameterValue(String str);
+
+	public abstract String getParameterValue();
+	
 	public void activateExternalPage(java.lang.Object[] parameters,
 			IRequestCycle cycle) {
 		
 		String paras = (String) parameters[0];
 		setParameter(paras.split(";"));
 		setTagName((String) parameters[1]);
-		
+		if (parameters.length == 5) {
+			setNum((Integer) parameters[4]);
+			setParameterValue((String) parameters[3]);
+			parseParameterValue();
+		}
+	}
+	
+	private Integer getInteger(String str) {
+		try {
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			return -999;
+		}
+	}
+
+	private void parseParameterValue() {
+		if (getParameterValue() != null) {
+			String[] strs = getParameterValue().split(",");
+			for (int i = 0; i < strs.length; i++) {
+
+				String[] kv = strs[i].split("=");
+				if (kv.length == 2) {
+					
+					if ("showDelLink".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setShowDelLink(iv);
+						}
+					} else if ("pageSize".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setPageSize(iv);
+						}
+					} else if ("tmd".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setTmdId(iv);
+						}
+					}else if ("isConfirm".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setIsConfirm(iv);
+						}
+					} else if ("templateId".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setTemplateId(iv);
+						}
+					}else if ("noPageLink".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setNoPageLink(iv);
+						}
+					} 
+				}
+
+			}
+		}
 	}
 	
 	public void onSubmit(IRequestCycle cycle) {
@@ -117,7 +185,14 @@ public abstract class ListGuide extends SecurityPage implements IExternalPage {
 		sb.append("#");
 		setReturnValue(sb.toString());
 		setNeedReturn(Boolean.TRUE);
+		if (getParameterValue() != null) {
+			setUpdate(true);
+		}
 	}
+	public abstract void setUpdate(boolean b);
+
+	@InitialValue("false")
+	public abstract boolean isUpdate();
 	
 	public IPropertySelectionModel getNoPageLinkList(){
 		Map<String,Integer> search = new OrderedMap<String,Integer>();
@@ -148,12 +223,13 @@ public abstract class ListGuide extends SecurityPage implements IExternalPage {
 		}
 		map.put("needreturn", getNeedReturn());
 		map.put("content", getReturnValue());
-		map.put("update", Boolean.FALSE);
+		map.put("update", isUpdate());
 		String tagValue = getTagName();
-		
-
-		map.put("tag", "$#imglink#");
-		map.put("num", 1);
+		if (HiveMind.isNonBlank(getParameterValue())) {
+			tagValue += "." + getParameterValue();
+		}
+		map.put("tag", "$#"+tagValue+"#");
+		map.put("num", getNum());
 		return map;
 	}
 

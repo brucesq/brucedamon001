@@ -1,11 +1,21 @@
 package com.hunthawk.reader.page.guide;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.hivemind.HiveMind;
+import org.apache.oro.text.regex.MatchResult;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.PatternCompiler;
+import org.apache.oro.text.regex.PatternMatcher;
+import org.apache.oro.text.regex.PatternMatcherInput;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
 import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IRequestCycle;
+import org.apache.tapestry.annotations.InitialValue;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.engine.IEngineService;
 import org.apache.tapestry.form.IPropertySelectionModel;
@@ -73,12 +83,89 @@ public abstract class VoteTopBottomGuide extends SecurityPage implements
 		types.put("Ãû³Æ", "name");
 		return new MapPropertySelectModel(types);
 	}
+	public abstract Integer getNum();
 
+	public abstract void setNum(Integer num);
+
+	public abstract void setParameterValue(String str);
+
+	public abstract String getParameterValue();
+	
 	public void activateExternalPage(java.lang.Object[] parameters,
 			IRequestCycle cycle) {
 		setTagName((String) parameters[1]);
+		if (parameters.length == 5) {
+			setNum((Integer) parameters[4]);
+			setParameterValue((String) parameters[3]);
+			parseParameterValue();
+		}
+	}
+	private Integer getInteger(String str) {
+		try {
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			return -999;
+		}
 	}
 
+	private void parseParameterValue() {
+		if (getParameterValue() != null) {
+			String[] strs = getParameterValue().split(",");
+			for (int i = 0; i < strs.length; i++) {
+
+				String[] kv = strs[i].split("=");
+				if (kv.length == 2) {
+					
+					if ("voteId".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setVoteId(iv);
+						}
+					} else if ("itemId".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setItemId(iv);
+						}
+					} else if ("customId".equals(kv[0])) {
+						
+							setCustomId(kv[1]);
+						
+					} else if ("templateId".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setTemplateId(iv);
+						}
+					}else if ("voteType".equals(kv[0])) {
+						Integer iv = getInteger(kv[1]);
+						if (iv != -999) {
+							setVoteType(iv);
+						}
+					} else if("mix".equals(kv[0])){
+						PatternCompiler compiler = new Perl5Compiler();
+						try {
+							Pattern pattern = compiler.compile(CommonGuide.MUTI_START
+									+ "[^\\" + CommonGuide.MUTI_LETTER + "]*" + CommonGuide.MUTI_END);
+							PatternMatcherInput input = new PatternMatcherInput(
+									kv[1]);
+							PatternMatcher matcher = new Perl5Matcher();
+							while (matcher.contains(input, pattern)) {
+								MatchResult result = matcher.getMatch();
+								String value = result.group(0);
+								value = value.substring(CommonGuide.MUTI_START.length(),
+										result.length() - CommonGuide.MUTI_END.length());
+								if(getMixs() == null){
+									setMixs(new ArrayList());
+								}
+								getMixs().add(value);
+							}
+						} catch (Exception e) {
+						}
+					}
+				}
+
+			}
+		}
+	}
 	public void onSubmit(IRequestCycle cycle) {
 
 		StringBuilder sb = new StringBuilder();
@@ -110,8 +197,14 @@ public abstract class VoteTopBottomGuide extends SecurityPage implements
 		sb.append("#");
 		setReturnValue(sb.toString());
 		setNeedReturn(Boolean.TRUE);
+		if (getParameterValue() != null) {
+			setUpdate(true);
+		}
 	}
+	public abstract void setUpdate(boolean b);
 
+	@InitialValue("false")
+	public abstract boolean isUpdate();
 	public abstract String getReturnValue();
 
 	public abstract void setReturnValue(String value);
@@ -151,11 +244,13 @@ public abstract class VoteTopBottomGuide extends SecurityPage implements
 		}
 		map.put("needreturn", getNeedReturn());
 		map.put("content", getReturnValue());
-		map.put("update", Boolean.FALSE);
+		map.put("update", isUpdate());
 		String tagValue = getTagName();
-
-		map.put("tag", "$#imglink#");
-		map.put("num", 1);
+		if (HiveMind.isNonBlank(getParameterValue())) {
+			tagValue += "." + getParameterValue();
+		}
+		map.put("tag", "$#"+tagValue+"#");
+		map.put("num", getNum());
 		return map;
 	}
 
