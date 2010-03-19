@@ -140,6 +140,11 @@ public class CommentListTag extends BaseTag {
 					msgType, boardId, null, null, id, null);
 		}
 
+		int startCount = msgCount - (currentPage-1)*pageSize +1;
+//		if(startCount > msgCount){
+//			startCount = msgCount+1;
+//		}
+		
 		// 判断是否导航
 		if (!isNoPageLink()) {
 			// List resAll=new ArrayList();
@@ -156,7 +161,7 @@ public class CommentListTag extends BaseTag {
 			loop++;
 			MsgRecord msg = (MsgRecord) it.next();
 			StringBuilder sb = new StringBuilder();
-			sb.append(loop);
+			sb.append(startCount-loop);
 			sb.append(".");
 			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm");
 			String time = sdf.format(msg.getCreateTime() == null ? new Date()
@@ -166,10 +171,13 @@ public class CommentListTag extends BaseTag {
 			String mobile = msg.getMobile();
 			// System.out.println("mobile-->"+mobile);
 			// @TODO
+			String user = "";
 			if (mobile.startsWith("1")) {
-				sb.append("【网友" + mobile.substring(mobile.length() - 4) + "】");// 用户所属地区
+				user = "【网友" + mobile.substring(mobile.length() - 4) + "】";
+				sb.append(user);// 用户所属地区
 			}else{
-				sb.append("【游客" + mobile.substring(mobile.length() - 4) + "】");// 用户所属地区
+				user = "【游客" + mobile.substring(mobile.length() - 4) + "】";
+				sb.append(user);// 用户所属地区
 			}
 			sb.append("<br/>");
 			sb.append(StrUtil.toUnicode(msg.getContent()));// 留言内容
@@ -182,9 +190,10 @@ public class CommentListTag extends BaseTag {
 			/**
 			 * 把显示内容拆开
 			 */
-			obj.put("user", mobile.substring(mobile.length() - 4));
-			obj.put("desc", msg.getContent());// 留言内容
+			obj.put("user", user);
+			obj.put("desc", StrUtil.toUnicode(msg.getContent()));// 留言内容
 			obj.put("time", time);// 留言时间
+			obj.put("loop",startCount-loop);
 			lsRess.add(obj);
 		}
 		map.put("objs", lsRess);
