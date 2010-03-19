@@ -14,6 +14,8 @@ import com.hunthawk.reader.domain.inter.MsgOperateLog;
 import com.hunthawk.reader.domain.inter.MsgRecord;
 import com.hunthawk.reader.domain.inter.VoteAct;
 import com.hunthawk.reader.domain.inter.VoteItem;
+import com.hunthawk.reader.domain.resource.ResourceAuthor;
+import com.hunthawk.reader.enhance.annotation.Memcached;
 
 /**
  * 交互类服务
@@ -73,12 +75,15 @@ public interface InteractiveService {
 	 * 暂时没有记录日志
 	 */
 	@Logable(name = "VoteItem", action = "add", property = { "id=ID,name=投票栏目名称,voteNumber=投票序号,voteId=所属投票ID,createTime=创建时间,creator=创建人" })
+	@Memcached(targetClass = VoteItem.class, properties = { "voteId" })
 	public void addVoteItem(VoteItem voteItem) throws Exception;
 	
 	@Logable(name = "VoteItem", action = "update", property = { "id=ID,name=投票栏目名称,voteNumber=投票序号,voteId=所属投票ID,createTime=创建时间,creator=创建人" })
+	@Memcached(targetClass = VoteItem.class, properties = { "voteId" })
 	public void updateVoteItem(VoteItem voteItem) throws Exception;
 	
 	@Logable(name = "VoteItem", action = "delete", property = { "id=ID,name=投票栏目名称,voteNumber=投票序号,voteId=所属投票ID,createTime=创建时间,creator=创建人" })
+	@Memcached(targetClass = VoteItem.class, properties = { "voteId" })
 	public void deleteVoteItem(VoteItem voteItem) throws Exception;
 	
 	public Long getVoteItemList(Collection<HibernateExpression> expressions);

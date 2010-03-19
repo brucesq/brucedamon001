@@ -994,7 +994,7 @@ public class UploadServiceImpl implements UploadService {
 		return getUploadResourceDir(resourceType, resourceId).getAbsolutePath();
 	}
 
-	private Date strToDate(String strD, boolean isNeed, String errInfo)
+	public static Date strToDate(String strD, boolean isNeed, String errInfo)
 			throws Exception {
 
 		Date date = ToolDateUtil.stringToDate(strD.trim(), "yyyy-MM-dd");
@@ -1008,7 +1008,8 @@ public class UploadServiceImpl implements UploadService {
 			date = ToolDateUtil.stringToDate(strD.trim(), "yyyy-MM");
 		}
 		if (date == null) {
-			date = ToolDateUtil.stringToDate(strD.trim(), "yyyy");
+			if(strD.trim().length()==4)
+					date = ToolDateUtil.stringToDate(strD.trim(), "yyyy");
 		}
 		if (date == null && isNeed)
 			throw new Exception(errInfo + "[" + strD + "]∏Ò Ω¥ÌŒÛ");
@@ -1399,11 +1400,12 @@ public class UploadServiceImpl implements UploadService {
 		// }
 		// String file = "2_smooth.mp4";
 		// System.out.println(file.lastIndexOf("_"));
-		String file1 = "D:\\vae\\aa\\ss/asdas.xx";
-		System.out.println(getFilePathDir(file1));
-		UploadServiceImpl impl = new UploadServiceImpl();
-		System.out.println(impl.getTimeValue("1:01:1",false,"asd"));
+//		String file1 = "D:\\vae\\aa\\ss/asdas.xx";
+//		System.out.println(getFilePathDir(file1));
+//		UploadServiceImpl impl = new UploadServiceImpl();
+//		System.out.println(impl.getTimeValue("1:01:1",false,"asd"));
 
+		System.out.println(strToDate("39814",true,"").toLocaleString());
 		// String str = "1^2";
 		// System.out.println(str.split("\\^").length);
 		//		
