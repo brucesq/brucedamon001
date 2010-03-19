@@ -65,20 +65,24 @@ public abstract class EditColumnPage extends EditPage implements
 
 	@InjectObject("spring:resourceService")
 	public abstract ResourceService getResourceService();
-	
-	/**add by liuxh 09-12-23*/
+
+	/** add by liuxh 09-12-23 */
 	@InjectObject("spring:materialService")
 	public abstract MaterialService getMaterialService();
+
 	@InjectObject("spring:systemService")
 	public abstract SystemService getSystemService();
-	
+
 	public abstract IUploadFile getUploadFile();
-	
+
 	public abstract Integer getImageId();
+
 	public abstract void setImageId(Integer imageId);
-	
+
 	public abstract void setImgUrl(String url);
+
 	public abstract String getImgUrl();
+
 	public abstract String getReturnValue();
 
 	public abstract void setReturnValue(String value);
@@ -86,7 +90,8 @@ public abstract class EditColumnPage extends EditPage implements
 	public abstract void setNeedReturn(Boolean bReturn);
 
 	public abstract Boolean getNeedReturn();
-	/**end*/
+
+	/** end */
 
 	public abstract Columns getParent();
 
@@ -114,10 +119,11 @@ public abstract class EditColumnPage extends EditPage implements
 		return Columns.class;
 	}
 
-	/**add by liuxh 09-12-23*/
+	/** add by liuxh 09-12-23 */
 	public boolean isRightFormat(String fileName) {
 		MaterialCatalog catalog = getMaterialService().getMaterialCatalog(
-				Integer.parseInt(getSystemService().getVariables("default_pic_material_catalog_id").getValue()));
+				Integer.parseInt(getSystemService().getVariables(
+						"default_pic_material_catalog_id").getValue()));
 		String patt = "";
 		if (catalog.getType().equals(MaterialCatalog.TYPE_IMAGE)) {
 			patt = "\\.(jpg|gif|png|bmp)$";
@@ -137,76 +143,87 @@ public abstract class EditColumnPage extends EditPage implements
 		}
 
 	}
-	public void uploadMaterial(IRequestCycle cycle){
-		//-------------上传图片开始------------
-		try{
-		if(getUploadFile()!=null){	
-			File entryFile = null;
-			String fileName = getUploadFile().getFileName().substring(
-					getUploadFile().getFileName().lastIndexOf("\\") + 1);
-			
-			boolean isRightFormat = isRightFormat(getUploadFile().getFileName());
-			if (!isRightFormat) {
 
-				ValidationDelegate delegate = getDelegate();
-				delegate.setFormComponent(null);
-				delegate
-						.record(
-								"文件格式不正确[图片素材只能为gif或jpg或png或bmp,音乐素材只能是mid或mp3或wma或wav]，请重新选择",
-								null);
-				return ;
-			}
-			Variables var = getSystemService().getVariables("upload_dir");
-			File dir = new File(var.getValue());
-			if(!dir.exists())
-				dir.mkdirs();
-			getResourceService().upload(getUploadFile(), "", dir);
-			entryFile = new File(dir, fileName);
-			
-			Material matr = new Material();		
-			 matr.setCatalogId(Integer.parseInt(getSystemService().getVariables("default_pic_material_catalog_id").getValue()));
-			 if(StringUtils.isEmpty(matr.getName())){
-				 matr.setName("默认");
-			 }
+	public void uploadMaterial(IRequestCycle cycle) {
+		// -------------上传图片开始------------
+		try {
+			if (getUploadFile() != null) {
+				File entryFile = null;
+				String fileName = getUploadFile().getFileName().substring(
+						getUploadFile().getFileName().lastIndexOf("\\") + 1);
+
+				boolean isRightFormat = isRightFormat(getUploadFile()
+						.getFileName());
+				if (!isRightFormat) {
+
+					ValidationDelegate delegate = getDelegate();
+					delegate.setFormComponent(null);
+					delegate
+							.record(
+									"文件格式不正确[图片素材只能为gif或jpg或png或bmp,音乐素材只能是mid或mp3或wma或wav]，请重新选择",
+									null);
+					return;
+				}
+				Variables var = getSystemService().getVariables("upload_dir");
+				File dir = new File(var.getValue());
+				if (!dir.exists())
+					dir.mkdirs();
+				getResourceService().upload(getUploadFile(), "", dir);
+				entryFile = new File(dir, fileName);
+
+				Material matr = new Material();
+				matr.setCatalogId(Integer.parseInt(getSystemService()
+						.getVariables("default_pic_material_catalog_id")
+						.getValue()));
+				if (StringUtils.isEmpty(matr.getName())) {
+					matr.setName("默认");
+				}
 				matr.setCreateTime(new Date());
 				matr.setCreator(getUser().getId());
 				matr.setModifyTime(new Date());
 				matr.setModifier(getUser().getId());
 				getMaterialService().addMaterial(matr);
-				
-				
-				Variables var1 = getSystemService().getVariables("media_dir");
-	            String fileType = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-	            matr.setExtName(fileType);
-	            
-	            matr.setFilename("material/"+String.valueOf(matr.getId()/1000)+ "/" + matr.getId());
-	            
-	            File destFile = new File(var1.getValue()+ "material"+File.separator+String.valueOf(matr.getId()/1000)+ File.separator + matr.getId()+"."+matr.getExtName());
 
-	         
-	            FileUtils.copyFile(entryFile, destFile);
-	            getResourceService().rsyncUploadFile(ResourceUtil.RSYNC_TYPE_ADD,new String[]{destFile.getAbsolutePath()});
-				
-	            matr.setSize((int)destFile.length());
-	            FileUtils.forceDeleteOnExit(entryFile);
-	
-	            getMaterialService().updateMaterial(matr);
-	            setImageId( matr.getId());
-	            String url = getSystemService().getVariables("media_url").getValue();
-				Material mater =  getMaterialService().getMaterial(getImageId());
-				setImgUrl( url + mater.getFilename() + "." + mater.getExtName());
-	            setReturnValue("");
+				Variables var1 = getSystemService().getVariables("media_dir");
+				String fileType = fileName.substring(
+						fileName.lastIndexOf(".") + 1).toLowerCase();
+				matr.setExtName(fileType);
+
+				matr.setFilename("material/"
+						+ String.valueOf(matr.getId() / 1000) + "/"
+						+ matr.getId());
+
+				File destFile = new File(var1.getValue() + "material"
+						+ File.separator + String.valueOf(matr.getId() / 1000)
+						+ File.separator + matr.getId() + "."
+						+ matr.getExtName());
+
+				FileUtils.copyFile(entryFile, destFile);
+				getResourceService().rsyncUploadFile(
+						ResourceUtil.RSYNC_TYPE_ADD,
+						new String[] { destFile.getAbsolutePath() });
+
+				matr.setSize((int) destFile.length());
+				FileUtils.forceDeleteOnExit(entryFile);
+
+				getMaterialService().updateMaterial(matr);
+				setImageId(matr.getId());
+				String url = getSystemService().getVariables("media_url")
+						.getValue();
+				Material mater = getMaterialService().getMaterial(getImageId());
+				setImgUrl(url + mater.getFilename() + "." + mater.getExtName());
+				setReturnValue("");
 				setNeedReturn(Boolean.FALSE);
 				return;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			getDelegate().setFormComponent(null);
 			getDelegate().record(e.getMessage(), null);
-			}
-			
+		}
+
 	}
-	
-	/**end*/
+
+	/** end */
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -226,12 +243,13 @@ public abstract class EditColumnPage extends EditPage implements
 				o.setPagegroup(getPageGroup());
 				o.setStatus(1);
 				o.setCountSet(100);
-				/**modify by liuxh 09-12-23*/
-				if(getImageId()!=null){
-//					System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>icon ->"+getImageId().toString());
+				/** modify by liuxh 09-12-23 */
+				if (getImageId() != null) {
+					// System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>icon
+					// ->"+getImageId().toString());
 					o.setIcon(getImageId().toString());
 				}
-				/**end*/
+				/** end */
 				// o.setOrder(100);
 				o.setTitle(o.getName());
 				// o.setColumnType(getColumnType());
@@ -248,8 +266,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.COLUMN_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setColOneTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -268,8 +286,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.RESOURCE_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setResOneTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -289,8 +307,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.COLUMN_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setColSecondTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -310,8 +328,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.COLUMN_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setColThirdTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -331,8 +349,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.RESOURCE_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setResSecondTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -352,8 +370,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.RESOURCE_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setResThirdTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -372,8 +390,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.DETAIL_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setDelOneTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -391,8 +409,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.DETAIL_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setDelSecondTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -410,8 +428,8 @@ public abstract class EditColumnPage extends EditPage implements
 							TemplateType.DETAIL_PAGE, CompareType.Equal);
 					expressions.add(ex2);
 					List<DefaultTemplateSet> defaultTemplates = getTemplateService()
-							.getDefaultTemplateSetList(1, Integer.MAX_VALUE, "templateId",
-									false, expressions);
+							.getDefaultTemplateSetList(1, Integer.MAX_VALUE,
+									"templateId", false, expressions);
 					if (defaultTemplates != null && defaultTemplates.size() > 0) {
 						o.setDelThirdTempId(defaultTemplates.get(0)
 								.getTemplateId());
@@ -428,20 +446,20 @@ public abstract class EditColumnPage extends EditPage implements
 				o.setTitle(o.getName());
 				o.setModifyTime(new Date());
 				o.setModifier(getUser().getId());
-				
-				/**modify by liuxh 09-12-23*/
-				if(getImageId()!=null){
+
+				/** modify by liuxh 09-12-23 */
+				if (getImageId() != null) {
 					o.setIcon(getImageId().toString());
-				}else{
+				} else {
 					o.setIcon("");
 				}
-				/**end*/
+				/** end */
 				if (getResourceTypeId() != 0 && getResourceTypeId() != null)
 					o.setResourceTypeId(getResourceTypeId());
 				getBussinessService().updateColumn(o);
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			getDelegate().setFormComponent(null);
 			getDelegate().record(e.getMessage(), null);
 
@@ -455,17 +473,19 @@ public abstract class EditColumnPage extends EditPage implements
 			setModel(new Columns());
 		} else {
 			Columns c = (Columns) getModel();
-			/**modify by liuxh 09-12-23*/
-//			System.out.println("init >>>>>>>>>>>>"+getImageId());
-			if(c.getIcon()!=null && !StringUtils.isEmpty(c.getIcon())){
-				setImageId(getImageId()==null?Integer.parseInt(c.getIcon()):getImageId());
+			/** modify by liuxh 09-12-23 */
+			// System.out.println("init >>>>>>>>>>>>"+getImageId());
+			if (c.getIcon() != null && !StringUtils.isEmpty(c.getIcon())) {
+				setImageId(getImageId() == null ? Integer.parseInt(c.getIcon())
+						: getImageId());
 			}
-			/**end*/
+			/** end */
 			if (c.getResourceTypeId() != null) {
 				setResourceTypeId(c.getResourceTypeId());
 				ResourceType type = getResourceService().getResourceType(
 						c.getResourceTypeId());
-				setResourceType(type.getShowType());
+				if (type != null)
+					setResourceType(type.getShowType());
 			}
 		}
 
@@ -552,7 +572,8 @@ public abstract class EditColumnPage extends EditPage implements
 			if (c.getResourceTypeId() != null) {
 				ResourceType type = getResourceService().getResourceType(
 						c.getResourceTypeId());
-				totals.put(type.getName(), type.getId());
+				if(type != null)
+						totals.put(type.getName(), type.getId());
 			}
 
 		}
@@ -591,8 +612,8 @@ public abstract class EditColumnPage extends EditPage implements
 			NotNullExpression pE = new NotNullExpression("resourceTypeId");
 			expressions1.add(pE);
 
-			List<Columns> columns = getBussinessService().findColumns(1, Integer.MAX_VALUE,
-					"id", false, expressions1);
+			List<Columns> columns = getBussinessService().findColumns(1,
+					Integer.MAX_VALUE, "id", false, expressions1);
 			for (Columns column : columns) {
 				if (resourceTypeIdList1.contains(column.getResourceTypeId()))
 					resourceTypeIdList1.remove(column.getResourceTypeId());
@@ -613,8 +634,8 @@ public abstract class EditColumnPage extends EditPage implements
 		return new MapPropertySelectModel(totals);
 	}
 
-	/**add by liuxh 09-12-23*/
-	public String getChooseImageURL(){
+	/** add by liuxh 09-12-23 */
+	public String getChooseImageURL() {
 		IEngineService service = getExternalService();
 		Object[] params = new Object[3];
 		params[0] = "imgid";
@@ -625,7 +646,7 @@ public abstract class EditColumnPage extends EditPage implements
 
 		return resURL;
 	}
-	/**end*/
+	/** end */
 	// /**
 	// *
 	// * @param value1
