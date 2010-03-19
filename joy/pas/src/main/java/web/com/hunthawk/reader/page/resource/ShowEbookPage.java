@@ -1292,7 +1292,8 @@ public abstract class ShowEbookPage extends SearchPage implements
 					type.append(";");
 				}
 				// 去掉最后一个分号
-				if (list.size() > 0) {
+				if (list.size() > 0 && type.length() > 2) {
+					
 					return type.toString().substring(0, (type.length() - 1));
 				} else {
 					return "";
