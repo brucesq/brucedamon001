@@ -49,6 +49,7 @@ import com.hunthawk.reader.domain.resource.ResourceType;
 import com.hunthawk.reader.domain.resource.Video;
 import com.hunthawk.reader.domain.resource.VideoSuite;
 import com.hunthawk.reader.pps.ArrayUtil;
+import com.hunthawk.reader.pps.PpsUtil;
 import com.hunthawk.reader.pps.service.BussinessService;
 import com.hunthawk.reader.pps.service.ResourceService;
 import com.hunthawk.reader.service.partner.PartnerService;
@@ -99,6 +100,8 @@ public class ResourceServiceImpl implements ResourceService {
 		this.memcached = memcached;
 	}
 
+	
+
 	public ResourceAll getResource(String resourceId) {
 		// 资源更新时需要，清空缓存
 		String key = Utility.getMemcachedKey(ResourceAll.class, resourceId);
@@ -113,6 +116,14 @@ public class ResourceServiceImpl implements ResourceService {
 					.substring(0, 1)));
 			if (resource == null) {
 				resource = new NullObject();
+			} else {
+				ResourceAll res = (ResourceAll) resource;
+				if (res.getDownnum() <= 1) {
+					res.setDownnum(PpsUtil.getRandom(10, 50));
+				}
+				if (res.getRankingNum() <= 1) {
+					res.setRankingNum(PpsUtil.getRandom(60, 100));
+				}
 			}
 			memcached.setAndSaveLocalMedium(key, resource,
 					72 * MemCachedClientWrapper.HOUR);
@@ -320,11 +331,11 @@ public class ResourceServiceImpl implements ResourceService {
 		case 6:
 			hql += " order by rel.id asc";
 			break;
-		
+
 		case 10:
 			hql += " order by resource.downnum desc";
 			break;// 人气总排行
-		
+
 		case 11:
 			hql += " order by resource.downNumMonth desc";
 			break;// 点击月排行
@@ -1074,7 +1085,7 @@ public class ResourceServiceImpl implements ResourceService {
 						.append(" where rel.order < ? and rel.pack = ? and status = 0 order by rel.order desc,rel.id asc");
 
 			}
-//			System.out.println(builder.toString()+" rel.getOrder()");
+			// System.out.println(builder.toString()+" rel.getOrder()");
 			List<ResourcePackReleation> rels = controller.findBy(builder
 					.toString(), 1, 1, rel.getOrder(), rel.getPack());
 			if (rels.size() > 0) {
@@ -1740,7 +1751,7 @@ public class ResourceServiceImpl implements ResourceService {
 	public long getResourceVisits(String resourceId) {
 		ResourceAll resource = getResource(resourceId);
 
-		return resource.getDownnum() == null ? 1 : resource.getDownnum()+1;
+		return resource.getDownnum() ;
 	}
 
 	/**
@@ -1750,10 +1761,13 @@ public class ResourceServiceImpl implements ResourceService {
 	 * @return
 	 */
 	public long incrResourceVisits(String resourceId) {
-		return getResourceVisits(resourceId);//resource.getDownnum() == null ? 1 : resource.getDownnum()+1;
-//		StatisticsLog.logStat(1, resourceId);
-//		ResourceAll resource = getResource(resourceId);
-//		return (resource.getDownnum() == null ? 1 : resource.getDownnum()) + 1;
+		return getResourceVisits(resourceId);// resource.getDownnum() == null
+												// ? 1 :
+												// resource.getDownnum()+1;
+		// StatisticsLog.logStat(1, resourceId);
+		// ResourceAll resource = getResource(resourceId);
+		// return (resource.getDownnum() == null ? 1 : resource.getDownnum()) +
+		// 1;
 	}
 
 	public Set<String> getAllResourceVisitKey() {
@@ -1762,7 +1776,8 @@ public class ResourceServiceImpl implements ResourceService {
 		// RESOURCE_VISITS.clear();
 		return allKeys;
 	}
-	public String getVideoResourceDirectory(String resourceId){
+
+	public String getVideoResourceDirectory(String resourceId) {
 		StringBuilder url = new StringBuilder();
 		url.append(bussinessService.getVariables("video_url").getValue());
 		Integer resourceType = Integer.parseInt(resourceId.substring(0, 1));
@@ -1775,9 +1790,9 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "magazine";
 		} else if (ResourceAll.RESOURCE_TYPE_NEWSPAPER.equals(resourceType)) {
 			key = "newspaper";
-		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			key = "video";
-		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
 		}
 		url.append(key);
@@ -1803,9 +1818,9 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "magazine";
 		} else if (ResourceAll.RESOURCE_TYPE_NEWSPAPER.equals(resourceType)) {
 			key = "newspaper";
-		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			key = "video";
-		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
 		}
 		url.append(key);
@@ -1840,9 +1855,9 @@ public class ResourceServiceImpl implements ResourceService {
 			return controller.get(Magazine.class, resourceId);
 		} else if (ResourceAll.RESOURCE_TYPE_NEWSPAPER.equals(resourceType)) {
 			return controller.get(NewsPapers.class, resourceId);
-		}else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			return controller.get(Video.class, resourceId);
-		}else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
+		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			return controller.get(Infomation.class, resourceId);
 		}
 		return controller.get(ResourceAll.class, resourceId);
@@ -2443,7 +2458,8 @@ public class ResourceServiceImpl implements ResourceService {
 			rels = (List<ResourcePackReleation>) memcached
 					.getAndSaveLocalMedium(key);
 			if (rels != null) {
-//				System.out.println("findDivisions rels size from mem:"+rels.size());
+				// System.out.println("findDivisions rels size from
+				// mem:"+rels.size());
 				if (isMagazine)
 					return page(rels, pageNo, pageSize);
 				else
@@ -2496,7 +2512,7 @@ public class ResourceServiceImpl implements ResourceService {
 			/** 非杂志资源取所有书部信息 */
 			rels = controller.findBy(hql, 1, Integer.MAX_VALUE, values);
 		}
-//		System.out.println("findDivisions rels size from db:"+rels.size());
+		// System.out.println("findDivisions rels size from db:"+rels.size());
 		memcached.setAndSaveLocalMedium(key, rels, MemCachedClientWrapper.HOUR);
 
 		if (isMagazine) {
@@ -2519,136 +2535,144 @@ public class ResourceServiceImpl implements ResourceService {
 	 * @param resource
 	 * @return add by liuxh 09-11-20
 	 */
-//	private List<ResourcePackReleation> getDivisionsBesidesMagazine(
-//			int listCount, List<ResourcePackReleation> rels,
-//			ResourceAll resource) {
-//		if (listCount >= rels.size()) {
-//			for (ResourcePackReleation rpr : rels) {
-//				if (rpr.getResourceId().equals(resource.getId())) {
-//					rels.remove(rpr);
-//					return rels;
-//				}
-//			}
-//		}
-//		/** 向前取的个数 */
-//		int before_count = 0;
-//		/** 向后取的个数 */
-//		int end_count = 0;
-//		if (listCount % 2 == 0) {// 偶数
-//			before_count = end_count = listCount / 2;
-//		} else {
-//			before_count = (listCount + 1) / 2 - 1;
-//			end_count = (listCount + 1) / 2;
-//		}
-//		System.out.println("前取" + before_count + "个 : 后取" + end_count + "个");
-//		List<ResourcePackReleation> result = new ArrayList<ResourcePackReleation>();
-//		/** 升序 */
-//		for (int j = 0; j < rels.size(); j++) {
-//			ResourcePackReleation releation = rels.get(j);
-//			if (resource.getId().equals(releation.getResourceId())) {
-//				int B_INDEX = j == 0 ? rels.size() : j;// 开始索引 如果当前索引为0
-//														// B_INDEX重置为最后一个
-//				int E_INDEX = j == rels.size() - 1 ? 0 : j;// 结束索引
-//
-//				for (int b = before_count; b > 0; b--) {
-//					if (j - b < 0) {
-//						if (j != 0)
-//							result.add(rels.get(rels.size() - (b - j)));
-//						else
-//							// 说明是第一个
-//							result.add(rels.get(B_INDEX - b));
-//					} else {
-//						result.add(rels.get(j - b));
-//					}
-//				}
-//				for (int e = 1; e <= end_count; e++) {
-//					if (j + e > rels.size() - 1) {
-//						if (j != rels.size() - 1) {
-//							result.add(rels.get((e - 1)
-//									- ((rels.size() - 1) - E_INDEX)));
-//						} else
-//							// 说明是最后一个
-//							result.add(rels.get(E_INDEX + (e - 1)));
-//					} else {
-//						result.add(rels.get(j + e));
-//					}
-//				}
-//				break;
-//			}
-//		}
-//
-//		// System.out.println("结果====================");
-//		// for(Iterator it=result.iterator();it.hasNext();){
-//		// ResourceAll
-//		// r=this.getResource(((ResourcePackReleation)it.next()).getResourceId());
-//		// System.out.println(r.getId()+"."+r.getName());
-//		// }
-//		return result;
-//	}
+	// private List<ResourcePackReleation> getDivisionsBesidesMagazine(
+	// int listCount, List<ResourcePackReleation> rels,
+	// ResourceAll resource) {
+	// if (listCount >= rels.size()) {
+	// for (ResourcePackReleation rpr : rels) {
+	// if (rpr.getResourceId().equals(resource.getId())) {
+	// rels.remove(rpr);
+	// return rels;
+	// }
+	// }
+	// }
+	// /** 向前取的个数 */
+	// int before_count = 0;
+	// /** 向后取的个数 */
+	// int end_count = 0;
+	// if (listCount % 2 == 0) {// 偶数
+	// before_count = end_count = listCount / 2;
+	// } else {
+	// before_count = (listCount + 1) / 2 - 1;
+	// end_count = (listCount + 1) / 2;
+	// }
+	// System.out.println("前取" + before_count + "个 : 后取" + end_count + "个");
+	// List<ResourcePackReleation> result = new
+	// ArrayList<ResourcePackReleation>();
+	// /** 升序 */
+	// for (int j = 0; j < rels.size(); j++) {
+	// ResourcePackReleation releation = rels.get(j);
+	// if (resource.getId().equals(releation.getResourceId())) {
+	// int B_INDEX = j == 0 ? rels.size() : j;// 开始索引 如果当前索引为0
+	// // B_INDEX重置为最后一个
+	// int E_INDEX = j == rels.size() - 1 ? 0 : j;// 结束索引
+	//
+	// for (int b = before_count; b > 0; b--) {
+	// if (j - b < 0) {
+	// if (j != 0)
+	// result.add(rels.get(rels.size() - (b - j)));
+	// else
+	// // 说明是第一个
+	// result.add(rels.get(B_INDEX - b));
+	// } else {
+	// result.add(rels.get(j - b));
+	// }
+	// }
+	// for (int e = 1; e <= end_count; e++) {
+	// if (j + e > rels.size() - 1) {
+	// if (j != rels.size() - 1) {
+	// result.add(rels.get((e - 1)
+	// - ((rels.size() - 1) - E_INDEX)));
+	// } else
+	// // 说明是最后一个
+	// result.add(rels.get(E_INDEX + (e - 1)));
+	// } else {
+	// result.add(rels.get(j + e));
+	// }
+	// }
+	// break;
+	// }
+	// }
+	//
+	// // System.out.println("结果====================");
+	// // for(Iterator it=result.iterator();it.hasNext();){
+	// // ResourceAll
+	// //
+	// r=this.getResource(((ResourcePackReleation)it.next()).getResourceId());
+	// // System.out.println(r.getId()+"."+r.getName());
+	// // }
+	// return result;
+	// }
 
-	
-	private List<ResourcePackReleation> getDivisionsBesidesMagazine(int listCount,List<ResourcePackReleation> rels,ResourceAll resource){
-		if(listCount>=rels.size()){
-			for (Iterator it = rels.iterator();it.hasNext();){    
-				ResourcePackReleation rpr = (ResourcePackReleation)it.next();   
-		        	if (rpr.getResourceId().equals(resource.getId())){ 
-		        	 	it.remove();
-		        	 	rels.remove(rpr); 
-		         	}   
-		     	}   
+	private List<ResourcePackReleation> getDivisionsBesidesMagazine(
+			int listCount, List<ResourcePackReleation> rels,
+			ResourceAll resource) {
+		if (listCount >= rels.size()) {
+			for (Iterator it = rels.iterator(); it.hasNext();) {
+				ResourcePackReleation rpr = (ResourcePackReleation) it.next();
+				if (rpr.getResourceId().equals(resource.getId())) {
+					it.remove();
+					rels.remove(rpr);
+				}
+			}
 			return rels;
 		}
-		/**向前取的个数*/
-		int before_count=0;
-		/**向后取的个数*/
-		int end_count=0;
-		if(listCount%2==0){//偶数
-			before_count=end_count=listCount/2;
-		}else{
-			before_count=(listCount+1)/2-1;
-			end_count=(listCount+1)/2;
+		/** 向前取的个数 */
+		int before_count = 0;
+		/** 向后取的个数 */
+		int end_count = 0;
+		if (listCount % 2 == 0) {// 偶数
+			before_count = end_count = listCount / 2;
+		} else {
+			before_count = (listCount + 1) / 2 - 1;
+			end_count = (listCount + 1) / 2;
 		}
-		System.out.println("前取"+before_count+"个 : 后取"+end_count+"个");
-		List<ResourcePackReleation> result=new ArrayList<ResourcePackReleation>();
-		/**升序*/
-		for(int j=0;j<rels.size();j++){
-			ResourcePackReleation releation=rels.get(j);
-			if(resource.getId().equals(releation.getResourceId())){
-				int B_INDEX=j==0?rels.size():j;//开始索引    如果当前索引为0  B_INDEX重置为最后一个
-				int E_INDEX=j==rels.size()-1?0:j;//结束索引
-			
-				for(int b=before_count;b>0;b--){
-					if(j-b<0){
-						if(j!=0)
-							result.add(rels.get(rels.size()-(b-j)));
-						else//说明是第一个
-							result.add(rels.get(B_INDEX-b));
-					}else{
-						result.add(rels.get(j-b));
+		System.out.println("前取" + before_count + "个 : 后取" + end_count + "个");
+		List<ResourcePackReleation> result = new ArrayList<ResourcePackReleation>();
+		/** 升序 */
+		for (int j = 0; j < rels.size(); j++) {
+			ResourcePackReleation releation = rels.get(j);
+			if (resource.getId().equals(releation.getResourceId())) {
+				int B_INDEX = j == 0 ? rels.size() : j;// 开始索引 如果当前索引为0
+														// B_INDEX重置为最后一个
+				int E_INDEX = j == rels.size() - 1 ? 0 : j;// 结束索引
+
+				for (int b = before_count; b > 0; b--) {
+					if (j - b < 0) {
+						if (j != 0)
+							result.add(rels.get(rels.size() - (b - j)));
+						else
+							// 说明是第一个
+							result.add(rels.get(B_INDEX - b));
+					} else {
+						result.add(rels.get(j - b));
 					}
 				}
-				for(int e=1;e<=end_count;e++){
-					if(j+e>rels.size()-1){
-						if(j!=rels.size()-1){
-							result.add(rels.get((e-1)-((rels.size()-1)-E_INDEX)));
-						}else//说明是最后一个
-							result.add(rels.get(E_INDEX+(e-1)));
-					}else{
-						result.add(rels.get(j+e));
+				for (int e = 1; e <= end_count; e++) {
+					if (j + e > rels.size() - 1) {
+						if (j != rels.size() - 1) {
+							result.add(rels.get((e - 1)
+									- ((rels.size() - 1) - E_INDEX)));
+						} else
+							// 说明是最后一个
+							result.add(rels.get(E_INDEX + (e - 1)));
+					} else {
+						result.add(rels.get(j + e));
 					}
 				}
 				break;
 			}
 		}
-		
-//		System.out.println("结果====================");
-//		for(Iterator it=result.iterator();it.hasNext();){
-//			ResourceAll r=this.getResource(((ResourcePackReleation)it.next()).getResourceId());
-//			System.out.println(r.getId()+"."+r.getName());
-//		}
+
+		// System.out.println("结果====================");
+		// for(Iterator it=result.iterator();it.hasNext();){
+		// ResourceAll
+		// r=this.getResource(((ResourcePackReleation)it.next()).getResourceId());
+		// System.out.println(r.getId()+"."+r.getName());
+		// }
 		return result;
 	}
-	
+
 	public String browseResourceTome(String tomeId, boolean isNotNext) {
 		String resourceId = getResourceIdfromTomeId(tomeId);
 		List<EbookTome> tomes = getEbookTomeByResourceId(resourceId, 1,
@@ -2671,20 +2695,19 @@ public class ResourceServiceImpl implements ResourceService {
 	}
 
 	public List<VideoSuite> getVideoSuiteList(String resourceId) {
-		String key = Utility
-				.getMemcachedKey(ResourceAll.class, resourceId, "chapters");
+		String key = Utility.getMemcachedKey(ResourceAll.class, resourceId,
+				"chapters");
 		List<VideoSuite> chapters = null;
 		try {
-			chapters = (List<VideoSuite>) memcached
-					.getAndSaveLocalLong(key);
+			chapters = (List<VideoSuite>) memcached.getAndSaveLocalLong(key);
 			if (chapters != null) {
 				return chapters;
 			}
 		} catch (Exception e) {
 			logger.error("从Memcached中获取资源章节信息出错!", e);
 		}
-		chapters = controller.findBy(VideoSuite.class, "resourceId", resourceId,
-				"chapterIndex", true);
+		chapters = controller.findBy(VideoSuite.class, "resourceId",
+				resourceId, "chapterIndex", true);
 		memcached.setAndSaveLong(key, chapters,
 				72 * MemCachedClientWrapper.HOUR);
 		return chapters;
