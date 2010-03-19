@@ -43,12 +43,19 @@ public class PpsUtil {
 		}
 		return list;
 	}
-	
+	public static int getRandom(int start, int end) {
+		Double l = Math.random();
+		Integer lv = end - start;
+		Double k = l * lv;
+		return start + k.intValue();
+	}
 	public static void main(String[] args){
-		String s = "<%asdas%><%1234%>";
-		List<String> list = getParameters(s);
-		for(String str : list){
-			System.out.println(str);
-		}
+//		String s = "<%asdas%><%1234%>";
+//		List<String> list = getParameters(s);
+//		for(String str : list){
+//			System.out.println(str);
+//		}
+		
+		System.out.println(getRandom(60,100));
 	}
 }
