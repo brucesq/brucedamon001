@@ -101,7 +101,7 @@ public class ViewFavoriteTag extends BaseTag {
 			flag=0;
 			error_info=e.getMessage();
 		}
-		String addsuccess_msg = getParameter("addsuccess", "已经将本书添加到您的收藏夹");
+		String addsuccess_msg = getParameter("addsuccess", "您已经收藏过该视频");
 		if (ERROR_FLAG) {
 			addsuccess_msg = error_info;
 		}
@@ -177,7 +177,7 @@ public class ViewFavoriteTag extends BaseTag {
 			TagLogger.debug(tagName, "删除收藏失败", request.getQueryString(), e);
 			// e.printStackTrace();
 		}
-		String delsuccess_msg = getParameter("delsuccess", "已经成功将本书从您的收藏夹中删除");
+		String delsuccess_msg = getParameter("delsuccess", "已经成功将本视频从您的收藏夹中删除");
 		if (ERROR_FLAG) {
 			delsuccess_msg = "收藏删除操作失败";
 		}

@@ -46,6 +46,7 @@ public class VoteResultTag extends BaseTag {
 				"投票成功,系统在3秒后将自动返回...");// 提示文字
 		String strVoteType = request
 				.getParameter(ParameterConstants.VOTE_VOTE_TYPE);
+		Integer timer = getIntParameter("timer",1);
 		String itemId = request.getParameter(ParameterConstants.VOTE_ITEM_ID);
 		String cid = request.getParameter(ParameterConstants.VOTE_CONTENT_ID);
 		if (strVoteType == null || StringUtils.isEmpty(strVoteType)) {
@@ -112,7 +113,7 @@ public class VoteResultTag extends BaseTag {
 				ParameterConstants.VOTE_ITEM_ID,
 				ParameterConstants.VOTE_CONTENT_ID));
 		Map velocityMap = new HashMap();
-		com.hunthawk.tag.process.Refresh.pageRefresh(3, backUrl.toString());// 3秒钟
+		com.hunthawk.tag.process.Refresh.pageRefresh(timer, backUrl.toString());// 3秒钟
 		// 后返回
 		velocityMap.put("successTitle", successTitle);
 		/**

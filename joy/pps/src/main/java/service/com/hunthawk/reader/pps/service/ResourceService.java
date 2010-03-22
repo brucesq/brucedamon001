@@ -614,7 +614,7 @@ public interface ResourceService {
  * 2009-11-09
  */
 	public List<ResourcePackReleation> findDivisions(String columnID,
-			ResourceAll resource) throws Exception;
+			ResourceAll resource,boolean isNeed) throws Exception;
 	/**
 	 * 
 	 * @param columnID
@@ -623,7 +623,7 @@ public interface ResourceService {
 	 * @throws Exception
 	 * @author liuxh 09-11-11
 	 */
-	public int getDivisionsCount(String columnID,ResourceAll resource) throws Exception;
+	public int getDivisionsCount(String columnID,ResourceAll resource,boolean isNeed) throws Exception;
 	/**
 	 * 根据资源ID得到相关的书部信息或期刊信息 带分页
 	 * @param columnID
@@ -639,6 +639,8 @@ public interface ResourceService {
 	public List<ResourcePackReleation> findDivisions(String columnID,
 			ResourceAll resource,int pageNo,int pageSize,int listCount,int order) throws Exception;
 
+	
+	
 	/**
 	 * 获取上一卷下一卷的卷 .isNotNext如果为false则是下一卷，如果为true是上一卷
 	 * @param tomeId

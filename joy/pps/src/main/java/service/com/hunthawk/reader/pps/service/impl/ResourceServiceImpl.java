@@ -100,8 +100,6 @@ public class ResourceServiceImpl implements ResourceService {
 		this.memcached = memcached;
 	}
 
-	
-
 	public ResourceAll getResource(String resourceId) {
 		// 资源更新时需要，清空缓存
 		String key = Utility.getMemcachedKey(ResourceAll.class, resourceId);
@@ -1751,7 +1749,7 @@ public class ResourceServiceImpl implements ResourceService {
 	public long getResourceVisits(String resourceId) {
 		ResourceAll resource = getResource(resourceId);
 
-		return resource.getDownnum() ;
+		return resource.getDownnum();
 	}
 
 	/**
@@ -1762,8 +1760,8 @@ public class ResourceServiceImpl implements ResourceService {
 	 */
 	public long incrResourceVisits(String resourceId) {
 		return getResourceVisits(resourceId);// resource.getDownnum() == null
-												// ? 1 :
-												// resource.getDownnum()+1;
+		// ? 1 :
+		// resource.getDownnum()+1;
 		// StatisticsLog.logStat(1, resourceId);
 		// ResourceAll resource = getResource(resourceId);
 		// return (resource.getDownnum() == null ? 1 : resource.getDownnum()) +
@@ -2324,7 +2322,7 @@ public class ResourceServiceImpl implements ResourceService {
 	 * @author yuzs 2009-11-09
 	 */
 	public List<ResourcePackReleation> findDivisions(String columnID,
-			ResourceAll resource) throws Exception {
+			ResourceAll resource, boolean isNeed) throws Exception {
 
 		String key = Utility.getMemcachedKey(ResourcePackReleation.class,
 				columnID, resource.getId(), String.valueOf(resource
@@ -2360,9 +2358,10 @@ public class ResourceServiceImpl implements ResourceService {
 			list.add(resource.getDivisionContent());
 		}
 		// 排除当前资源对象
-		hql += "and ra.id not like ?";
-		list.add(resource.getId());
-
+		if (isNeed) {
+			hql += "and ra.id not like ?";
+			list.add(resource.getId());
+		}
 		if (getNotBussinessPartnerIds().length() > 0) {
 			hql += " and ra.cpId not in " + getNotBussinessPartnerIds() + " ";
 		}
@@ -2380,8 +2379,8 @@ public class ResourceServiceImpl implements ResourceService {
 
 	}
 
-	public int getDivisionsCount(String columnID, ResourceAll resource)
-			throws Exception {
+	public int getDivisionsCount(String columnID, ResourceAll resource,
+			boolean isNeed) throws Exception {
 
 		if (resource.getDivision() == null
 				|| resource.getDivisionContent() == null
@@ -2423,7 +2422,9 @@ public class ResourceServiceImpl implements ResourceService {
 		list.add(resource.getDivisionContent());
 		// }
 		// 排除当前资源对象
-		hql += "and ra.id not in ('" + resource.getId() + "')";
+		if (isNeed) {
+			hql += "and ra.id not in ('" + resource.getId() + "')";
+		}
 		// list.add(resource.getId());
 
 		if (getNotBussinessPartnerIds().length() > 0) {
@@ -2603,7 +2604,6 @@ public class ResourceServiceImpl implements ResourceService {
 	// // }
 	// return result;
 	// }
-
 	private List<ResourcePackReleation> getDivisionsBesidesMagazine(
 			int listCount, List<ResourcePackReleation> rels,
 			ResourceAll resource) {
@@ -2634,7 +2634,7 @@ public class ResourceServiceImpl implements ResourceService {
 			ResourcePackReleation releation = rels.get(j);
 			if (resource.getId().equals(releation.getResourceId())) {
 				int B_INDEX = j == 0 ? rels.size() : j;// 开始索引 如果当前索引为0
-														// B_INDEX重置为最后一个
+				// B_INDEX重置为最后一个
 				int E_INDEX = j == rels.size() - 1 ? 0 : j;// 结束索引
 
 				for (int b = before_count; b > 0; b--) {
