@@ -163,7 +163,7 @@ public class CommentListTag extends BaseTag {
 			StringBuilder sb = new StringBuilder();
 			sb.append(startCount-loop);
 			sb.append(".");
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm");
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
 			String time = sdf.format(msg.getCreateTime() == null ? new Date()
 					: msg.getCreateTime());
 			sb.append(time);// 留言时间
@@ -173,10 +173,10 @@ public class CommentListTag extends BaseTag {
 			// @TODO
 			String user = "";
 			if (mobile.startsWith("1")) {
-				user = "【网友" + mobile.substring(mobile.length() - 4) + "】";
+				user = "网友" + mobile.substring(mobile.length() - 4) + "";
 				sb.append(user);// 用户所属地区
 			}else{
-				user = "【游客" + mobile.substring(mobile.length() - 4) + "】";
+				user = "游客" + mobile.substring(mobile.length() - 4) + "";
 				sb.append(user);// 用户所属地区
 			}
 			sb.append("<br/>");

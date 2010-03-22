@@ -90,6 +90,11 @@ public class TitleTag extends BaseTag {
 						if(nChapter!=null)
 							title=nChapter.getName();
 					}
+				}else{
+					ResourceAll res=getResourceService(request).getResource(URLUtil.getResourceId(request));
+					if(res!=null ){
+						title=res.getName();
+					}
 				}
 			}else if(flag.equals(ParameterConstants.PAGE_RESOURCE)){//ืสิดาณ
 				ResourceAll res=getResourceService(request).getResource(URLUtil.getResourceId(request));

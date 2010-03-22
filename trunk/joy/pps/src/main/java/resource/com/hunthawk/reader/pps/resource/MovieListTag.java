@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.hunthawk.reader.pps.resource;
 
 import java.util.ArrayList;
@@ -6,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,9 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.hunthawk.reader.domain.bussiness.Columns;
 import com.hunthawk.reader.domain.bussiness.TagTemplate;
-import com.hunthawk.reader.domain.resource.EbookChapterDesc;
 import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.domain.resource.ResourceAuthor;
 import com.hunthawk.reader.domain.resource.ResourcePackReleation;
@@ -35,18 +35,12 @@ import com.hunthawk.reader.tag.util.Navigator;
 import com.hunthawk.tag.BaseTag;
 import com.hunthawk.tag.TagUtil;
 import com.hunthawk.tag.util.ParamUtil;
+
 /**
- * 往期回顾标签
- * @author liuxh 09-11-11
- * 标签名称：lookback_list
- * 参数说明：
- * 		order: 0.倒序  1.正序 (书部或者期刊号)
- * 		columnId:栏目ID 用于获取批价包
- * 		listCount:列表总数量
- *  	pageSize:每页显示的资源数
- *  	noPageLink:不显示翻页相关的链接
+ * @author sunquanzhi
+ *
  */
-public class LookbackEverTag extends BaseTag {
+public class MovieListTag extends BaseTag {
 
 	private BussinessService bussinessService;
 	private FeeLogicService feeLogicService;
@@ -85,32 +79,13 @@ public class LookbackEverTag extends BaseTag {
 		}
 		
 		ResourceAll res=getResourceService(request).getResource(resourceId);
-		int listCount=getIntParameter("listCount",-1)<0?DEFAULT_MAX_COUNT:getIntParameter("listCount",-1);
-		int order=getIntParameter("order",0);//排序方式  默认按书部/期刊数降序
-		this.noPageLink = getIntParameter("noPageLink", -1) < 0;
-		int pageSize = getIntParameter("pageSize", -1) < 0 ? DEFAULT_PAGE_SIZE: getIntParameter("pageSize", -1);
-		int currentPage =request.getParameter(ParameterConstants.PAGE_NUMBER)==null?1:Integer.parseInt(request.getParameter(ParameterConstants.PAGE_NUMBER));
 	
-		int totalCount=0;
-		try{
-			totalCount=getResourceService(request).getDivisionsCount(String.valueOf(columnId), res,true);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			TagLogger.error(tagName, "获取往期资源列表失败", request.getQueryString(), ex);
-			return new HashMap();
-		}
 		
-		if(listCount>totalCount)
-			listCount=totalCount;
-		if (!isNoPageLink()) {
-			Navigator navi = new Navigator(listCount, currentPage,
-					pageSize, 5);
-			request.setAttribute(ParameterConstants.PAMS_NAVIGATOR, navi);
-		}
+		
 		
 		List<ResourcePackReleation> rprs=null;
 		try {
-			 rprs=getResourceService(request).findDivisions(String.valueOf(columnId), res,currentPage,pageSize,listCount,order);
+			 rprs=getResourceService(request).findDivisions(String.valueOf(columnId), res,false);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -185,7 +160,7 @@ public class LookbackEverTag extends BaseTag {
 			}
 			Map<String, Object> obj = new HashMap<String, Object>();
 			obj.put("url", sb.toString());
-			obj.put("title", resourceAll.getName());
+			obj.put("title", resourceAll.getBComment());
 //			System.out.println(resourceAll.getDivision()+" : "+resourceAll.getDivisionContent());
 			obj.put("resource", resourceAll); // 新添加上了 资源对象
 			String imgUrl = CoverPreview.getPreview(getResourceService(request), resourceAll, 51);// 把预览图放进去

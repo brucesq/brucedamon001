@@ -491,4 +491,15 @@
 		<classname>com.hunthawk.reader.pps.basic.RedirectTag</classname>
 		<desc>友链</desc>
 	</tag>
+	
+	<tag>
+		<name>movie_list</name>
+		<classname>com.hunthawk.reader.pps.resource.MovieListTag</classname>
+		<desc>电影列表</desc>
+	</tag>
+	<tag>
+		<name>movie_prop</name>
+		<classname>com.hunthawk.reader.pps.resource.MoviePlayTimeTag</classname>
+		<desc>电影属性</desc>
+	</tag>
 </configs>

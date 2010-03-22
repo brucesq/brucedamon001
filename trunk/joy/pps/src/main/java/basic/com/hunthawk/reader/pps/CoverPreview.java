@@ -1,12 +1,12 @@
 package com.hunthawk.reader.pps;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.Ebook;
+import com.hunthawk.reader.domain.resource.Infomation;
 import com.hunthawk.reader.domain.resource.Magazine;
 import com.hunthawk.reader.domain.resource.NewsPapers;
 import com.hunthawk.reader.domain.resource.ResourceAll;
+import com.hunthawk.reader.domain.resource.Video;
 import com.hunthawk.reader.pps.service.ResourceService;
 
 public class CoverPreview {
@@ -46,6 +46,20 @@ public class CoverPreview {
 			}
 		} else if (resource.getId().startsWith("4")) {// Âþ»­
 			Comics comics = (Comics) resource;
+			if (comics.getImage().toLowerCase().matches(
+					"[^.]+\\.(png|jpg|gif|jpeg)")) {
+				imgUrl = service.getPreviewCoverImg(
+						comics.getId(), comics.getImage(), size);
+			}
+		}else if (resource.getId().startsWith("6")) {// Âþ»­
+			Video video = (Video) resource;
+			if (video.getImage().toLowerCase().matches(
+					"[^.]+\\.(png|jpg|gif|jpeg)")) {
+				imgUrl = service.getPreviewCoverImg(
+						video.getId(), video.getImage(), size);
+			}
+		}else if (resource.getId().startsWith("7")) {// Âþ»­
+			Infomation comics = (Infomation) resource;
 			if (comics.getImage().toLowerCase().matches(
 					"[^.]+\\.(png|jpg|gif|jpeg)")) {
 				imgUrl = service.getPreviewCoverImg(

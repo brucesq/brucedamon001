@@ -299,7 +299,7 @@ public class CustomServiceImpl implements CustomService {
 			try{
 				controller.save(fav);
 			}catch(Exception ex){
-				throw new Exception("您已经收藏过这本书");
+				throw new Exception("您已经收藏过该视频");
 			}
 			// 清空收藏缓存
 			String key = Utility.getMemcachedKey(Favorites.class, fav

@@ -92,7 +92,7 @@ public class PertinenceTag extends BaseTag {
 			try {
 			/*	rprList = getResourceService(request).findPertinence(columnID,
 						resource, count);*/
-				rprList = getResourceService(request).findDivisions(columnID, resource);
+				rprList = getResourceService(request).findDivisions(columnID, resource,true);
 				if(rprList == null ||  rprList.size() <= 0)
 					return new HashMap();
 			} catch (Exception e) {

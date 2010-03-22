@@ -18,7 +18,6 @@ import com.hunthawk.reader.domain.resource.ResourceType;
  * 
  */
 public class StrUtil {
-	
 	/**
 	 * 大于1M转成MB，小于转成KB
 	 * @param size

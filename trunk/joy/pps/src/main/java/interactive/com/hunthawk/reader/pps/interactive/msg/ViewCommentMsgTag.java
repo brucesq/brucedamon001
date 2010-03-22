@@ -36,6 +36,7 @@ public class ViewCommentMsgTag extends BaseTag {
 	public Map parseTag(HttpServletRequest request, String tagName) {
 		// TODO Auto-generated method stub
 		String title=getParameter("title","");
+		Integer timer = getIntParameter("timer",1);
 		String successTitle=getParameter("successTitle","发表留言成功！系统将稍后显示，页面正在返回...");
 		int status=-1;//留言状态
 		//得到参数
@@ -76,7 +77,7 @@ public class ViewCommentMsgTag extends BaseTag {
 			velocityMap.put("url", backUrl);
 		}
 //		
-		com.hunthawk.tag.process.Refresh.pageRefresh(3,backUrl.toString()) ;//3秒钟 后返回
+		com.hunthawk.tag.process.Refresh.pageRefresh(timer,backUrl.toString()) ;//3秒钟 后返回
 		//1成功。2等待审核。3含有敏感字。4留言板快不存在或者已下线。5留言内容为空
 		if(status==2){
 			successTitle="发表留言成功！我们会尽快对您的留言进行审核.";
