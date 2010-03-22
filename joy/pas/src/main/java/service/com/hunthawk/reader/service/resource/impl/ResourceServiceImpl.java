@@ -502,8 +502,8 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 
 		if (name != null) {
-			hql += " and resource.name like ?";
-			param.add(name);
+			hql += " and resource.name like '%"+name+"%' ";
+//			param.add(name);
 		}
 		if (authorId != null && !authorId.equals("0")) {
 			hql += " and resource.authorId like ? ";
@@ -586,6 +586,12 @@ public class ResourceServiceImpl implements ResourceService {
 				hql += " and  resource.id = restype.rid";
 			}
 		}
+		
+		if (name != null) {
+			hql += " and resource.name like '%"+name+"%' ";
+//			param.add(name);
+		}
+		
 		// -----½áÊø------
 		if (authorId != null && !authorId.equals("0")) {
 			hql += " and resource.authorId like ? ";
@@ -595,6 +601,8 @@ public class ResourceServiceImpl implements ResourceService {
 			hql += " and  resource.cpId =? ";
 			param.add(cpid);
 		}
+		
+		
 		if (creatorId != null) {
 			hql += " and resource.creatorId=? ";
 			param.add(creatorId);
