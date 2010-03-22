@@ -607,11 +607,13 @@ public abstract class ShowEpackReleationPage extends SearchPage {
 					ResourceResType rrt = (ResourceResType) it.next();
 					ResourceType rt = getResourceService().getResourceType(
 							rrt.getResTypeId());
+					if(rt == null)
+						continue;
 					type.append(rt.getName());
 					type.append(";");
 				}
 				// 去掉最后一个分号
-				if (list.size() > 0) {
+				if (list.size() > 0 && type.length() > 1) {
 					return type.toString().substring(0, (type.length() - 1));
 				} else {
 					return "";
