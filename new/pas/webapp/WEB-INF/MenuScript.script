@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="GBK"?>
+<!-- 
+   Copyright 2005 The Apache Software Foundation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<!DOCTYPE script PUBLIC
+	"-//Apache Software Foundation//Tapestry Script Specification 3.0//EN"
+	"http://jakarta.apache.org/tapestry/dtd/Script_3_0.dtd">
+  
+<script>
+<input-symbol key="menulist" class="java.util.List" required="yes"/>
+			
+ <body>
+                      		         	              
+	var MenuConfig = {
+	addButton : function(id, text, items) {
+		if (!this[id]) {
+			this[id] = {
+				text : text,
+				items : items
+			}
+		}
+	},
+	getItems : function() {
+		var items = [];
+		for (var i = 0; i &lt; arguments.length; i++) {
+			items.push(arguments[i]);
+		}
+		return items;
+	}
+};
+
+function MenuItem(id, text, url) {
+	this.id = id;
+	this.text = text;
+	this.url = url;
+}
+
+<foreach index="menuindex" key="pamsmenu" expression="menulist">
+MenuConfig.addButton(
+	"${pamsmenu.id}", "${pamsmenu.title}",
+	MenuConfig.getItems(
+			<foreach  index="productindex" key="productmenu" expression="pamsmenu.childs">
+			  <if expression="pamsmenu.childs.size()==1">
+		            new MenuItem("${productmenu.id}","${productmenu.title}","${productmenu.url}")
+		          </if>
+			  <if-not expression="pamsmenu.childs.size()==1">
+			     <if expression="productindex&lt;(pamsmenu.childs.size() - 1)">
+			       new MenuItem("${productmenu.id}","${productmenu.title}","${productmenu.url}"),
+			     </if>
+			     <if expression="productindex==(pamsmenu.childs.size() - 1)">
+			        new MenuItem("${productmenu.id}","${productmenu.title}","${productmenu.url}")
+			     </if>
+			   </if-not>
+	                </foreach>
+	)
+);
+</foreach>
+
+/* ---------------------------------------------- */
+
+var Cookie = {
+	read : function(name) {
+		var cookieValue = "";
+		var search = name + "=";
+		if(document.cookie.length > 0)  { 
+			offset = document.cookie.indexOf(search);
+			if (offset != -1) { 
+				offset += search.length;
+				end = document.cookie.indexOf(";", offset);
+				if (end == -1) end = document.cookie.length;
+				cookieValue = unescape(document.cookie.substring(offset, end))
+			}
+		}
+		return cookieValue;
+	},
+	write : function(name, value, hours) {
+		var expire = "";
+		if (hours != null) {
+			expire = new Date((new Date()).getTime() + hours * 3600000);
+			expire = "; expires=" + expire.toGMTString();
+		}
+		document.cookie = name + "=" + escape(value) + expire;
+	}
+};
+
+var Menus = {
+	current : null, //保存当前按钮的id
+	buttonController : function(element, event) {
+		switch (event.type) {
+			case "mouseover" :
+				element.className = "menuItem-hover";
+				break;
+			case "mouseout" :
+				element.className = "menuItem";
+				break;
+			case "mousedown" : break;
+		}
+	},
+	menuController : function(element, event) {
+		var isCurrent = false;
+		if (element.id == this.current) isCurrent = true;
+		switch (event.type) {
+			case "mouseover" :
+				if (!isCurrent) {
+					this.changeStyle(element, "hover");
+				}
+				break;
+			case "mouseout" :
+				if (!isCurrent) {
+					this.changeStyle(element, "normal");
+				}
+				break;
+			case "mousedown" :
+				if (this.current) {
+					this.changeStyle(document.getElementById(this.current), "normal");
+				}
+				this.changeStyle(element, "active");
+				this.open(element.id);
+				this.current = element.id;
+				break;
+			case "click" :
+				event.cancelBubble = true;
+		}
+	},
+	changeStyle : function(element, mode) {
+		var isFirst = false;
+		if (element.cellIndex == 1) isFirst = true;
+		switch (mode) {
+			case "normal" :
+				if (isFirst) {
+					element.style.backgroundImage = "url(img/menu_normal_left.png)";
+				} else {
+					element.style.backgroundImage = "url(img/menu_normal.png)";
+				}
+				break;
+			case "hover" :
+				if (isFirst) {
+					element.style.backgroundImage = "url(img/menu_hover_left.png)";
+				} else {
+					element.style.backgroundImage = "url(img/menu_hover.png)";
+				}
+				break;
+			case "active" :
+				if (isFirst) {
+					element.style.backgroundImage = "url(img/menu_active_left.png)";
+				} else {
+					element.style.backgroundImage = "url(img/menu_active.png)";
+				}
+				break;
+		}
+	},
+	open : function(id) {
+		this.closeCurrent();
+		var menu = document.getElementById("menu_" + id);
+		menu.style.visibility = "visible";
+	},
+	close : function(id) {
+		var menu = document.getElementById("menu_" + id);
+		menu.style.visibility = "hidden";
+	},
+	closeCurrent : function() {
+		if (this.current)
+			this.close(this.current);
+	},
+	openURL : function(url) {
+		var target = "main";
+		
+		frames[target].location.href = url;
+	},
+	initialize : function() {
+		var menu = new Menu();
+		var i = 0;
+		for (var name in MenuConfig) {
+			if (typeof MenuConfig[name] != "function") {
+				var key = name;
+				if (MenuConfig[key]) {
+					var isFirst = false;
+					if (i == 0) isFirst = true;
+					var menuItem = MenuConfig[key];
+					menu.addItem(key, menuItem.text, menuItem.items, isFirst);
+					i++;
+				}
+			}
+		}
+		var container = document.getElementById("menuBox");
+		container.innerHTML = menu;
+	}
+};
+
+function Menu() {
+	this.htmlCode = "";
+}
+
+Menu.prototype.addItem = function(id, text, items, isFirst) {
+	var htmlCode = "		&lt;td class=\"menuContainer\"&gt;\n";
+	htmlCode += "			&lt;div id=\"menu_" + id + "\" style=\"position: absolute; visibility: hidden;\"&gt;\n";
+	htmlCode += "				&lt;div class=\"menuLayer\"&gt;\n";
+	htmlCode += "					&lt;table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"&gt;\n";
+	
+	for (var i = 0; i &lt; items.length; i++) {
+		htmlCode += "						&lt;tr&gt;\n";
+		htmlCode += "							&lt;td id=\"" + items[i].id + "\" class=\"menuItem\" onMouseOver=\"Menus.buttonController(this, event);\" onMouseOut=\"Menus.buttonController(this, event);\" onMouseDown=\"Menus.buttonController(this, event); Menus.openURL('" + items[i].url + "')\"&gt;&lt;div&gt;&lt;span&gt;" + items[i].text + "&lt;/span&gt;&lt;/div&gt;&lt;/td&gt;\n";
+		htmlCode += "						&lt;/tr&gt;\n";
+	}
+	
+	htmlCode += "					&lt;/table&gt;\n";
+	htmlCode += "				&lt;/div&gt;\n";
+	htmlCode += "			&lt;/div&gt;\n";
+	htmlCode += "		&lt;/td&gt;\n";
+	
+	var picSrc = "";
+	if (isFirst)
+		picSrc = "img/menu_normal_left.png";
+	else
+		picSrc = "img/menu_normal.png";
+	htmlCode += "		&lt;td id=\"" + id + "\" class=\"buttonItem\" background=\"img/menu_normal_left.png\" onMouseOver=\"Menus.menuController(this, event);\" onMouseOut=\"Menus.menuController(this, event);\" onMouseDown=\"Menus.menuController(this, event);\" onClick=\"Menus.menuController(this, event);\" style=\"background: url(" + picSrc + ") no-repeat;\"&gt;" + text + "&lt;/td&gt;\n";
+	this.htmlCode += htmlCode;
+}
+
+Menu.prototype.toString = function() {
+	var htmlCode = "&lt;table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"&gt;\n";
+	htmlCode += "	&lt;tr&gt;\n";
+	htmlCode += this.htmlCode;
+	htmlCode += "	&lt;/tr&gt;\n";
+	htmlCode += "&lt;/table&gt;\n";
+	return htmlCode;
+}
+
+document.onclick = function() {
+	Menus.closeCurrent();
+}
+
+window.onload = function() {
+	Menus.initialize();
+	
+}
+
+var logoState = "open";
+function logoControler(element) {
+	if (logoState == "open") {
+		element.className = "arrow-down";
+		document.getElementById("logo").style.display = "none";
+		logoState = "closed";
+	} else if (logoState == "closed") {
+		element.className = "arrow-up";
+		document.getElementById("logo").style.display = "block";
+		logoState = "open";
+	}
+}
+
+
+var searchState = "closed";
+function SearchControler(element) {
+	if (searchState == "open") {
+		if (frames['main'].document.getElementById("Searchbar") != null) {
+			frames['main'].document.getElementById("Searchbar").style.display = "none";
+			element.className = "Search_normal";
+			searchState = "closed";
+			}
+	} else if (searchState == "closed") {
+		if (frames['main'].document.getElementById("Searchbar") != null) {
+			element.className = "Search_nonce";
+			frames['main'].document.getElementById("Searchbar").style.display = "block";
+			searchState = "open";
+		}
+	}
+}
+		
+ </body>
+
+</script>

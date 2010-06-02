@@ -1,0 +1,384 @@
+<html jwcid="@Shell" stylesheet="asset:stylesheet" title="页面组配置"
+	doctype="" browserLogLevel="ERROR" consoleEnabled="true"
+	debugEnabled="false">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<META HTTP-EQUIV="expires" CONTENT="0">
+<title>配置页面组</title>
+</head>
+<script type="text/javascript"><!--
+function templateChoose()
+{
+	 var bType=location.href.substring((location.href.length-1),location.href.length);
+		//alert("bType --->."+bType);
+		//得到当前工程名称
+		var project=location.href.split('/')[3];
+  //init
+ //得到map的值
+  var s=document.getElementById("map").value;
+  //alert("map --->"+s);
+  if(s!=null && s!="" && s.length>1){
+		  var maps=s.substring((s.indexOf("S")+1),s.length);
+		  var maparr=s.split(",");
+		  var str_areaid="";
+		  var str_pgid="";
+		  for(var j=0;j<maparr.length;j++){
+			  var areaid=maparr[j].split("=")[0].substring(j==0?1:0,maparr[j].split("=")[0].length);
+			  var pgid=maparr[j].split("=")[1];
+			// alert(areaid+":"+pgid);
+			 str_areaid+=areaid+(maparr.length==1?"":",");
+			 str_pgid+=pgid+(maparr.length==1?"":",");
+		  }
+	
+		//alert("修改操作");
+		var m=str_areaid.split(",");
+			//得到所有复选框的值
+			var names="";
+			for ( var n=0; n< document.getElementsByTagName("input").length; n++ ) 
+	 		{
+	  			var e = document.getElementsByTagName("input")[n];
+	  			if ( (e.type=='checkbox') &&(!e.disabled) ) 
+	  			{
+	  	  			for(var y=0;y<m.length;y++){
+	   					if ( e.value.split("_")[0] ==m[y])
+		   				{
+	   						//alert(e.value.split("_")[0]);
+	   						names+=e.value.split("_")[1]+(y==0?"":",");
+		   	   				e.checked=true;
+		   				}
+	  	  			}
+	  			}
+	 		}
+	 		//将页面组的值写入input
+		var m2=str_pgid.split(",");	
+		//将第一个文本框赋值  全网页面组
+		//alert(m2);
+		//alert("names -->"+names);
+		document.getElementById("defaultSet").innerHTML="<input type=\"text\" name=\"pid001\" value=\""+m2[0].split(",")[0]+"\" id=\"pid001\" class=\"inputMain\" style=\"height: 20px; width: 50px;\" /> &nbsp;&nbsp;<input onClick=\"cuspopup_window('/"+project+"/bussiness/PackGroupSetPage.external?sp=Spid001&amp;sp=S"+bType+"');\" name=\"Submit\" value=\"配置页面组\" class=\"buttonMain\" type=\"button\" id=\"Any\" />   <br />";
+		//显示div
+		for(var h=1;h<m2.length-1;h++){
+			var temp_pgid=m2[h].split(",")[0];
+			//清空div
+			document.getElementById("protasis1").style.display="";
+			//document.getElementById("protasis2").innerHTML="";
+			var aid=m[h];
+			var area_name=names.split(",")[h-1];
+			//alert(area_name);
+			document.getElementById("protasis2").innerHTML +=area_name+"：<input type=\"text\" name=\"pid"+aid+"\" value=\""+m2[h].split(",")[0]+"\" id=\"pid"+aid+"\" class=\"inputMain\" style=\"height: 20px; width: 50px;\" /> &nbsp;&nbsp;<input onClick=\"cuspopup_window('/"+project+"/bussiness/PackGroupSetPage.external?sp=Spid"+aid+"&amp;sp=S"+bType+"');\" name=\"Submit\" value=\"配置页面组\" class=\"buttonMain\" type=\"button\" id=\"Any\" />   <br />";
+
+		}
+ }else{
+	//alert("添加 操作");
+	document.getElementById("defaultSet").innerHTML="<input type=\"text\" name=\"pid001\" value=\"\" id=\"pid001\" class=\"inputMain\" style=\"height: 20px; width: 50px;\" /> &nbsp;&nbsp;<input onClick=\"cuspopup_window('/"+project+"/bussiness/PackGroupSetPage.external?sp=Spid001&amp;sp=S"+bType+"');\" name=\"Submit\" value=\"配置页面组\" class=\"buttonMain\" type=\"button\" id=\"Any\" />   <br />";
+	
+ }
+  if (document.all.chooseFlag.value == "Strue" && document.all.chooseValue.value != "X" )
+  {
+	 	//点击提交按钮将input框的值写入隐藏域map 
+	 	
+   		window.opener.document.getElementById(document.all.returnElement.value.substr(1)).value = document.all.chooseValue.value.substr(1);
+   		window.close();
+  }
+	
+  
+}
+function getInputValue(){
+	//先检验所有Input是否有值 无值提示必须选择值
+	//先得到所有input
+	var temp="";
+	var inputs=document.getElementsByTagName("input");
+	for(var i=0;i<inputs.length;i++){
+		var e = document.getElementsByTagName("input")[i];
+		if((e.type=='text') &&(e.value=='')){
+			//alert('第二步操作失败：您还没有配置省份对应的页面组!');
+			return temp;
+		}else{
+			if(e.type=='text'){
+				var str=e.name;
+				var areaid=str.substring(3,e.name.length);
+				var pid=e.value;
+				temp+=temp==""?areaid+"="+pid:","+areaid+"="+pid;
+			}
+		}
+	}
+	return temp;
+}
+function doSubmit(){
+	if(getInputValue()==""){
+		alert('第二步操作失败：您还没有配置省份对应的页面组!');
+	}else{
+		window.opener.document.getElementById(document.all.returnElement.value.substr(1)).value =  getInputValue();
+		window.close();
+	}
+	
+}
+// --></script>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+// 得到所有的checkbox的选中值
+function getSelectedInfoRows()
+{
+ var temp = "";
+ for ( var i=0; i< document.getElementsByTagName("input").length; i++ ) 
+ {
+  var e = document.getElementsByTagName("input")[i];
+  if ( (e.type=='checkbox')&&(!e.disabled) ) 
+  {
+   if ( e.checked )
+   {
+    temp += temp==""? e.value: "," + e.value ;
+   }
+  }
+ }
+ return temp;
+}
+function showDiv(){
+	//得到当前URL 截取最后一个参数的值
+	var bType=location.href.substring((location.href.length-1),location.href.length);
+	//alert("bType --->."+bType);
+	var strs=getSelectedInfoRows();
+	var arr=strs.split(",");
+	if(getSelectedInfoRows().length>0){
+		document.getElementById("protasis1").style.display="";
+		//添加之前先清空 如果有就不清空
+		document.getElementById("protasis2").innerHTML="";
+		for(var i=0;i<arr.length;i++){
+			var names=arr[i].split("_")[1];
+			var aid=arr[i].split("_")[0];
+			//得到当前工程名称
+			var project=location.href.split('/')[3];
+			document.getElementById("protasis2").innerHTML +=names+"：<input type=\"text\" name=\"pid"+aid+"\" value=\"\" id=\"pid"+aid+"\" class=\"inputMain\" style=\"height: 20px; width: 50px;\" /> &nbsp;&nbsp;<input onClick=\"cuspopup_window('/"+project+"/bussiness/PackGroupSetPage.external?sp=Spid"+aid+"&amp;sp=S"+bType+"');\" name=\"Submit\" value=\"配置页面组\" class=\"buttonMain\" type=\"button\" id=\"Any\" />   <br />";
+		}
+	}else{
+		//清空span
+		document.getElementById("protasis2").innerHTML ="";
+	}
+	//隐藏上部按钮 并显示底部提交按钮
+	document.getElementById("showButton").style.display="none";
+	document.getElementById("bottomButton").style.display="";
+}
+function showButton(){
+	//显示保存省份按钮
+	document.getElementById("showButton").style.display="";
+	//隐藏最底部提交按钮
+	document.getElementById("bottomButton").style.display="none";
+}
+//-->
+</SCRIPT>
+<base target="_self">
+<body jwcid="@Body" class="customBg" onload="templateChoose()">
+<form jwcid="areaForm"><span jwcid="chooseFlag" /> <span
+	jwcid="chooseValue" />  <span
+	jwcid="returnElement" /> 
+	<span
+	jwcid="map" /> 
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0">
+	<!--  <input type="hidden" name="map" id="map"/>-->
+	<tr>
+		<td width="7" valign="top">
+		<table width="100%" height="100%" border="0" cellpadding="0"
+			cellspacing="0">
+			<tr>
+				<td height="100">&nbsp;</td>
+			</tr>
+			<tr>
+				<td valign="bottom" background="../img/custom_Leftbg.png">&nbsp;</td>
+			</tr>
+
+		</table>
+		</td>
+		<td valign="top" style="padding: 0px 12px;">
+		<table width="100%" height="100%" border="0" cellpadding="0"
+			cellspacing="0">
+			<tr>
+				<td height="40" style="padding-top: 12px;"><strong>配置页面组</strong></td>
+			</tr>
+			<tr>
+				<td><font color="red"><span jwcid="error">错误信息</span></font></td>
+			</tr>
+			<tr>
+				<!-- 选择省份 -->
+				<td valign="top">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td valign="top" colspan="4"><strong>1.选择省份：</strong></td>
+					</tr>
+					<tr>
+						<td width="10%" align="right">&nbsp;</td>
+						<td colspan="3" width="90%">
+						<fieldset style="width: 600" align="left"><legend>省份</legend>
+						<input type="checkbox" name="areaid" value="001" checked="checked"
+							disabled="true">全网&nbsp;(*)<br />
+						<input type="checkbox" name="areaid" value="010_内蒙"
+							onClick="javascript:showButton();">内蒙 <input
+							type="checkbox" name="areaid" value="011_北京"
+							onClick="javascript:showButton();">北京 <input
+							type="checkbox" name="areaid" value="013_天津"
+							onClick="javascript:showButton();">天津 <input
+							type="checkbox" name="areaid" value="017_山东"
+							onClick="javascript:showButton();">山东 <input
+							type="checkbox" name="areaid" value="018_河北"
+							onClick="javascript:showButton();">河北 <input
+							type="checkbox" name="areaid" value="019_山西"
+							onClick="javascript:showButton();">山西 <input
+							type="checkbox" name="areaid" value="022_澳门"
+							onClick="javascript:showButton();">澳门 <input
+							type="checkbox" name="areaid" value="030_安徽"
+							onClick="javascript:showButton();">安徽<br />
+						<input type="checkbox" name="areaid" value="031_上海"
+							onClick="javascript:showButton();">上海 <input
+							type="checkbox" name="areaid" value="034_江苏"
+							onClick="javascript:showButton();">江苏 <input
+							type="checkbox" name="areaid" value="036_浙江"
+							onClick="javascript:showButton();">浙江 <input
+							type="checkbox" name="areaid" value="038_福建"
+							onClick="javascript:showButton();">福建 <input
+							type="checkbox" name="areaid" value="050_海南"
+							onClick="javascript:showButton();">海南 <input
+							type="checkbox" name="areaid" value="051_广东"
+							onClick="javascript:showButton();">广东 <input
+							type="checkbox" name="areaid" value="059_广西"
+							onClick="javascript:showButton();">广西 <input
+							type="checkbox" name="areaid" value="070_青海"
+							onClick="javascript:showButton();">青海<br />
+						<input type="checkbox" name="areaid" value="071_湖北"
+							onClick="javascript:showButton();">湖北 <input
+							type="checkbox" name="areaid" value="074_湖南"
+							onClick="javascript:showButton();">湖南 <input
+							type="checkbox" name="areaid" value="075_江西"
+							onClick="javascript:showButton();">江西 <input
+							type="checkbox" name="areaid" value="076_河南"
+							onClick="javascript:showButton();">河南 <input
+							type="checkbox" name="areaid" value="079_西藏"
+							onClick="javascript:showButton();">西藏 <input
+							type="checkbox" name="areaid" value="081_四川"
+							onClick="javascript:showButton();">四川 <input
+							type="checkbox" name="areaid" value="083_重庆"
+							onClick="javascript:showButton();">重庆 <input
+							type="checkbox" name="areaid" value="084_陕西"
+							onClick="javascript:showButton();">陕西<br />
+						<input type="checkbox" name="areaid" value="085_贵州"
+							onClick="javascript:showButton();">贵州 <input
+							type="checkbox" name="areaid" value="086_云南"
+							onClick="javascript:showButton();">云南 <input
+							type="checkbox" name="areaid" value="087_甘肃"
+							onClick="javascript:showButton();">甘肃 <input
+							type="checkbox" name="areaid" value="088_宁夏"
+							onClick="javascript:showButton();">宁夏 <input
+							type="checkbox" name="areaid" value="089_新疆"
+							onClick="javascript:showButton();">新疆 <input
+							type="checkbox" name="areaid" value="090_吉林"
+							onClick="javascript:showButton();">吉林 <input
+							type="checkbox" name="areaid" value="091_辽宁"
+							onClick="javascript:showButton();">辽宁 <input
+							type="checkbox" name="areaid" value="097_黑龙江"
+							onClick="javascript:showButton();">黑龙江</fieldset>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="4" style="text-align: right;">
+						<div id="showButton" style="display: none;"><input
+							type="button" name="button" id="showdiv" value="&gt;&gt;保存省份选择项"
+							onClick="javascript:showDiv();" /></div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<!--  	<div id="setRelation" > -->
+			<tr>
+				<td valign="top">
+				<table width="100%" height="100%" border="0" cellpadding="0"
+					cellspacing="0">
+					<tr>
+						<td valign="top" class="customFrame">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td valign="top" colspan="4"><strong>2.配置省份与页面组对应关系：</strong></td>
+							</tr>
+
+							<tr>
+								<td valign="top">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+									<tr>
+										<td valign="top" style="padding-top: 10px;">
+
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+											<tr>
+												<td> <span><!--  <span jwcid="tamplateRadioGroup">--> <br />
+												全网：<span id="defaultSet"></span>
+											<!-- 	<input name="textfield" type="text"
+													style="height: 20px; width: 50px;" class="inputMain"
+													jwcid="pid001@TextField" value=""
+													displayName="literal:页面组设置" /> 
+													&nbsp;&nbsp;
+													
+													 <input name="Submit" jwcid="@Any" type="button" class="buttonMain"
+													value="配置页面组" onClick="ognl:getPackGroupSetURLPams('001','0')" /><br />-->
+												<div id="protasis1" style="display: none;"><span id="protasis2"></span>
+												</div>
+												</span></td>
+											</tr>
+											<!--  分页 不需要	<tr>
+												<td align="right"><span jwcid="customPages" /></td>
+											</tr>-->
+										</table>
+										</td>
+									</tr>
+								</table>
+								</td>
+							</tr>
+						</table>
+						</td>
+					</tr>
+					<tr>
+						<td height="40" align="center" valign="middle"
+							style="border-top: none 0px;">
+						<div id="bottomButton" style="display: ">
+						<!--  <input
+							name="Submit" type="submit" class="buttonCustom" value="选择此模板"
+							jwcid="chooseSubmit" />-->
+							<input
+							type="button" name="button"  value="选择"
+							onClick="javascript:doSubmit();" />
+						</div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<!--  </div>  -->
+
+		</table>
+		</td>
+		<td width="7" valign="top">
+		<table width="100%" height="100%" border="0" cellpadding="0"
+			cellspacing="0">
+			<tr>
+				<td height="100">&nbsp;</td>
+			</tr>
+			<tr>
+				<td background="../img/custom_Rightbg.png">&nbsp;</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td height="7" valign="top"><img src="../img/custom_Leftbg02.png"
+			width="7" height="7"></td>
+		<td background="../img/custom_Bottombg.png"></td>
+		<td><img src="../img/custom_Rightbg02.png" width="7" height="7"></td>
+	</tr>
+</table></form>
+</body>
+
+</html>

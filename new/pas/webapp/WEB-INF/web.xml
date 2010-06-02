@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+	
+  <display-name>reader</display-name>
+  
+   <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/applicationContext*.xml</param-value>
+	</context-param>
+    
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+	
+	
+	<filter>
+		<filter-name>redirect</filter-name>
+		<filter-class>org.apache.tapestry.RedirectFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>redirect</filter-name>
+		<url-pattern>/</url-pattern>
+	</filter-mapping> 
+	
+	 <filter>
+        <filter-name>securityFilter</filter-name>
+        <filter-class>com.hunthawk.framework.security.simple.SecurityFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>*.page</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>/app</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>*.external</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>*.direct</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>*.sdirect</url-pattern>
+    </filter-mapping> 
+    <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>/remoting/*</url-pattern>
+    </filter-mapping> 
+    
+    <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>*.svc</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping> 
+     <!-- 
+    <filter>
+        <filter-name>hibernateFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    
+     <filter-mapping>
+        <filter-name>hibernateFilter</filter-name>
+        <url-pattern>*.page</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>hibernateFilter</filter-name>
+        <url-pattern>/app</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>hibernateFilter</filter-name>
+        <url-pattern>*.external</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>hibernateFilter</filter-name>
+        <url-pattern>*.direct</url-pattern>
+    </filter-mapping> 
+     <filter-mapping>
+        <filter-name>hibernateFilter</filter-name>
+        <url-pattern>*.sdirect</url-pattern>
+    </filter-mapping> 
+        -->
+    
+    
+  	<servlet>
+	  	<servlet-name>reader</servlet-name>
+	    <servlet-class>org.apache.tapestry.ApplicationServlet</servlet-class>
+	  	<load-on-startup>0</load-on-startup>
+  	</servlet>
+     
+  	<servlet-mapping>
+	  	<servlet-name>reader</servlet-name>
+	  	<url-pattern>/app</url-pattern>
+  	</servlet-mapping> 
+  	<servlet-mapping>
+	    <servlet-name>reader</servlet-name>
+	    <url-pattern>*.page</url-pattern>
+  	</servlet-mapping>
+  
+	  <servlet-mapping>
+	    <servlet-name>reader</servlet-name>
+	    <url-pattern>*.external</url-pattern>
+	  </servlet-mapping>
+	    
+	  <servlet-mapping>
+	    <servlet-name>reader</servlet-name>
+	    <url-pattern>*.direct</url-pattern>
+	  </servlet-mapping>
+	  
+	  <servlet-mapping>
+	    <servlet-name>reader</servlet-name>
+	    <url-pattern>*.sdirect</url-pattern>
+	  </servlet-mapping>  
+	  
+	  <servlet-mapping>
+	    <servlet-name>reader</servlet-name>
+	    <url-pattern>*.svc</url-pattern>
+	  </servlet-mapping>
+	  
+	  <servlet-mapping>
+	    <servlet-name>reader</servlet-name>
+	    <url-pattern>/assets/*</url-pattern>
+	  </servlet-mapping>
+	  
+	 
+   <mime-mapping>  
+       <extension>xls</extension>  
+       <mime-type>application/msexcel</mime-type>  
+   </mime-mapping> 
+   
+  
+</web-app>

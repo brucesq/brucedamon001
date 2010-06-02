@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+   <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+   <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer"/>
+	
+   <component id="chapterLink" type="DirectLink">
+    <binding name="listener" value="listener:showChapter"/>
+    <binding name="parameters" value="resourceAll"/>
+    <binding name="renderer" value="bean:popupRender"/>
+   </component>
+      <component id="tomeLink" type="DirectLink">
+    <binding name="listener" value="listener:showTome"/>
+    <binding name="parameters" value="resourceAll"/>
+    <binding name="renderer" value="bean:popupRender"/>
+   </component>
+   
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="resourceSuites"/>
+    <binding name="columns" value="literal:!id:编号:id,!filename:文件名:filename,!filedesc:版本:filedesc,!type:文件类型:type,!size:大小:size,!delete:删除:delete"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="pageSize" value="50"/>
+  </component>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentSuite"/>
+  </component>
+  
+  <component id="customPages" type="hunthawk:TablePages"/>
+  
+  <component id="deleteColumnValue" type="Block"/>
+  <component id="deleteLink" type="DirectLink">
+    	<binding name="listener" value="listener:onDeleteSuite"/>
+    	<binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  
+</page-specification>    

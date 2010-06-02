@@ -1,0 +1,160 @@
+<html jwcid="@Shell" stylesheet="asset:stylesheet" title="标签向导"
+	doctype="" browserLogLevel="DEBUG" consoleEnabled="true"
+	debugEnabled="false">
+	<base target="_self">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+		<title>标签向导</title>
+		<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+	</head>
+	<body jwcid="@Body">
+		<span jwcid="insertGuideScript" />
+			<table width="100%" height="100%" border="0" cellpadding="0"
+				cellspacing="0" class="openWindowBg">
+				<tr>
+					<td valign="top">
+						<table width="580" height="380" border="0" cellpadding="0"
+							cellspacing="0" class="openWindow-outerborder">
+							<tr>
+								<th valign="top">
+									标签参数向导
+								</th>
+							</tr>
+
+							<tr>
+								<td valign="top" style="padding: 20px 10px;">
+
+									<form jwcid="guide@Form" clientValidationEnabled="true">
+										<span jwcid="parameter@Hidden" value="ognl:parameter" /> <span
+											jwcid="tagname@Hidden" value="ognl:tagName" />
+<span jwcid="@Hidden" value="ognl:parameterValue" />
+												<table width="100%" border="0" cellpadding="0"
+													cellspacing="4">
+
+													<tr>
+														<td width="28%" align="right">
+															留言类型:
+														</td>
+
+														<td width="72%">
+															<select jwcid="voteType@PropertySelection"
+																model="ognl:voteTypeList" value="ognl:voteType"
+																onChange="literal:tapestry.form.submit(this.form)"></select>
+														</td>
+													</tr>
+
+													<span jwcid="@If" condition="ognl:showCustom">
+													<tr>
+														<td width="28%" align="right">
+															用户定制ID:
+														</td>
+
+														<td width="72%">
+															<Input jwcid="customId@TextField" value="ognl:customId"
+																displayName="literal:用户定制ID" />
+														</td>
+													</tr>
+
+													</span>
+
+													<tr>
+														<td align="right">
+															投票成功提示页模板ID：
+														</td>
+														<td>
+															<input name="textfield2" type="text" readonly="true"
+																jwcid="templateId@TextField" value="ognl:templateId" />
+															&nbsp;&nbsp;
+															<input name="Submit" jwcid="@Any" type="button"
+																class="buttonMain" value="选择模板"
+																onClick="ognl:templateURL" />
+														</td>
+													</tr>
+													<tr>
+														<td align="right">
+															投票ID：
+														</td>
+														<td>
+															<input name="voteId" type="text" readonly="true"
+																jwcid="voteId@TextField" value="ognl:voteId" />
+															&nbsp;&nbsp;
+															<input name="Submit" jwcid="@Any" type="button"
+																class="buttonMain" value="选择投票" onClick="ognl:voteURL" />
+														</td>
+													</tr>
+													<tr>
+														<td align="right">
+															投票子项ID：
+														</td>
+														<td>
+															<input name="itemId" type="text" readonly="true"
+																jwcid="itemId@TextField" value="ognl:itemId" />
+															&nbsp;&nbsp;
+															<input name="voteItembutton" type="button"
+																class="buttonMain" value="投票子项"
+																onClick="javascript:getItemURL();" />
+														</td>
+													</tr>
+													<tr>
+														<td width="15%" align="right">
+															链接组合策略：
+															<br>
+														</td>
+														<td width="85%">
+															<input jwcid="@contrib:Palette" sort="literal:USER"
+																model="ognl:mixList" selected="ognl:mixs"
+																tableClass="literal:palette" />
+														</td>
+													</tr>
+
+													<tr>
+														<td align="right">
+															&nbsp;
+														</td>
+														<td>
+															<input name="Submit2" type="submit" jwcid="@Submit"
+																listener="listener:onSubmit" class="buttonMain"
+																value="确  定" />
+															&nbsp;&nbsp;&nbsp;&nbsp;
+															<input name="close" type="button" class="buttonCustom"
+																onclick="javascript:window.close();return false;"
+																value="关 闭" />
+														</td>
+													</tr>
+													<tr>
+														<td align="right">
+															&nbsp;
+														</td>
+														<td>
+															&nbsp;
+														</td>
+													</tr>
+												</table>
+									</form>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+	</body>
+	<script type="text/javascript">
+	function getItemURL() {
+		var voteId = document.getElementById("voteId").value;
+		if (voteId == null || voteId == "") {
+			alert("您还没有选择投票ID!");
+		} else {
+			var project = location.href.split('/')[3];
+			var url = "/" + project
+					+ "/inter/VoteItemChoicePage.external?sp=SitemId&amp;sp=S";
+
+			var newWindow = window
+					.open(
+							url + voteId,
+							'',
+							'width=800,height=570,top=100,left=100,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no');
+			newWindow.focus();
+		}
+	}
+</script>
+</html>

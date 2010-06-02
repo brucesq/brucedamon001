@@ -1,0 +1,205 @@
+<html jwcid="@Shell"   title="版权列表"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="resource/ShowReferenPage" jwcid="sysUserList@DirectLink" listener="listener:cancel">版权列表</a>－》版权维护</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+			  <tr >
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;版权维护</td>					
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">
+				<form jwcid="userForm@Form" clientValidationEnabled="true">	
+				<input type="hidden" jwcid="model@Hidden" value="ognl:model" />
+					<br>
+					<br>
+					<table width="100%" border="0" cellspacing="6" cellpadding="0">
+					 						<tr>
+											<td width="15%" align="right">版权方名称<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="name@TextField" value="ognl:model.name" validators="validators:required" displayName="literal:版权方名称"/>
+												</td>
+											</tr>
+					 						<tr>
+											<td width="15%" align="right">版权联系人姓名<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="contactName@TextField" value="ognl:model.contactName" validators="validators:required" displayName="literal:版权联系人姓名"/>
+												</td>
+											</tr>
+					 						<tr>
+											<td width="15%" align="right">版权联系人电话<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="contactPhone@TextField" value="ognl:model.contactPhone" validators="validators:required" displayName="literal:版权联系人电话"/>
+												</td>
+											</tr>
+												<tr>
+											<td width="15%" align="right">版权联系人邮箱<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="email@TextField" value="ognl:model.email" validators="validators:required" displayName="literal:版权联系人邮箱"/>
+												</td>
+											</tr>
+												<tr>
+											<td width="15%" align="right">版权联系人地址<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="address@TextField" value="ognl:model.address" validators="validators:required" displayName="literal:版权联系人地址"/>
+												</td>
+											</tr>
+												<tr>
+											<td width="15%" align="right">版权联系人传真<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="fax@TextField" value="ognl:model.fax" validators="validators:required" displayName="literal:版权联系人传真"/>
+												</td>
+											</tr>
+					 						<tr>
+											<td width="15%" align="right">版权生效时间<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain" translator="translator:date"  jwcid="beginTime@DatePicker" extField" value="ognl:model.beginTime" validators="validators:required" displayName="literal:生效日期"/>
+												</td>
+											</tr>
+					 						<tr>
+											<td width="15%" align="right">版权失效时间<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain" translator="translator:date"  jwcid="endTime@DatePicker" value="ognl:model.endTime" validators="validators:required" displayName="literal:失效日期"/>
+												</td>
+											</tr>
+					 						<tr>
+											<td width="15%" align="right">授权地域<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="pZone@TextField" value="ognl:model.pZone" validators="validators:required" displayName="literal:授权地域"/>
+												</td>
+											</tr>
+											<span jwcid="@If" condition="ognl:hasRole('copyrightchange')&&!user.roleChannel&&!user.roleProvider && modelNew">
+											<tr>
+											<td width="15%" align="right">CP<br>
+												</td>
+												<td width="85%">
+													<select jwcid="cpId@PropertySelection" model="ognl:cpList" value="ognl:model.cpId" displayName="literal:CP"></select>
+												</td>
+											</tr>
+											</span>
+											<tr>
+											<td width="15%" align="right">著作权许可使用协议：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="copyrightUse@Upload" file="ognl:uploadFile" type="file"  onKeyDown="return   false;"/><font color="red">文件名称为userpor.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											
+											<tr>
+											<td width="15%" align="right">著作权转让协议：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="attorn@Upload" file="ognl:uploadFile1" type="file" onKeyDown="return   false;"/><font color="red">文件名称为attorn.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											<tr>
+											<td width="15%" align="right">合作协议：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="cooperatePro@Upload" file="ognl:uploadFile2" type="file"  onKeyDown="return   false;"/><font color="red">文件名称为cooperate.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+												
+											<tr>
+											<td width="15%" align="right">授权书：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="provider@Upload" file="ognl:uploadFile3" type="file" onKeyDown="return   false;"/><font color="red">文件名称为provider.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											
+												<tr>
+											<td width="15%" align="right">著作权登记证书：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="copyright@Upload" file="ognl:uploadFile4" type="file" onKeyDown="return   false;"/><font color="red">文件名称为copyright.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											<tr>
+											<td width="15%" align="right">作品版权状况说明书：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="productinfo@Upload" file="ognl:uploadFile5" type="file" onKeyDown="return   false;"/><font color="red">文件名称为productinfo.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											
+											<tr>
+											<td width="15%" align="right">MCP版权自查情况说明书：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="mcpinfo@Upload" file="ognl:uploadFile6" type="file" onKeyDown="return   false;"/><font color="red">文件名称为mcpinfo.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+													<tr>
+											<td width="15%" align="right">MCP版权无问题承诺书：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="promises@Upload" file="ognl:uploadFile7" type="file" onKeyDown="return   false;"/><font color="red">文件名称为promises.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											<tr>
+											<td width="15%" align="right">作者信息表：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="authorinfo@Upload" file="ognl:uploadFile8" type="file" onKeyDown="return   false;"/><font color="red">文件名称为authorinfo.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											<tr>
+											<td width="15%" align="right">其他：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield44"  style="width: 400px;" jwcid="other@Upload" file="ognl:uploadFile9" type="file" onKeyDown="return   false;"/><font color="red">文件名称为other.(doc/pdf/jpg)</font>
+												</td>												
+											</tr>
+											
+																																																		
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" class="buttonMain" value="确  定" jwcid="submitUser@Submit" listener="listener:saveAndReturn"/>
+													
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="Submit2" type="Reset" class="buttonMain"  value="重  置">
+													
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+					</table>	
+					
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

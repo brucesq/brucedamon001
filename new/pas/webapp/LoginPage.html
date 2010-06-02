@@ -1,0 +1,82 @@
+<html jwcid="@Shell"   title="用户登录"  doctype=""
+	  browserLogLevel="ERROR"
+	  consoleEnabled="true"
+	  debugEnabled="false">
+<head>
+<script language="javascript">
+if (window.top) {
+	if (top.location.href!=window.location.href)
+	{
+	  top.location.href=window.location.href;
+	}
+}
+</script>
+
+</head>
+<link jwcid="@Relation" href="css.css" media="all" />
+
+
+<body  jwcid="@Body">
+<form jwcid="@Form" clientValidationEnabled="true">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="login_bg">
+  
+  <tr>
+    <td align="center">
+	<table class="login_bg_new02" cellspacing="0" cellpadding="0">
+	
+	
+	
+	<tr>
+		<td>
+	<table width="100%" border="0" cellspacing="5" cellpadding="0">
+	<tr>
+							<td class="login_text_new">&nbsp;</td>
+							<td>
+								&nbsp;
+							</td>
+	</tr>
+     
+      <tr>
+        <td  class="login_text_new">用户名：</td>
+        <td><input name="textfield" type="text" class="input_login" jwcid="username@TextField" value="ognl:name"  />
+		   
+		</td>
+
+      </tr>
+      <tr>
+        <td  class="login_text_new">密&nbsp;&nbsp;&nbsp; 码：</td>
+        <td><input name="textfield2" type="text" class="input_login"  jwcid="password@TextField" hidden="true" value="ognl:password" /> 
+        </td>
+      </tr>
+      
+      
+      <tr>
+							<td class="login_text_new">验证码：</td>
+							<td>
+								<input type="text" name="textfield" id="textfield" class="login_input_new02" jwcid="validCode@TextField" value="ognl:validCode" validators="validators:required,maxLength=4" displayName="literal:验证码" autocomplete="off"/>
+								<br/><img jwcid="validImg@Any" src="ognl:cnbrnContextPath" width="60" height="20" align="absmiddle"/>&nbsp;&nbsp;<a href="#" onclick="ognl:onclickPath" class="login_a_new" jwcid="@Any">换张图片</a></td>
+	 </tr>
+      
+        <tr>
+        <td height="28" align="right">&nbsp;&nbsp; </td>
+        <td> 
+        &nbsp;  <input name="Submit" type="submit" class="login_button" value="登   录" jwcid="@Submit" listener="listener:login" /></td>
+      </tr>
+      
+      
+     
+    </table>
+	
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	
+	
+</form>
+</body>
+</html>

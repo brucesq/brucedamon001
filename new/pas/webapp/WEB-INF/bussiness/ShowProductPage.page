@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+ <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+  <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  <set name="features">
+		'scrollbars=no,width=600,height=450'
+  </set>
+	</bean>
+   <component id="showType" type="PropertySelection">
+    <binding name="model" value="bussinessTypeList"/>
+    <binding name="value" value="showType"/>
+  </component>
+ 
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!id:编号:id,!name:产品名称:name,!channel.intro:渠道名称:channel.intro,!statusName:状态:statusName,!showTypeName:产品类型:showTypeName,!isadapterName:适配版本:isadapterName,!creditName:适配宽窄屏:creditName,=displayModifier,!showModifyTimeName:修改日期:showModifyTimeName,!link:链接:link,!right:赋权:right,!validate:维护:validate,!detail:详情:detail"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="tablePageSize"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentObject"/>
+  </component>
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  
+  
+   <component id="validateColumnValue" type="Block"/>
+   <component id="validateLink" type="DirectLink">
+    <binding name="listener" value="listener:onEdit"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+   </component>
+   
+   <component id="idColumnValue" type="Block"/>
+  <component id="nameLink" type="DirectLink">
+    <binding name="listener" value="listener:showProductPageGroup"/>
+    <binding name="parameters" value="components.tableFormRows.tableRow"/>
+  </component>
+  <component id="channelID" type="Insert">
+    <binding name="value" value="components.tableFormRows.tableRow.id"/>
+  </component>
+  
+  <component id="linkColumnValue" type="Block"/>
+  
+  <component id="statuspublish" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.Constants@PRODUCTSTATUS_PUBLISH"/>
+  </component>
+  <component id="statusdisabled" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.Constants@PRODUCTSTATUS_OFFLINE"/>
+  </component>
+  
+  <component id="statuspause" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.Constants@PRODUCTSTATUS_PAUSE"/>
+  </component>
+  
+   <component id="statuswait" type="LinkSubmit">
+    <binding name="action" value="listener:onChangeStatus"/>
+    <binding name="selected" value="statusValue"/>
+    <binding name="tag" value="ognl:@com.hunthawk.reader.domain.Constants@PRODUCTSTATUS_CHECK"/>
+  </component>
+  
+  <component id="rightColumnValue" type="Block"/>
+  <component id="rightImg" type="Image">
+    <binding name="image" value="asset:rightIcon"/>
+  </component>
+  <component id="detailColumnValue" type="Block"/>  
+    <component id="detailLink" type="DirectLink">
+     <binding name="listener" value="listener:onDetail"/>
+     <binding name="parameters" value="components.tableFormRows.tableRow"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+  <asset name="rightIcon" path="img/icon_04.png"/>
+   
+</page-specification>    

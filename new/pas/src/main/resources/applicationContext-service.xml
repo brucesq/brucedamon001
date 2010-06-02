@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	   default-autowire="byName" default-lazy-init="false">
+	   
+	   <bean name="userServiceTarget" class="com.hunthawk.reader.service.system.impl.UserServiceImpl" />
+	
+	   <bean name="menuServiceTarget" class="com.hunthawk.reader.service.system.impl.MenuServiceImpl" />
+		
+	   <bean name="partnerServiceTarget" class="com.hunthawk.reader.service.partner.impl.PartnerServiceImpl" />
+		
+	  
+	   
+	  <bean name="systemServiceTarget" class="com.hunthawk.reader.service.system.impl.SystemServiceImpl" />
+	 
+	  <bean name="feeServiceTarget" class="com.hunthawk.reader.service.partner.impl.FeeServiceImpl" />
+	  
+	  
+	  <bean name="templateServiceTarget" class="com.hunthawk.reader.service.bussiness.impl.TemplateServiceImpl" />
+	  
+	  <bean name="resourceServiceTarget" class="com.hunthawk.reader.service.resource.impl.ResourceServiceImpl" />
+	  
+	  <bean name="uploadService" class="com.hunthawk.reader.service.resource.impl.UploadServiceImpl" />
+	  
+	   <bean name="bussinessServiceTarget" class="com.hunthawk.reader.service.bussiness.impl.BussinessServiceImpl" />
+	  
+	   <bean name="guestServiceTarget" class="com.hunthawk.reader.service.guest.impl.GuestServiceImpl" />
+	  
+	   <bean name="resourcePackServiceTarget" class="com.hunthawk.reader.service.resource.impl.ResourcePackServiceImpl" />
+	   
+	   <bean name="remindServiceTarget" class="com.hunthawk.reader.service.inter.impl.RemindServiceImpl" />
+	  
+	   <bean name="interactiveServiceTarget" class="com.hunthawk.reader.service.inter.impl.InteractiveServiceImpl" />
+	
+	    <bean name="statisticsServiceTarget" class="com.hunthawk.reader.service.system.impl.StatisticsServiceImpl" />
+	
+	   <bean name="videoSearchService" class="com.hunthawk.reader.service.resource.impl.VideoSearchServiceImpl" />
+	
+	
+	    <bean id="statisticsService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.system.StatisticsService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>statisticsServiceTarget</value>
+			</list>
+		</property>
+	   </bean>
+	   
+	   
+	  <bean id="templateService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.bussiness.TemplateService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>templateServiceTarget</value>
+			</list>
+		</property>
+	   </bean>
+		
+	 <bean id="bussinessService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.bussiness.BussinessService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>bussinessServiceTarget</value>
+			</list>
+		</property>
+	   </bean>
+	   
+	  <bean id="feeService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.partner.FeeService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>feeServiceTarget</value>
+			</list>
+		</property>
+	   </bean>
+	
+	<bean id="guestService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.guest.GuestService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>guestServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="remindService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.inter.RemindService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>remindServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="systemService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.system.SystemService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>systemServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="resourceService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.resource.ResourceService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>resourceServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="resourcePackService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.resource.ResourcePackService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>resourcePackServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="interactiveService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.inter.InteractiveService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>interactiveServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="partnerService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.partner.PartnerService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>partnerServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="keywordService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.system.KeyWordService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>keywordServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean name="materialServiceTarget" class="com.hunthawk.reader.service.resource.impl.MaterialServiceImpl" />
+	
+	<bean name="uebService" class="com.hunthawk.reader.service.resource.impl.UebServiceImpl" />
+	
+	<bean name="keywordFilter" class="com.hunthawk.reader.service.system.impl.KeyWordFilterImpl" />
+	
+	<bean name="keywordServiceTarget" class="com.hunthawk.reader.service.system.impl.KeyWordServiceImpl" />
+	   
+	<bean name="hotwordServiceTarget" class="com.hunthawk.reader.service.system.impl.HotWordServiceImpl" />
+	  
+   <bean id="materialService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.resource.MaterialService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>materialServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+   <bean id="hotwordService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.system.HotWordService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>hotwordServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="menuService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.system.MenuService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>menuServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.system.UserService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>userServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 适配器service start -->
+
+	<bean name="adapterServiceTarget" class="com.hunthawk.reader.service.adapter.impl.AdapterServiceImpl" />
+	<bean id="adapterService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>com.hunthawk.reader.service.adapter.AdapterService</value></property>	
+		<property name="interceptorNames">
+			<list>
+				<value>enhanceInterceptor</value>
+				<value>adapterServiceTarget</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 适配器service end -->
+	
+</beans>

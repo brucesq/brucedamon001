@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+  <asset name="stylesheet" path="css.css"/>
+  <property name="selectedRights" persist="session" initial-value="new java.util.HashSet()"/>
+  <property name="userSelectedRights" persist="session" initial-value="new java.util.HashSet()"/>
+  <property name="selectedUsers" persist="session" initial-value="new java.util.HashSet()"/>
+  <property name="selectedObjects" persist="session" initial-value="new java.util.HashSet()"/>
+  <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+  <property name="right"/>
+  <component id="rightList" type="For">
+    <binding name="source" value="rightList"/>
+    <binding name="value" value="right"/>
+  </component>
+  <component id="rightTitle" type="Insert">
+    <binding name="value" value="right.title"/>
+  </component>
+  <component id="checkBox" type="contrib:ControlledCheckbox">
+    <binding name="value" value="rightCheckboxSelected"/>
+  </component>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup">
+  </component>
+  <component id="rightForm" type="Form">
+  </component>
+  <component id="userrightForm" type="Form">
+  </component>
+  <component id="objectGroup" type="contrib:Palette">
+    <binding name="model" value="groups"/>
+    <binding name="selected" value="selectedGroup"/>
+    <binding name="tableClass" value="literal:palette"/>
+    <binding name="displayName" value="literal:所属群组"/>
+    <binding name="availableTitleBlock" value="groupList"/>
+    <binding name="selectedTitleBlock" value="groupExist"/>
+  </component>
+  <component id="objectUser" type="contrib:Palette">
+    <binding name="model" value="users"/>
+    <binding name="selected" value="selectedUser"/>
+    <binding name="tableClass" value="literal:palette"/>
+    <binding name="displayName" value="literal:所属用户"/>
+    <binding name="availableTitleBlock" value="objectUserList"/>
+    <binding name="selectedTitleBlock" value="objectuserExist"/>
+  </component>
+  <component id="addRight" type="bayeux:SubmitOnce">
+    <binding name="listener" value="listener:addRight"/>
+  </component>
+  <component id="rightObject" type="Hidden">
+    <binding name="value" value="object"/>
+  </component>
+  <component id="sucessFlag" type="Hidden">
+    <binding name="value" value="sucess"/>
+  </component>
+  <component id="userrightList" copy-of="rightList"/>
+   
+  <component id="userrightTitle" copy-of="rightTitle"/>
+   
+ 
+  <component id="usercheckBox" type="contrib:ControlledCheckbox">
+    <binding name="value" value="userRightCheckboxSelected"/>
+  </component>
+   
+  <component id="usercheckboxGroup" copy-of="checkboxGroup"/>
+  <component id="addUserRight" type="bayeux:SubmitOnce">
+    <binding name="listener" value="listener:addUserRight"/>
+  </component>
+  <component id="userrightObject" copy-of="rightObject"/>
+  <component id="usersucessFlag" copy-of="sucessFlag"/>
+  
+  <component id="table" type="contrib:TableView">
+    <binding name="source" value="groupRightList"/>
+    <binding name="columns" value="literal:name:组名:name,!seeRight:查看权限:seeRight,!editRight:编辑权限:editRight,!deleteRight:删除权限:deleteRight"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="5"/>
+  </component>
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="groupcheckboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+   <binding name="row" value="currentObject"/>
+  </component>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  <component id="deleteGroupRight" type="Submit">
+    <binding name="action" value="listener:deleteGroupRight"/>
+  </component>
+
+  <component id="usergrouptable" type="contrib:TableView">
+    <binding name="source" value="userRightList"/>
+    <binding name="columns" value="literal:name:用户名:name,!seeRight:查看权限:seeRight,!editRight:编辑权限:editRight,!deleteRight:删除权限:deleteRight"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="5"/>
+  </component>
+<component id="usercustomPages" type="hunthawk:TablePages"/>
+  <component id="userDeletecheckboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="usercontrolCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="usertableFormRows" type="contrib:TableRows">
+   <binding name="row" value="currentObject"/>
+  </component>
+  <component id="userdelete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  <component id="deleteUserRight" type="Submit">
+    <binding name="action" value="listener:deleteUserRight"/>
+  </component>
+</page-specification>

@@ -1,0 +1,296 @@
+<html jwcid="@Shell" title="模板列表" doctype="" browserLogLevel="DEBUG"
+	consoleEnabled="true" debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+<script language="JavaScript" type="text/javascript">
+<!--
+function changeStyle (element){
+	var button = element;
+	while(element.tagName != "TD"){
+		element = element.parentNode;
+	}
+	var _div = element.getElementsByTagName("DIV");
+	if(_div[0].style.display == "none"){
+		_div[0].style.display = "block";
+		button.innerText = "隐藏所有标签";
+		button.className = "buttonNew_down";
+	}else{
+		_div[0].style.display = "none";
+		button.innerText = "显示所有标签";
+		button.className = "buttonNew_right";
+	}
+}
+//-->
+</script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body">
+<span jwcid="insertTextScript@Script"
+	script="literal:../guide/text.script" />
+<div jwcid="warn@hunthawk:Warning" /><span
+	jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置： CMS系统－》<a href="#"
+			jwcid="sysUserList@DirectLink" listener="listener:cancel">模板列表</a>－》维护模板</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+		<table height="22" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+			<tr>
+				<td class="ToolbarLine"><img src="../img/icon_Add.png"
+					width="11" height="11" align="absmiddle">&nbsp;维护模板</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+		<div style="width: 100%; height: 100%; overflow: auto;">
+		<form jwcid="userForm@Form" clientValidationEnabled="true"><input
+			type="hidden" jwcid="model@Hidden" value="ognl:model" />
+		<table width="100%" border="0" cellspacing="6" cellpadding="0">
+			<tr>
+				<td width="15%" align="right">模板标题：</td>
+				<td width="85%"><input name="textfield" type="text" size="20"
+					validators="validators:required" jwcid="templateName@TextField"
+					value="ognl:model.title" /> &nbsp;&nbsp;模板目录:<select
+					jwcid="templatecatalogs@PropertySelection"
+					model="ognl:templateCatalogs" value="ognl:model.templateCatalog">
+				</select> &nbsp;&nbsp; <!-- 		下载页模板ID：<input name="textfield" type="text"   size="10"  jwcid="pageid@TextField" translator="translator:integer" value="ognl:model.downPageId" displayName="literal:下载页模板"/> 
+													&nbsp;&nbsp; 
+													<input name="Submit" jwcid="templateChoice@Any" type="button" class="buttonMain" value="选择模板" onClick="choiceTemplate()" url="ognl:templateURL"/>-->
+				<span jwcid="@If" condition="ognl:modelNew"> 模板类型： <select
+					jwcid="templateTypes@PropertySelection" model="ognl:templateTypes"
+					value="ognl:model.templateType"
+					onChange="changeModelType(this.options[this.options.selectedIndex].value)">
+				</select> &nbsp;&nbsp;&nbsp;&nbsp;输出类型：<select
+					jwcid="bTypes@PropertySelection" model="ognl:bussinessTypeList"
+					value="ognl:model.showType"
+					onChange="changeShowType(this.options[this.options.selectedIndex].value)">
+				</select> <span id="signTypeBlock">&nbsp;&nbsp;&nbsp;&nbsp;版本类型：<select
+					jwcid="vTypes@PropertySelection" model="ognl:versionTypeList"
+					value="ognl:model.signType"
+					onChange="changeSignType(this.options[this.options.selectedIndex].value)">
+				</select></span> </span> &nbsp;&nbsp; <span jwcid="@Else"> 模板类型： <span
+					jwcid="@InsertText" value="ognl:model.templateType.name" raw="true" />
+				&nbsp;&nbsp; 输出类型：<span jwcid="@InsertText"
+					value="ognl:model.showTypeName" raw="true" /> <span jwcid="@If"
+					condition="ognl:(model.showType == 1)"> &nbsp;&nbsp; 版本类型：<span
+					jwcid="@InsertText" value="ognl:model.signTypeName" raw="true" />
+				</span> </span>
+			</tr>
+
+			<tr>
+				<td align="right" valign="top">WML 标签：</td>
+				<td>
+				<button class="buttonNew_right" onClick="changeStyle(this)"
+					onFocus="blur()">显示所有标签</button>
+				<div style="display: none" class="buttonNew_div"><span
+					class="buttonBlue"><img src="../img/buttonNew_left.gif"
+					align="absmiddle" />
+				<button type="button" class="buttonYellow" buttonType="ABC"
+					value="WML标签" onClick="javascript:AddText(document,wml);">WML标签</button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span> <span
+					class="buttonBlue"><img src="../img/buttonNew_left.gif"
+					align="absmiddle" />
+				<button type="button" class="buttonYellow" buttonType="ABC"
+					value="换行" onClick="javascript:AddText(document,br);">换行</button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span> <span
+					class="buttonBlue"><img src="../img/buttonNew_left.gif"
+					align="absmiddle" />
+				<button type="button" class="buttonYellow" buttonType="ABC"
+					value="段落" onClick="javascript:AddText(document,pp);">段落</button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span> <span
+					class="buttonBlue"><img src="../img/buttonNew_left.gif"
+					align="absmiddle" />
+				<button type="button" class="buttonYellow" buttonType="ABC"
+					value="返回" onClick="javascript:AddText(document,back);">返回</button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span> <span
+					class="buttonBlue"><img src="../img/buttonNew_left.gif"
+					align="absmiddle" />
+				<button type="button" class="buttonYellow" buttonType="ABC"
+					value="联通首页" onClick="AddText(document,home);">联通首页</button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span> <span
+					class="buttonBlue"><img src="../img/buttonNew_left.gif"
+					align="absmiddle" />
+				<button type="button" class="buttonYellow" buttonType="ABC"
+					value="链接" onClick="hyperlink();">链接</button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span> <span
+					class="buttonBlue"><img src="../img/buttonNew_left.gif"
+					align="absmiddle" />
+				<button type="button" class="buttonYellow" buttonType="ABC"
+					value="图片" onClick="image();">图片</button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span></div>
+				</td>
+			</tr>
+
+
+			<tr>
+				<td align="right" valign="top">系统标签：</td>
+				<td>
+				<div jwcid="@dojo:Widget" dojoType="TabContainer" isContainer="true"
+					style="width: 700px; height: 100px; padding-left: 0px"><span
+					jwcid="updateSystags@Any"> <span jwcid="@Foreach"
+					source="ognl:sysTagTypes" value="ognl:sysTagType">
+				<div jwcid="@dojo:Widget" dojoType="ContentPane"
+					style="overflow: auto" label="ognl:sysTagType.type"><span
+					jwcid="@Foreach" source="ognl:sysTagType.tagGuide"
+					value="ognl:sysTag"> <span class="buttonBlue"> <img
+					src="../img/buttonNew_left.gif" align="absmiddle" />
+				<button name="Submit" jwcid="@Any" onClick="ognl:sysTag.process"
+					title="ognl:sysTag.title"><span jwcid="@Insert"
+					value="ognl:sysTag.title" /></button>
+				<img src="../img/buttonNew_right.gif" align="absmiddle" /></span> </span></div>
+
+				</span> </span></div>
+				</td>
+			</tr>
+
+
+			<tr>
+				<td align="right">模板内容：<br />
+				<a href="#" jwcid="showpreview@LinkSubmit" action="listener:onClick">编辑预览:</a>
+				</td>
+				<td>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td width="70%"><textarea name="textfield3" cols="85"
+							rows="20" onclick="javascript: storeCaret(this);"
+							maxlength="1000" jwcid="content@TextArea"
+							value="ognl:content"></textarea></td>
+						<span jwcid="preContent@Any">
+						<td width="30%"><span raw="true" jwcid="@InsertText"
+							value="ognl:preContent"> </span></td>
+						</span>
+					</tr>
+				</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td><input name="Submit2" type="submit" class="buttonMain"
+					value="确  定" jwcid="submitUser@Submit"
+					listener="listener:saveAndReturn" /> &nbsp;&nbsp;&nbsp;&nbsp;<input
+					name="Submit2" type="Reset" class="buttonMain" value="重  置">
+
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+
+
+		</form>
+		</div>
+		</td>
+	</tr>
+</table>
+</body>
+<script language="javascript">
+var wml_wap2x_pad =  "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.0//EN\" \"http://www.wapforum.org/DTD/xhtml-mobile10.dtd\">\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n\t\<title>$#title#<\/title>\r\n\t$#meta#\r\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" \/>\r\n<\/head>\r\n<body>\r\n\r\n\r\n\r\n<\/body>\r\n<\/html>";		
+
+if (document.all.templateName.value == "" && document.all.content.value == "")
+{
+    AddText(document,wml);
+}
+function changeModelType(templateType){
+	var showType = document.all.bTypes.value;
+	if(showType!= 0){ //pad ,app形式时
+		document.all.content.value = "";
+	if(templateType==5)
+		AddText(document,wml_wap2x_pad);
+		else
+		AddText(document,wml_wap2x);
+	}
+}
+function changeShowType(typeId){
+	
+	if(typeId != 0){
+		document.getElementById('signTypeBlock').style.display='none';
+	}else{
+		document.getElementById('signTypeBlock').style.display='block';
+	}
+	
+	var sType = '0';
+	if(typeId == 0){
+		sType = '1';
+		var  sel  =  document.all.vTypes;
+		changeSignType(sel.options[sel.selectedIndex].value); 
+	}else if(typeId == 1){  //PAD
+		sType = '3';
+		document.all.content.value = "";
+		
+		if(document.all.templateTypes.value==5)
+			AddText(document,wml_wap2x_pad);
+		else
+			AddText(document,wml_wap2x);
+	}else{
+		sType = '2';  //app
+		document.all.content.value = "";
+		
+		if(document.all.templateTypes.value==5)
+			AddText(document,wml_wap2x_pad);
+		else
+			AddText(document,wml_wap2x);
+	}
+	/*
+	var node = document.getElementById('templateChoice').getAttributeNode('url');
+	var url = node.value;
+	
+	var urls = url.split('sp=');
+	urls[urls.length-1] = sType + urls[urls.length-1].substring(1);
+	
+	url = urls.join('sp=');
+	
+	
+	node.value = url;
+	*/
+}
+
+function changeSignType(typeId){
+
+	if(typeId == 1){
+		document.all.content.value = "";
+		AddText(document,wml);
+	}else{
+		document.all.content.value = "";
+		AddText(document,wml_wap2x);
+	}
+	var sType = '0';
+	if(typeId == 0){
+		sType = '3';
+	}else if(typeId == 1){
+		sType = '1';
+	}else{
+		sType = '2';
+	}
+	
+	/*
+	var node = document.getElementById('templateChoice').getAttributeNode('url');
+	var url = node.value;
+	
+	var urls = url.split('sp=');
+	urls[urls.length-2] = sType + urls[urls.length-2].substring(1);
+	
+	url = urls.join('sp=');
+	
+	
+	node.value = url;
+	*/
+}
+
+function choiceTemplate(){
+//	var node = document.getElementById('templateChoice').getAttributeNode('url');
+//	eval(node.value);
+}
+
+</script>
+</html>

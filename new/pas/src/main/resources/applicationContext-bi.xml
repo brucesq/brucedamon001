@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="false">
+
+	<bean id="bidataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${etl_db.url}</value>
+		</property>
+		<property name="user">
+			<value>${etl_db.user}</value>
+		</property>
+		<property name="password">
+			<value>${etl_db.password}</value>
+		</property>
+
+		<property name="initialPoolSize">
+			<value>2</value>
+		</property>
+		<property name="minPoolSize">
+			<value>2</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>15</value>
+		</property>
+		<property name="checkoutTimeout">
+			<value>5000</value>
+		</property>
+		<property name="maxIdleTime">
+			<value>1800</value>
+		</property>
+		<property name="idleConnectionTestPeriod">
+			<value>3000</value>
+		</property>
+		<property name="acquireIncrement">
+			<value>2</value>
+		</property>
+		<property name="autoCommitOnClose">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<bean id="bisessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="bidataSource" />
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>
+					com.hunthawk.reader.domain.statistics.ResourceDataReport
+				</value>
+				<value>com.hunthawk.reader.domain.statistics.UADataReport</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">${etl_db.show_sql}</prop>
+				<prop key="current_session_context_class">thread</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.transaction.factory_class">
+					org.hibernate.transaction.JDBCTransactionFactory
+				</prop>
+				<prop key="hibernate.jdbc.fetch_size">30</prop>
+				<prop key="hibernate.jdbc.batch_size">25</prop>
+				<prop key="hibernate.max_fetch_depth">0</prop>
+				<prop key="hibernate.cache.provider_class">
+					org.hibernate.cache.EhCacheProvider
+				</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+			</props>
+		</property>
+	</bean>
+
+	<bean id="bihibernateTemplate"
+		class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory">
+			<ref local="bisessionFactory" />
+		</property>
+		<property name="cacheQueries" value="true" />
+	</bean>
+	
+	<bean name="bihibernateGenericController"
+		class="com.hunthawk.framework.HibernateGenericController">
+		<property name="hibernateTemplate">
+			<ref local="bihibernateTemplate" />
+		</property>
+		<property name="cacheQueries" value="true" />
+		<property name="sessionFactory">
+			<ref local="bisessionFactory" />
+		</property>
+	</bean>
+	
+
+	<bean id="resourceStatService" class="com.hunthawk.reader.service.stat.impl.ResourceStatServiceImpl">
+		<property name="hibernateGenericController">
+			<ref bean="bihibernateGenericController" />
+		</property>
+	</bean>
+
+</beans>

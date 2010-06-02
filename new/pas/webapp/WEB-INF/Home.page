@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+  <page-specification>
+    <asset name="stylesheet" path="css.css"/>
+       <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  	<set name="features">
+		'scrollbars=no,width=500,height=400'
+  	</set>
+	</bean>
+    <component id="insertMenuScript" type="Script">
+      <binding name="script" value="literal:MenuScript.script"/>
+      <binding name="menulist" value="menuList"/>
+    </component>
+    <component id="username" type="Insert">
+      <binding name="value" value="userName"/>
+    </component>
+    <component id="userExit" type="ServiceLink">
+      <binding name="service" value="literal:restart"/>
+    </component>
+    
+   <component id="modifyPerson" type="DirectLink">
+    <binding name="listener" value="listener:modifyPerson"/>
+    <binding name="renderer" value="bean:popupRender"/>
+    </component>
+  </page-specification>

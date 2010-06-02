@@ -1,0 +1,107 @@
+<html jwcid="@Shell"   title="增加资源包"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#" jwcid="sysUserList@DirectLink" listener="listener:cancel">资源列表</a>－》新增资源到资源包</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+			  <tr >
+				<tr>
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;新增资源到资源包</td>					
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">
+				<form jwcid="userForm@Form" clientValidationEnabled="true">	
+				<input type="hidden" jwcid="model@Hidden" value="ognl:model" />
+				<input type="hidden" jwcid="pack@Hidden"  value="ognl:pack" />
+					<br>
+					<br>
+					<table width="100%" border="0" cellspacing="6" cellpadding="0">
+										 	 <tr>
+												<td width="15%" align="right">选择资源：<br>
+												</td>
+												<td>
+													
+													<input name="textfield" type="text" class="inputMain"    jwcid="pageid@TextField" value="ognl:resourceIds" validators="validators:required,minLength=8" displayName="literal:资源ID" readonly="true"/>
+													&nbsp;&nbsp; 
+													<!-- 
+													<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择资源" onClick="ognl:sourceURL"/>
+													-->
+													<input  type="hidden" jwcid="cpid@Hidden"  value="ognl:model.cpid"/>
+												</td>											
+											</tr>
+										  <span jwcid="@If" condition="ognl:checkPackFee">
+										  
+											<tr>
+											<td width="15%" align="right">计费ID：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain"    jwcid="feeId@TextField"  value="ognl:model.feeId" validators="validators:minLength=12,maxLength=12" displayName="literal:计费ID"/>
+													&nbsp;&nbsp; 
+													<input name="Submit" jwcid="@Any" type="button" class="buttonMain" value="选择计费" onClick="ognl:feeURL"/>								
+												</td>													
+											</tr>
+											<tr>
+											<td width="15%" align="right">此计费名称：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain"   jwcid="feeName@TextField" value="ognl:feeName" />
+												</td>												
+											</tr>
+											</span>
+											<span jwcid="@If" condition="ognl:checkPack">
+											<tr>
+												<td width="15%" align="right">设置计费点：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="choice@TextField" value="ognl:model.choice"  translator="translator:integer" /><font color="red">从第几个章节开始计费(包月的就为空)</font>
+												</td>
+											</tr>
+											 </span>
+												
+											<tr>
+											<td width="15%" align="right">排序：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain"   jwcid="order@TextField" value="ognl:model.order" translator="translator:integer"/>
+												</td>
+											</tr>
+					                    																													
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" class="buttonMain" value="确  定" jwcid="submitEpack@Submit" listener="listener:saveAndReturn" />
+													
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="Submit2" type="Reset" class="buttonMain"  value="重  置">
+													
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+					</table>	
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

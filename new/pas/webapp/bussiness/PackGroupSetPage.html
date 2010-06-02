@@ -1,0 +1,207 @@
+<html jwcid="@Shell"  stylesheet="asset:stylesheet" title="页面组选择"  doctype=""
+	  browserLogLevel="ERROR"
+	  consoleEnabled="true"
+	  debugEnabled="false">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+<title>选择页面组</title>
+</head>
+<script type="text/javascript"><!--
+function templateChoose()
+{
+  //alert(document.all.templateTypeFlag.value);
+  if (document.all.chooseFlag.value == "Strue" && document.all.chooseValue.value != "X" )
+  {
+   
+   		
+   		window.opener.document.getElementById(document.all.returnElement.value.substr(1)).value = document.all.chooseValue.value.substr(1);
+   		window.close();
+  }
+  
+}
+// --></script>
+<base target="_self">
+<body jwcid="@Body" class="customBg" onload="templateChoose()">
+<form jwcid="templateForm">
+<span jwcid="chooseFlag"/>
+<span jwcid="chooseValue"/>
+<span jwcid="returnElement"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="7" valign="top"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="100">&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="bottom" background="../img/custom_Leftbg.png">&nbsp;</td>
+      </tr>
+      
+    </table></td>
+    <td valign="top" style="padding:0px 12px;"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="40" style="padding-top:12px;"><strong>选择页面组</strong></td>
+      </tr>
+	  <tr>
+	  <td><font color="red"><span jwcid="error">错误信息</span></font></td>
+      </tr>
+	  <tr>
+        <td valign="top"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td valign="top" class="customFrame"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td height="20">
+                	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+						<tr>
+							<td height="40" class="search_bg">
+							编号：
+							<input name="textfield5" type="text" class="Template-text02"jwcid="searchId"/>
+							&nbsp;&nbsp;&nbsp;
+							名称：
+							
+							<input name="textfield" type="text" class="Template-text02" jwcid="pageGroupName@TextField" value="ognl:pageGroupName"/>						
+							<span jwcid="bSearch@Hidden" value="ognl:search" />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+							<input name="Submit2" type="submit" class="buttonMain" value="搜  索" jwcid="searchTemplate"/>
+							</td>
+						</tr>
+					</table>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+						<tr>
+							<td valign="top" style="padding-top:10px;">
+                            
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" jwcid="table">
+									<tr>
+										<td>
+										   <span jwcid="tamplateRadioGroup">
+											<table id="box1" class="borderTop_bg" width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#d5d9dc" style="border-collapse:collapse;">
+												<tr>
+													<td align="center" bgcolor="#DFDFDF">&nbsp;</td>
+													<td jwcid="@contrib:TableColumns" class="title"/>
+													</tr>
+
+																																							
+												<tr align="center" jwcid="tableFormRows" class="ognl:beans.evenOdd.next">
+												<td><span jwcid="templateRadio"/></td>
+													<td jwcid="@contrib:TableValues"/>
+												</tr>
+												
+																								
+												
+											</table>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<td align="right"><span jwcid="customPages"/></td>
+									</tr>
+									</table>
+									<table width="100%" border="0" cellspacing="0" cellpadding="0" jwcid="$remove$">
+									<tr>
+										<td>
+											<table id="box1" class="borderTop_bg" width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#d5d9dc" style="border-collapse:collapse;">
+												<tr>
+													<th width="5%" scope="col">&nbsp;</th>
+													<th width="5%" scope="col">编号</th>
+													<th scope="col">模板类型</th>
+													<th scope="col">模板名称</th>
+													<th width="8%" scope="col">版本类型</th>
+													</tr>
+
+																																							
+												<tr>
+													<td bgcolor="#f0f0f2">
+														<input type="radio" name="radiobutton" value="radiobutton">
+													</td>
+													<td bgcolor="#f0f0f2">66</td>
+													<td bgcolor="#f0f0f2"><a href="#">列表模板</a></td>
+													<td bgcolor="#f0f0f2">国内新闻列表模板</td>
+													<td bgcolor="#f0f0f2">3.x</td>
+												</tr>
+												<tr>
+													<td>
+														<input type="radio" name="radiobutton" value="radiobutton">
+													</td>
+													<td>48</td>
+													<td><a href="#">正文模板</a></td>
+													<td>国内新闻正文模板</td>
+													<td>2.x</td>
+												</tr>
+		
+								</table>
+										</td>
+									</tr>
+									<tr>
+										<td align="right"><a href="#">【首页】</a><a href="#">【上页】</a><a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a> <a href="#">【下页】</a><a href="#">【尾页】</a> 跳转
+											<input name="textfield2" type="text" class="inputGO">
+页&nbsp;&nbsp;
+<input name="Submit3" type="submit" class="buttonGO" value="GO">
+&nbsp; </td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+                </td>
+              </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td height="40" align="center" valign="middle" style=" border-top:none 0px;"><input name="Submit" type="submit" class="buttonCustom" value="选择" jwcid="chooseSubmit"/>
+            </td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+    </table></td>
+    <td width="7" valign="top"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="100">&nbsp;</td>
+      </tr>
+      <tr>
+        <td background="../img/custom_Rightbg.png">&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td height="7" valign="top"><img src="../img/custom_Leftbg02.png" width="7" height="7"></td>
+    <td background="../img/custom_Bottombg.png"></td>
+    <td><img src="../img/custom_Rightbg02.png" width="7" height="7"></td>
+  </tr>
+</table>
+    
+</form>
+ <div id="enlarge_images"></div>
+</body>
+<script language="javascript">
+	var gg = document.getElementsByTagName("img");
+		var ei = document.getElementById("enlarge_images");
+ 
+		for(i=0; i<gg.length; i++){
+			var ts = gg[i];
+			if(gg[i].id=="srcImg")
+			{
+				ts.onmousemove = function(event){ 
+				event = event || window.event;
+				ei.style.display = "block";
+				ei.innerHTML = '<img src="' + this.src + '" />';
+				ei.style.top  = document.body.scrollTop + event.clientY + 10 + "px";
+				ei.style.left = document.body.scrollLeft + event.clientX + 10 + "px";
+				}
+						
+			ts.onmouseout = function(){
+				ei.innerHTML = "";
+				ei.style.display = "none";
+			}
+		}
+}
+</script>
+</html>

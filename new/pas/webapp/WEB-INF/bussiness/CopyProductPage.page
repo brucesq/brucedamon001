@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+ <asset name="stylesheet" path="css.css"/>
+ <bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+   <component id="table" type="contrib:TableView">
+    <binding name="source" value="tableModel"/>
+    <binding name="columns" value="literal:!proName:产品名称:proName,!channelList:归属渠道:channelList,!statusName:状态:statusName,!showTypeName:产品类型:showTypeName,!isadapterName:适配版本:isadapterName,!creditName:适配宽窄屏:creditName"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="tablePageSize"/>
+  </component>
+  
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentProduct"/>
+  </component>
+  
+  
+  <component id="customPagesDown" type="hunthawk:TablePages"/>
+  <component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+  
+  
+ <component id="channelListColumnValue" type="Block"/>
+	<component id="channelList" type="PropertySelection">
+    <binding name="model" value="channelList"/>
+    <binding name="value" value="channel"/>
+    <binding name="translator" value="translator:number"/>
+  </component>
+
+ <component id="proNameColumnValue" type="Block"/>
+   <component id="proName" type="TextField">
+    <binding name="value" value="name"/>
+  </component>
+
+
+
+</page-specification>    
