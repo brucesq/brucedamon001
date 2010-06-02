@@ -1,0 +1,130 @@
+<html jwcid="@Shell" title="栏目列表" doctype="" browserLogLevel="DEBUG"
+	consoleEnabled="true" debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /><span
+	jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#"
+			jwcid="@DirectLink" listener="listener:cancelPage">资源列表</a>－》批量修改（封面、出版日期、分类）</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+		<table height="22" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+			<tr>
+				<td class="ToolbarLine"><img src="../img/icon_Add.png"
+					width="11" height="11" align="absmiddle">&nbsp;修改模板</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+		<div style="width: 100%; height: 100%; overflow: auto;">
+		<form jwcid="userForm@Form" clientValidationEnabled="true"><input
+			type="hidden" jwcid="model@Hidden" value="ognl:model" /> 
+		<input type="hidden" jwcid="resources@Hidden" value="ognl:resources"/>
+		<input type="hidden" jwcid="resourceType@Hidden" value="ognl:resourceType"/>
+			 <br>
+		<br>
+		<table width="100%" border="0" cellspacing="6" cellpadding="0">
+			<tr>
+				<td width="15%" align="right">&nbsp;<br>
+				</td>
+				<td width="85%">
+
+				<table>
+				<tr>
+				<td width="15%" align="right">封面图片替换：<br>
+						</td>
+							<td width="85%">
+							<input name="textfield44"  style="width: 400px;" jwcid="productinfo@Upload" file="ognl:uploadFileImage" type="file" onKeyDown="return   false;"/><font color="red">文件名称为cover.(gif/jpg/png)</font>
+						</td>												
+				</tr>
+				<tr>
+					<td width="15%" align="right">出版日期<br>
+						</td>
+							<td width="85%">
+								<input name="textfield" type="text" class="inputMain" translator="translator:date"  jwcid="publishTime@DatePicker" value="ognl:publishTime" />
+							</td>
+						</tr>
+				<tr>
+							<td width="15%" align="right">批量添加分类：<br>
+												</td>
+												<td width="85%"><input jwcid="@contrib:Palette" model="ognl:privileges" selected="ognl:selectedResourceTypes" tableClass="literal:palette" displayName="literal:资源类别" availableTitleBlock="ognl:roleList" selectedTitleBlock="ognl:roleExist"/></td>
+					</tr>
+					
+					<tr>
+												<td width="15%" align="right">批量删除分类：<br>
+												</td>
+												<td width="85%"><input jwcid="@contrib:Palette" model="ognl:privileges" selected="ognl:delSelectedResourceTypes" tableClass="literal:palette" displayName="literal:资源类别" availableTitleBlock="ognl:roleList" selectedTitleBlock="ognl:roleExist"/></td>
+							</tr>
+							
+							<tr>
+											<td width="15%" align="right">短简介：<br>
+												</td>
+												<td width="85%">
+												<textarea name="textfield3"  cols="60" rows="8"  maxlength="2000"  jwcid="cComment@TextArea" value="ognl:comment"></textarea>
+												</td>
+											</tr>											
+											
+											<tr>
+											<td width="15%" align="right">长简介：<br>
+												</td>
+												<td width="85%">
+												<textarea name="textfield3"  cols="60" rows="12"  maxlength="4000"  jwcid="introLon@TextArea" value="ognl:introLon"></textarea>
+												</td>
+											</tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td><input name="Submit2" type="submit" class="buttonMain"
+					value="确  定" jwcid="submitUser@Submit"
+					listener="listener:savePage" /> &nbsp;&nbsp;&nbsp;&nbsp;<input
+					name="Submit2" type="Reset" class="buttonMain" value="重  置">
+
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+			<span jwcid="roleList@Block">
+                      分类列表
+                      </span>
+                      <span jwcid="roleExist@Block">
+                      已选列表
+                      </span>	
+	 <span jwcid="@contrib:TableView"       
+													source="ognl:tableModel"       
+													columns="literal: !编号:id, !栏目名称:name,=sort,!日期:modifyTime" >
+													<table id="box1" width="100%" border="1"  bordercolor="#d5d9dc"  style="border-collapse:collapse;" jwcid="@Any" element="literal:table"> 
+													<tr>
+														 <td jwcid="@contrib:TableColumns" class="title">  </td>     
+													</tr>
+													 <tr jwcid="rows@contrib:TableRows">
+														 <td jwcid="@contrib:TableValues">  </td>     
+													</tr>
+													</table>
+
+                      
+												</span>
+											
+		</form>
+		</div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

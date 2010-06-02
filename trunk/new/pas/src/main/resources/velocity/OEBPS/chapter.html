@@ -1,0 +1,15 @@
+<HTML>
+<HEAD>
+<TITLE>${chapterTitle}</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type />
+<META name=GENERATOR content="${generator}" />
+</HEAD>
+<BODY style="FONT-SIZE: 16px">
+ #foreach($img in $chapterImages)
+ 	<p><img src="images/${img}" alt="" /></p>
+ #end
+<p>
+${chapterContent}
+</p>
+</BODY>
+</HTML>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+  <asset name="stylesheet" path="css.css"/>
+     <bean name="popupRender" class="org.apache.tapestry.contrib.link.PopupLinkRenderer">
+  	<set name="features">
+		'scrollbars=no,width=830,height=600'
+  	</set>
+	</bean>
+  <component id="detailList" type="For">
+    <binding name="source" value="detailList"/>
+    <binding name="value" value="currentDetailField"/>
+  </component>
+  <component id="insertTitle" type="Insert">
+    <binding name="value" value="currentDetailField.title"/>
+  </component>
+  <component id="insertValue" type="InsertText">
+    <binding name="value" value="currentDetailField.value"/>
+    <binding name="raw" value="true"/>
+  </component>
+  
+  <component id="catalogList" type="For">
+    <binding name="source" value="catalogList"/>
+    <binding name="value" value="currentCatalogField"/>
+  </component>
+  <component id="catalogTitle" type="Insert">
+    <binding name="value" value="currentCatalogField.title"/>
+  </component>
+  <component id="catalogValue" type="InsertText">
+    <binding name="value" value="currentCatalogField.value"/>
+    <binding name="raw" value="false"/>
+  </component>
+  
+   <component id="detailLink" type="DirectLink">
+     <binding name="listener" value="listener:showChapter"/>
+     <binding name="parameters" value="{currentObject,currentCatalogField.title}"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+  
+  
+   <component id="packList" type="For">
+    <binding name="source" value="packList"/>
+    <binding name="value" value="currentPackField"/>
+  </component>
+  <component id="packTitle" type="Insert">
+    <binding name="value" value="currentPackField.title"/>
+  </component>
+  <component id="packValue" type="InsertText">
+    <binding name="value" value="currentPackField.value"/>
+    <binding name="raw" value="false"/>
+  </component>
+  
+   <component id="packLink" type="DirectLink">
+     <binding name="listener" value="listener:showPack"/>
+     <binding name="parameters" value="currentPackField.title"/>
+     <binding name="renderer" value="bean:popupRender"/>
+  </component>
+  
+  
+   <component id="detailImg" type="Image">
+    <binding name="image" value="asset:detailIcon"/>
+  </component>
+  <asset name="detailIcon" path="img/icon_Add.png"/>
+</page-specification>  

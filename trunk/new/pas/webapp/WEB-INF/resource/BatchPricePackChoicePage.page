@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE page-specification PUBLIC
+  "-//Apache Software Foundation//Tapestry Specification 4.0//EN"
+  "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<page-specification>
+<asset name="stylesheet" path="css.css"/>
+<bean name="evenOdd" class="org.apache.tapestry.bean.EvenOdd"/>
+  
+  <component id="templateForm" type="Form">
+  </component>
+  <component id="resourcePackName" type="TextField">
+    <binding name="value" value="resourcePackName"/>
+  </component>
+  <component id="table" type="contrib:TableView">
+    <binding name="source" value="chooseResourcePacks"/>
+    <binding name="columns" value="literal:!id:编号:id,!name:批价包名称:name,=feeType,!code:计费价格:code,=spName"/>
+    <binding name="rowsClass" value="beans.evenOdd.next"/>
+    <binding name="columnsClass" value="literal:title"/>
+    <binding name="pageSize" value="tablePageSize"/>
+  </component>
+  
+<component id="tableFormRows" type="contrib:TableRows">
+		<binding name="row" value="currentObject"/>
+  </component>
+  
+	<component id="checkboxGroup" type="contrib:CheckboxGroup"/>
+  <component id="controlCheckbox" type="contrib:ControlCheckbox"/>
+  <component id="delete" type="contrib:ControlledCheckbox">
+    <binding name="value" value="checkboxSelected"/>
+  </component>
+
+  <component id="customPages" type="hunthawk:TablePages"/>
+  <component id="chooseSubmit" type="Submit">
+    <binding name="listener" value="listener:chooseSubmit"/>
+  </component>
+  <component id="chooseFlag" type="Hidden">
+    <binding name="value" value="choose"/>
+  </component>
+  <component id="searchResourcePack" type="Submit">
+    <binding name="listener" value="listener:searchResourcePack"/>
+  </component>
+  <component id="chooseValue" type="Hidden">
+    <binding name="value" value="radioValue"/>
+  </component>
+
+  <component id="choosePackType" type="Hidden">
+    <binding name="value" value="choosePackType"/>
+  </component>
+  <component id="error" type="Delegator">
+    <binding name="delegate" value="beans.delegate.firstError"/>
+  </component>
+  <component id="searchId" type="TextField">
+    <binding name="value" value="searchId"/>
+  </component>
+    <component id="returnElement" type="Hidden">
+    <binding name="value" value="returnElement"/>
+  </component>
+</page-specification>

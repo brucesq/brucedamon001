@@ -1,0 +1,165 @@
+<html jwcid="@Shell" title="栏目列表" doctype="" browserLogLevel="DEBUG"
+	consoleEnabled="true" debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="../js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="../js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="../css.css" media="all" />
+<body jwcid="@Body">
+<div jwcid="warn@hunthawk:Warning" /><span
+	jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate" />
+<table width="100%" height="100%" border="0" cellpadding="0"
+	cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》<a href="#"
+			jwcid="@DirectLink" listener="listener:cancelPage" parameters="ognl:pageGroup">栏目列表</a>－》批量修改模板</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="../img/Toolbar_bg.png">
+		<table height="22" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+			<tr>
+				<td class="ToolbarLine"><img src="../img/icon_Add.png"
+					width="11" height="11" align="absmiddle">&nbsp;修改模板</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+		<div style="width: 100%; height: 100%; overflow: auto;">
+		<form jwcid="userForm@Form" clientValidationEnabled="true"><input
+			type="hidden" jwcid="model@Hidden" value="ognl:model" /> 
+			<input type="hidden" jwcid="columns@Hidden" value="ognl:columnsList"/>
+			<input type="hidden" jwcid="pageGroup@Hidden" value="ognl:pageGroup"/>
+			 <br>
+		<br>
+		<table width="100%" border="0" cellspacing="6" cellpadding="0">
+			<tr>
+				<td width="15%" align="right">栏目模板：<br>
+				</td>
+				<td width="85%">
+
+				<table>
+					<tr>
+						<td><input name="WP1" type="text" size="10"
+							jwcid="onepage@TextField" translator="translator:integer"
+							 value="ognl:colOneTempId"
+							displayName="literal:栏目默认模板" /> <input name="WP1Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="默认模板"
+							onClick="ognl:getTemplateURL(2,1,'onepage')" /> &nbsp;&nbsp;</td>
+						<td>
+						<div id="pro_two" style="display: "><input name="WP2"
+							type="text" size="10" jwcid="twopage@TextField"
+							translator="translator:integer"
+							value="ognl:colSecondTempId"
+							displayName="literal:栏目WAP2.0模板" /> <input name="Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="WAP2.0模板"
+							onClick="ognl:getTemplateURL(2,2,'twopage')" /> &nbsp;&nbsp; <input
+							name="WP3" type="text" size="10" jwcid="threepage@TextField"
+							translator="translator:integer" value="ognl:colThirdTempId"
+							displayName="literal:栏目3G模板" /> <input name="Submit" jwcid="@Any"
+							type="button" class="buttonMain" value="3G模板"
+							onClick="ognl:getTemplateURL(2,3,'threepage')" /></div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="15%" align="right">资源模板：<br>
+				</td>
+				<td width="85%">
+
+				<table>
+					<tr>
+						<td><input name="WR1" type="text" size="10"
+							jwcid="one@TextField" translator="translator:integer"
+							 value="ognl:resOneTempId"
+							displayName="literal:资源默认模板" /> <input name="WR1Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="默认模板"
+							onClick="ognl:getTemplateURL(3,1,'one')" /> &nbsp;&nbsp;</td>
+						<td>
+						<div id="res_two" style="display: "><input name="WR2"
+							type="text" size="10" jwcid="two@TextField"
+							translator="translator:integer"
+							value="ognl:resSecondTempId"
+							displayName="literal:资源WAP2.0模板" /> <input name="Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="WAP2.0模板"
+							onClick="ognl:getTemplateURL(3,2,'two')" /> &nbsp;&nbsp; <input
+							name="WR3" type="text" size="10" jwcid="three@TextField"
+							translator="translator:integer" value="ognl:resThirdTempId"
+							displayName="literal:资源3G模板" /> <input name="Submit" jwcid="@Any"
+							type="button" class="buttonMain" value="3G模板"
+							onClick="ognl:getTemplateURL(3,3,'three')" /></div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="15%" align="right">详情模板：</td>
+				<td width="85%">
+				<table>
+					<tr>
+						<td><input name="DE1" type="text" size="10"
+							jwcid="del1@TextField" translator="translator:integer"
+							value="ognl:delOneTempId"
+							displayName="literal:详情默认模板" /> <input name="DE1Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="默认模板"
+							onClick="ognl:getTemplateURL(4,1,'del1')" /> &nbsp;&nbsp;</td>
+						<td>
+						<div id="del_two" style="display: "><input name="DE2"
+							type="text" size="10" jwcid="del2@TextField"
+							translator="translator:integer"
+							value="ognl:delSecondTempId"
+							displayName="literal:详情WAP2.0模板" /> <input name="Submit"
+							jwcid="@Any" type="button" class="buttonMain" value="WAP2.0模板"
+							onClick="ognl:getTemplateURL(4,2,'del2')" /> &nbsp;&nbsp; <input
+							name="DE3" type="text" size="10" jwcid="del3@TextField"
+							translator="translator:integer" value="ognl:delThirdTempId"
+							displayName="literal:详情3G模板" /> <input name="Submit" jwcid="@Any"
+							type="button" class="buttonMain" value="3G模板"
+							onClick="ognl:getTemplateURL(4,3,'del3')" /></div>
+						</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td><input name="Submit2" type="submit" class="buttonMain"
+					value="确  定" jwcid="submitUser@Submit"
+					listener="listener:savePage" /> &nbsp;&nbsp;&nbsp;&nbsp;<input
+					name="Submit2" type="Reset" class="buttonMain" value="重  置">
+
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+	 <span jwcid="@contrib:TableView"       
+													source="ognl:tableModel"       
+													columns="literal: !编号:id, !栏目名称:name,!日期:modifyTime" >
+													<table id="box1" width="100%" border="1"  bordercolor="#d5d9dc"  style="border-collapse:collapse;" jwcid="@Any" element="literal:table"> 
+													<tr>
+														 <td jwcid="@contrib:TableColumns" class="title">  </td>     
+													</tr>
+													 <tr jwcid="rows@contrib:TableRows">
+														 <td jwcid="@contrib:TableValues">  </td>     
+													</tr>
+													</table>
+												</span>
+											
+		</form>
+		</div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

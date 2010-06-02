@@ -1,0 +1,114 @@
+<html jwcid="@Shell"   title="修改个人信息"  doctype=""
+	  browserLogLevel="DEBUG"
+	  consoleEnabled="true"
+	  debugEnabled="true">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="js/pams.js" type="text/javascript" charset="gbk"></script>
+<script src="js/common.js" type="text/javascript" charset="gbk"></script>
+</head>
+<link jwcid="@Relation" href="css.css" media="all" />
+<body jwcid="@Body" class="customBg" onload="templateChoose()">
+<div jwcid="warn@hunthawk:Warning" /> 
+<span jwcid="@hunthawk:ShowValidateError" delegate="bean:delegate"/>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="bar_-bg01">当前位置：CMS系统－》修改个人信息</td>
+	</tr>
+	<tr>
+		<td height="22" valign="middle" background="img/Toolbar_bg.png">
+			<table height="22" border="0" cellpadding="0" cellspacing="0">
+			  <tr >
+				<tr>
+					<td class="ToolbarLine"><img src="img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;修改个人信息</td>					
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div style="width:100%; height: 100%; overflow: auto;">
+				<form jwcid="userForm@Form" clientValidationEnabled="true">	
+				<input type="hidden" jwcid="model@Hidden" value="ognl:model" />
+				<input type="hidden" jwcid="chooseFlag@Hidden" value="ognl:choose" />
+					<br>
+					<br>
+					<table width="100%" border="0" cellspacing="6" cellpadding="0">
+					 <tr>
+												<td width="15%" align="right">旧密码：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain" hidden="true" jwcid="oldPassword@TextField" validators="validators:required" displayName="literal:旧密码" value="ognl:oldpwd"/>
+												</td>
+											</tr>
+											<tr>
+											<td width="15%" align="right">新密码：<br>
+												</td>
+												<td width="85%">
+													<input name="textfield" type="text" class="inputMain" hidden="true" jwcid="newPassword@TextField" value="ognl:newPassword" validators="validators:required" displayName="literal:新密码" />
+												</td>												
+											</tr>
+											
+											<tr id="checkType" >
+											<td width="15%" align="right">确认密码：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain" hidden="true" jwcid="renewPassword@TextField" value="ognl:renewPassword" validators="validators:required" displayName="literal:确认密码"/>
+												
+												</td>												
+											</tr>	
+												<tr id="checkType">
+											<td width="15%" align="right">用户姓名：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain" jwcid="chName@TextField" value="ognl:model.chName" validators="validators:required" displayName="literal:用户姓名"/>
+												
+												</td>												
+											</tr>
+												<tr id="checkType" >
+											<td width="15%" align="right">邮箱：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain" jwcid="email@TextField" value="ognl:model.email" validators="validators:required" displayName="literal:邮箱"/>
+												
+												</td>												
+											</tr>
+												<tr id="checkType">
+											<td width="15%" align="right">联系方式：<br>
+												</td>
+												<td width="85%">
+												<input name="textfield" type="text" class="inputMain"   jwcid="phoneNum@TextField" value="ognl:model.phoneNum" />
+												
+												</td>												
+											</tr>																					
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>
+													<input name="Submit2" type="submit" class="buttonMain" value="确  定" jwcid="submitEpack@Submit" listener="listener:saveAndReturn" />
+													
+													&nbsp;&nbsp;&nbsp;&nbsp;<input name="Submit2" type="Reset" class="buttonMain"  value="重  置">
+													
+												</td>
+											</tr>
+											<tr>
+												<td align="right">&nbsp;</td>
+												<td>&nbsp;</td>
+											</tr>
+					</table>	
+				</form>
+			</div>
+		</td>
+	</tr>
+</table>
+</body>
+<script type="text/javascript">
+	function templateChoose(){
+	if (document.all.chooseFlag.value == "Strue")
+  {   
+   		window.close();
+  }
+
+}
+
+</script>
+</html>

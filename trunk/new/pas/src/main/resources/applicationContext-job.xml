@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="false">
+
+	<bean id="copyrightExpiredJobObj"
+		class="com.hunthawk.reader.service.job.CopyrightExpiredJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+	</bean>
+
+	<bean id="monthChoiceClearJobObj"
+		class="com.hunthawk.reader.service.job.MonthChoiceClearJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+	</bean>
+
+	<bean id="remindSendJobObj"
+		class="com.hunthawk.reader.service.job.RemindSendJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="remindService">
+			<ref bean="remindServiceTarget" />
+		</property>
+	</bean>
+
+	<bean id="clearResourceFpJobObj"
+		class="com.hunthawk.reader.service.job.ClearResourceFpJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+	</bean>
+	<bean id="clearResourceFpJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="clearResourceFpJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="clearResourceFpTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="clearResourceFpJob" />
+		<property name="cronExpression" value="0 0 6 * * ?" />
+
+	</bean>
+
+	<bean id="batchAddReleationJobObj"
+		class="com.hunthawk.reader.service.job.BatchAddReleationJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+		<property name="resourcePackService">
+			<ref bean="resourcePackServiceTarget" />
+		</property>
+	</bean>
+
+
+	<bean id="batchAddReleationJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="batchAddReleationJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="batchAddReleationJobTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="batchAddReleationJob" />
+		<property name="startDelay" value="120000" />
+		<property name="repeatInterval" value="3600000" />
+	</bean>
+
+
+	<bean id="copyrightExpiredJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="copyrightExpiredJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+
+
+
+
+
+	<bean id="copyrightExpiredTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="copyrightExpiredJob" />
+		<property name="cronExpression" value="0 0 3 * * ?" />
+
+	</bean>
+
+	<bean id="monthChoiceClearJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="monthChoiceClearJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="monthChoiceClearTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="monthChoiceClearJob" />
+		<property name="cronExpression" value="59 59 23 L * ?" />
+	</bean>
+
+	<bean id="remindSendJobJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="remindSendJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="remindSendJobTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="remindSendJobJob" />
+		<property name="startDelay" value="60000" />
+		<property name="repeatInterval" value="300000" />
+	</bean>
+
+	<bean
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- 		<ref bean="copyrightExpiredTrigger" /> -->
+				<!-- 		<ref bean="monthChoiceClearTrigger" /> -->
+				<ref bean="batchAddReleationJobTrigger" />
+				<ref bean="clearResourceFpTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="statDataRankDateObj"
+		class="com.hunthawk.reader.service.job.StatDataRankDate">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+	</bean>
+
+	<bean id="statDataRankDate"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="statDataRankDateObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+
+
+
+
+
+</beans>
