@@ -1,0 +1,10 @@
+#set($space="|")
+#if(${this.currentPage} <=${this.number} || ${this.number}==0)
+${this.title}#foreach(${obj} in ${objs})
+<a href="$!{obj.get("url")}">$!{obj.get("title")}</a>
+#if(${velocityCount}<${objs.size()})
+$space
+#end
+#end
+${this.split}
+#end

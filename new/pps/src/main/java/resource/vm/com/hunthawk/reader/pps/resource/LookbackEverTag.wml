@@ -1,0 +1,7 @@
+#if(${objs.size()}>0)
+¡¾Í¬¼¯ÍÆ¼ö¡¿<br/>
+#end
+#foreach(${obj} in ${objs})
+<a href="$!{obj.get("url")}">$!{obj.get("title")}</a> 
+<br/>
+#end

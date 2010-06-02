@@ -1,0 +1,6 @@
+#if(${isAdd})
+${addResult}<br/>
+#else
+${delsuccess}<br/>
+#end
+<a href="${url}">${title}</a>

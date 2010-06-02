@@ -1,0 +1,11 @@
+#if(${isOrder})
+${successTitle}
+#else
+	<a href="${url}">
+		#if(${showFee})
+			VIP ${price}Ôª
+		#else
+			¶©¹ºVIP
+		#end
+	</a>
+#end

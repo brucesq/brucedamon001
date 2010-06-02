@@ -1,0 +1,18 @@
+<input type="text" name="msg" size="20"/>${this.split}
+#if($login)
+<select name="anon">
+  <option value="0">สตร๛</option>
+  <option value="1">ฤไร๛</option>
+</select>
+#end
+<anchor>${title}
+  <go href="${url}" method="post" accept-charset="UTF-8">
+    <postfield name="jcp" value="$msg"/>
+    <postfield name="CP" value="${CP}"/>
+    <postfield name="CT" value="${CT}"/>
+    <postfield name="CTI" value="${CTI}"/>
+    #if($login)
+    <postfield name="anon" value="$anon"/>
+    #end
+  </go>
+</anchor> 

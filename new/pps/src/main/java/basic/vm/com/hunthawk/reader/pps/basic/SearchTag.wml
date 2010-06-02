@@ -1,0 +1,1 @@
+<anchor>${title}<go href="${url}" method="get" accept-charset="UTF-8" >#foreach(${obj} in ${objs})#if($!{obj.get("key")}!='qkey')<postfield name="$!{obj.get("key")}" value="$!{obj.get("value")}" />#end#end#if(${isQuickSearch})<postfield name="qkey" value="${qvalue}" />#else<postfield name="key" value="$searchname" /><postfield name="st" value="${searchby}" />#end</go></anchor>
