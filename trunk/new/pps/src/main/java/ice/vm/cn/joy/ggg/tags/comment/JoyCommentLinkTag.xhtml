@@ -1,0 +1,21 @@
+<form name="messageForm" action="s.py" method="get">
+<table>
+  <tr valign="middle" align="center">
+    <td>
+      <input type="text" name="jcp" size="12" value="" style="border:1px #000000 solid;background-color:white;color:black;font-size:13.5px;line-height:23px;text-decoration:none;"  maxlength="20"/>
+      #if($login)
+      <input name="anon" type="checkbox" value="1"/>ÄäÃû
+      #end
+    </td>
+    <td align="left">
+    #foreach(${obj} in ${objs})
+      <input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+    #end
+      <input type="hidden" name="CP" value="${CP}"/>
+      <input type="hidden" name="CT" value="${CT}"/>
+      <input type="hidden" name="CTI" value="${CTI}"/>
+      <input type="submit" value="${title}" style="valign:middle;font-size:13.5px;line-height:15px;border:1.5px #000000 solid;width:50px;height:20px;"/>
+    </td>
+  </tr>
+</table>
+</form>

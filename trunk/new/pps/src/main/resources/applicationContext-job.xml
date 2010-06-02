@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	 default-lazy-init="false">
+	
+	<bean id="userFootprintUpdateJobObj" class="com.hunthawk.reader.pps.job.UserFootprintUpdateJob" >
+	  		<property name="hibernateGenericController" >
+	  			<ref bean="hibernateGenericController" />
+	  		</property>
+	  		<property name="memcached" >
+	  			<ref bean="memcached" />
+	  		</property>
+	  		<property name="customService" >
+	  			<ref bean="customService" />
+	  		</property>
+	</bean>
+	
+	<bean id="resourceVisitsUpdateJobObj" class="com.hunthawk.reader.pps.job.ResourceVisitsUpdateJob" >
+	  		<property name="hibernateGenericController" >
+	  			<ref bean="hibernateGenericController" />
+	  		</property>
+	  		<property name="memcached" >
+	  			<ref bean="memcached" />
+	  		</property>
+	  		<property name="resourceService" >
+	  			<ref bean="resourceService" />
+	  		</property>
+	</bean>
+	
+	<bean id="voteUpdateJobObj" class="com.hunthawk.reader.pps.job.VoteUpdateJob" >
+	  		<property name="hibernateGenericController" >
+	  			<ref bean="hibernateGenericController" />
+	  		</property>
+	  		<property name="memcached" >
+	  			<ref bean="memcached" />
+	  		</property>
+	  		<property name="interactiveService" >
+	  			<ref bean="interactiveService" />
+	  		</property>
+	</bean>
+	
+	<bean id="userFootprintUpdateJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="userFootprintUpdateJobObj"/>
+        <property name="targetMethod" value="doJob"/>
+        <property name="concurrent" value="false" />
+     </bean>
+    
+   <bean id="resourceVisitsUpdateJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="resourceVisitsUpdateJobObj"/>
+        <property name="targetMethod" value="doJob"/>
+        <property name="concurrent" value="false" />
+     </bean>
+     
+     <bean id="voteUpdateJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="voteUpdateJobObj"/>
+        <property name="targetMethod" value="doJob"/>
+        <property name="concurrent" value="false" />
+     </bean>
+    
+    <bean id="userFootprintUpdateJobTrigger"
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="userFootprintUpdateJob"/>
+        <property name="startDelay" value="600000"/>  
+        <property name="repeatInterval" value="1800000"/>
+    </bean>
+    
+    <bean id="resourceVisitsUpdateJobTrigger"
+        class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="resourceVisitsUpdateJob"/>
+       <property name="cronExpression" value="0 1 * * * ?"/>
+    </bean>
+    
+    <bean id="voteUpdateJobTrigger"
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail" ref="voteUpdateJob"/>
+        <property name="startDelay" value="100000"/>  
+        <property name="repeatInterval" value="3600000"/>
+    </bean>
+    
+    
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="userFootprintUpdateJobTrigger"/>
+                <ref bean="resourceVisitsUpdateJobTrigger"/>
+                <ref bean="voteUpdateJobTrigger"/>
+            </list>
+        </property>
+    </bean>
+	
+</beans>

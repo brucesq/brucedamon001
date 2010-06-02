@@ -1,0 +1,25 @@
+<form id="searchForm" name="searchForm" action="s.do" method="get">
+  <div class="col_input_1">
+     <div class="col_input_1_content input_bg_1">
+        <input type="text" name="key" value="${text}" style="width:265px;" />
+     </div>
+  </div>
+          
+    <div class="col_3">
+    <div class="col_3_content">
+  		#foreach(${obj} in ${objs})
+		<input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+		#end
+		<input id="searchType" type="hidden" name="st" value="1" />
+        <li class="col_3_left"><input class="btn_2 font_color_3 font_size_1" type="button" value="按书名" onClick="searchSubmit(1)" name="B3" style="border:0px;"></li>
+        <li class="col_3_middle">&nbsp;</li>
+		<li class="col_3_right"><input class="btn_2 font_color_3 font_size_1" type="button" value="按作者" onClick="searchSubmit(2)" name="B3" style="border:0px;"></li>
+     </div>
+     </div> 
+</form>
+<script language="javascript">
+function searchSubmit(type){
+	document.all.searchType.value = type;
+	document.all.searchForm.submit();
+}
+</script>

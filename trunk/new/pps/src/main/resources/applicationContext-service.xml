@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	   default-autowire="byName" default-lazy-init="false">
+	   
+	   <bean name="bussinessService" class="com.hunthawk.reader.pps.service.impl.BussinessServiceImpl" />
+	
+	
+       <bean name="customService" class="com.hunthawk.reader.pps.service.impl.CustomServiceImpl" />
+	
+	   <bean name="guestService" class="com.hunthawk.reader.pps.service.impl.GuestServiceImpl" />
+	   
+	   <bean name="resourceService" class="com.hunthawk.reader.pps.service.impl.ResourceServiceImpl" />
+	
+	   <bean name="chapterService" class="com.hunthawk.reader.pps.service.impl.ChapterServiceImpl" init-method="init">
+	   		<property name="filePath">
+	   			<value>${chapter.cache}</value>
+	   		</property>
+	   </bean>
+	 
+	   <bean name="interactiveService" class="com.hunthawk.reader.pps.service.impl.InteractiveServiceImpl" />
+	   <bean name="feeLogicService" class="com.hunthawk.reader.pps.service.impl.FeeLogicServiceImpl" />
+	
+	 <bean name="iphoneService" class="com.hunthawk.reader.pps.service.impl.IphoneServiceImpl" />
+	 <bean name="feeMsgService" class="com.hunthawk.reader.pps.service.impl.FeeMsgServiceImpl" />
+	 
+	  <bean name="iphoneFeeParamService" class="com.hunthawk.reader.pps.service.impl.IphoneFeeParamServiceImpl" />
+	  
+	   <bean name="keyWordService" class="com.hunthawk.reader.pps.service.impl.KeyWordServiceImpl" />
+	   
+	   <bean name="adapterService" class="com.hunthawk.reader.pps.service.impl.AdapterServiceImpl" />
+	   
+    <!-- ice service begin -->
+    <bean name="commentService" class="cn.joy.ggg.api.service.impl.CommentServiceImpl" />
+    <bean name="communityService" class="cn.joy.ggg.api.service.impl.CommunityServiceImpl" />
+    <bean name="messageService" class="cn.joy.ggg.api.service.impl.MessageServiceImpl" />
+    <bean name="relationService" class="cn.joy.ggg.api.service.impl.RelationServiceImpl" />
+    <bean name="UACService" class="cn.joy.ggg.api.service.impl.UACServiceImpl" />
+    <!-- ice service end -->
+</beans>

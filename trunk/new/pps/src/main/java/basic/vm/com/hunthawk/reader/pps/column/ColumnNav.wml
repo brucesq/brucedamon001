@@ -1,0 +1,1 @@
+#foreach(${obj} in ${objs})<a href="$!{obj.get("url")}">$!{obj.get("column").name}</a>#if(${velocityCount} < $objs.size())&gt;&gt;#end#end

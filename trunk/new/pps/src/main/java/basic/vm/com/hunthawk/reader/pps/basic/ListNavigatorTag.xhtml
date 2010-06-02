@@ -1,0 +1,23 @@
+#if(${isJump})
+	<form name="navform" action="s.py" method="get" accept-charset="UTF-8">
+		<input type="text" name="pn" size="5" maxlength="5" value="1"/>
+		#foreach(${obj} in ${objs})
+		<input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+		#end
+		<input type="submit" value="${title}"/>
+	</form>
+#else
+	#if(${total}>1)
+		#if(${flag}==1)
+				  #if(${current}<${total})
+				  	<a href="${nextlink}">下一页</a>
+				  #end
+				  #if(${current}!=1)
+				  	<a href="${prelink}">上一页</a>
+				  #end
+				  
+		#else
+			<a href="${url}">${title}</a>
+		#end
+	#end
+#end

@@ -1,0 +1,15 @@
+#if(${flag}=="resource")
+	#foreach(${obj} in ${objs})
+		<a href="$!{obj.get("url")}">$!{obj.get("linkname")}</a>
+		#if(${velocityCount} < $objs.size())
+		<br/>
+		#end
+	#end
+#else
+	#foreach(${obj} in ${objs})
+		<a href="$!{obj.get("url")}">$!{obj.get("title")}   $!{obj.get("count")}</a>
+		#if(${velocityCount} < $objs.size())
+		<br/>
+		#end
+	#end
+#end

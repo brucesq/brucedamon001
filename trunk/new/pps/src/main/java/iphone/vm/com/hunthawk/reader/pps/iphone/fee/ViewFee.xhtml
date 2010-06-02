@@ -1,0 +1,22 @@
+
+<table width="98%" border="0" cellspacing="0" cellpadding="0"> 
+	<tr>
+		<td align="center" valign="top">
+			#if($this.orderSuccess)
+				<table width="300" border="0" cellspacing="10" cellpadding="0">
+					<tr><td class="white_font" align="left">尊敬的手机号为${mobile}的用户：</td></tr>
+					<tr><td class="white_font" align="left">您已经成功订购：${content}</td></tr>
+					<tr><td height="20"></td></tr>
+					<tr><td align="center"><ul class="btn01"><li><a href="${url}">${title}</a></li></ul></td></tr>
+				</table>
+			#else
+				<table width="300" border="0" cellspacing="10" cellpadding="0">
+					<tr><td class="white_font" align="left">订购失败：${failMessage}</td></tr>
+					<tr><td class="white_font" align="left"></td></tr>
+					<tr><td height="20"></td></tr>
+					<tr><td align="center"><ul class="btn01"><li><a href="${url}">${title}</a></li></ul></td></tr>
+				</table>
+			#end
+		</td>
+	</tr>
+</table>

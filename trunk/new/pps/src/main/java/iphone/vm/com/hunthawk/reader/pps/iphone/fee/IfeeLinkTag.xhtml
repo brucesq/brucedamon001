@@ -1,0 +1,42 @@
+<table width="98%" border="0" cellspacing="0" cellpadding="0"> 
+<form  id="PayForm" name="PayForm" action="s.do" method="get">
+	<tr><td align="center" valign="top">
+		<table width="50%" border="0" cellspacing="5" cellpadding="0">
+			<tr><td class="white_font" align="left" colspan="2">尊敬的手机号为${mobile}的用户</td></tr>
+			<tr><td class="white_font" align="left" colspan="2">您选择的内容：${content}</td></tr>
+			<tr><td class="white_font" align="left" valign="top">
+					<table width="85px" border="0" cellspacing="0" cellpadding="0">
+						<tr><td>资费类型：</td></tr></table></td>
+				<td class="white_font" align="left" valign="top">
+					<table width="200px" border="0" cellspacing="8" cellpadding="0">
+					<tr><td width="100%" align="left" class="white_font">
+					<input type=radio name=PayType value=1 checked> 频道包月(${channelPay}元)</td></tr>
+				 	#if(${columnPay}!="")
+					 <tr><td width="100%" align="left" class="white_font">
+					<input type=radio name=PayType value=2> 栏目包月(${columnPay}元)</td></tr>
+					#end
+					<tr><td width="100%" align="left" class="white_font">
+					<input type=radio name=PayType value=3> 单本计次(${resourcePay}元)</td></tr>
+					</table></td></tr>		
+		</table></td></tr>
+	<tr><td align="center" valign="top">
+		<table width="98%" height="45" border="0" cellspacing="0" cellpadding="0" background="./images/wap_tmp_1_bg_line_2.png"> 
+ 		 <tr><td align="center" valign="middle">
+			<table width="50%" border="0" cellspacing="0" cellpadding="0"> 
+			  <tr><td align="center" valign="top">
+			  	#foreach(${obj} in ${objs})
+					<input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+				#end
+			  		<input id="PayID" type="hidden" name="PayID" value="1" />
+					<input class="bt_2 orange_font_16" type="button" value="立即支付" onClick="PaySubmit(1)" name="B3" style="border:0px;"></td></tr>
+			</table>
+		</td></tr>
+		</table></td></tr>
+</form>
+</table>	
+<script language="javascript"> 
+function PaySubmit(ID){
+	document.all.PayID.value = ID;
+	document.all.PayForm.submit();
+}
+</script>

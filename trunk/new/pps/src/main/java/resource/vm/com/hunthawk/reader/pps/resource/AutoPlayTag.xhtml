@@ -1,0 +1,17 @@
+<form name="form" action="s.do" method="get" accept-charset="UTF-8">
+	<table>
+	<tr valign="middle" align="center">
+	#if(${showInput})
+		<td>
+				º‰∏Ù<input type="text" name="T" size="3" value="2" style="border:1px #000000 solid;background-color:white;color:black;font-size:13.5px;line-height:23px;text-decoration:none;"  maxlength="2"/>√Î 
+		</td>
+	#end 
+		<td align="left">
+			#foreach(${obj} in ${objs})
+			<input type="hidden" name="$!{obj.get("key")}" value="$!{obj.get("value")}"/>
+			#end
+			<input type="submit" value="${title}" style="valign:middle;font-size:13.5px;line-height:15px;border:1.5px #000000 solid;width:50px;height:20px;"/>
+		</td>
+	</tr>
+	</table>
+	</form>
