@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="false">
+
+
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="statDataRankDateTrigger" />
+				<ref bean="statisticsUAJobTrigger" />
+				<ref bean="statisticsJobTrigger" />
+				<!-- <ref bean="voteResultJobTrigger" /> -->
+				<ref bean="statisticsAccessLogJobTrigger" />
+				<ref bean="statisticsMonthLogJobTrigger" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- 日，周，月，总统计任务  start -->
+	<bean id="statDataRankDateObj" class="com.hunthawk.reader.timer.job.StatDataRankDate">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+		<property name="memcached" ref="memcached"></property>
+		<property name="voteService" ref="voteService"></property>
+		<property name="statDataRankSummary" ref="statDataRankSummaryObj"></property>
+	</bean>
+
+	<bean id="statDataRankDate"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="statDataRankDateObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="statDataRankDateTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="statDataRankDate" />
+		<property name="cronExpression" value="0 1 5 * * ?" />
+	</bean>
+	<!-- 日，周，月，总统计任务  end -->
+
+
+	<!-- 统计UA start -->
+	<bean id="statisticsUAJobObj" class="com.hunthawk.reader.timer.job.StatisticsUAJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+	</bean>
+
+	<bean id="statisticsUAJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="statisticsUAJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="statisticsUAJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="statisticsUAJob" />
+		<property name="cronExpression" value="0 1 2 * * ?" />
+
+	</bean>
+
+	<!-- 统计UA end -->
+
+	<!-- 统计点击数 start -->
+	<bean id="statisticsJobObj" class="com.hunthawk.reader.timer.job.StatisticsJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+		<property name="memcached">
+			<ref bean="memcached" />
+		</property>
+	</bean>
+
+	<bean id="statisticsJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="statisticsJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+
+
+	<bean id="statisticsJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="statisticsJob" />
+		<property name="cronExpression" value="0 1 3 * * ?" />
+
+	</bean>
+	
+	<!-- 统计日志数 start -->
+	<bean id="statisticsAccessLogJobObj" class="com.hunthawk.reader.timer.job.StatisticsAccessLogJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+	</bean>
+
+	<bean id="statisticsAccessLogJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="statisticsAccessLogJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="statisticsAccessLogJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="statisticsAccessLogJob" />
+		<property name="cronExpression" value="0 30 0 * * ?" />
+
+	</bean>
+	
+	<!-- 统计日志数  end -->
+	
+	
+	<bean id="statisticsMonthLogJobObj" class="com.hunthawk.reader.timer.job.MonthReportJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		
+	</bean>
+
+	<bean id="statisticsMonthLogJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="statisticsMonthLogJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="statisticsMonthLogJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="statisticsMonthLogJob" />
+		<property name="cronExpression" value="0 30 4 1 * ?" />
+
+	</bean>
+	
+	
+	<!-- 统计投票任务 start -->
+	<!-- 
+	<bean id="voteResultJobObj" class="com.hunthawk.reader.timer.job.VoteResultJob">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+
+	</bean>
+	
+	<bean id="voteResultJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="voteResultJobObj" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="voteResultJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="voteResultJob" />
+		<property name="cronExpression" value="0 10 * * * ?" />
+
+	</bean>
+	 -->
+	
+	<!-- 统计投票任务 end -->
+	
+	<!-- 所有统计任务汇总 start -->
+	
+	<bean id="statDataRankSummaryObj" class="com.hunthawk.reader.timer.job.StatDataRankSummary">
+		<property name="hibernateGenericController">
+			<ref bean="hibernateGenericController" />
+		</property>
+		<property name="systemService">
+			<ref bean="systemServiceTarget" />
+		</property>
+		<property name="memcached" ref="memcached"></property>
+		<property name="voteService" ref="voteService"></property>
+		
+	</bean>
+	
+	<!-- 所有统计任务汇总 end -->
+
+
+</beans>
