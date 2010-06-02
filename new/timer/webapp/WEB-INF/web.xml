@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<!--Spring 框架需要引入的配置文件及相关类 --> 
+	
+
+       <context-param> 
+              <param-name>contextConfigLocation</param-name> 
+              <param-value>classpath:applicationContext.xml</param-value> 
+       </context-param> 
+    
+
+       
+
+       <servlet> 
+         <servlet-name>context</servlet-name> 
+          <servlet-class> 
+             org.springframework.web.context.ContextLoaderServlet 
+          </servlet-class> 
+
+         <load-on-startup>1</load-on-startup> 
+
+       </servlet>
+  <servlet>
+    <servlet-name>StartJobs</servlet-name>
+
+    <servlet-class>com.hunthawk.reader.timer.servlet.StartJobs</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>StartJobs</servlet-name>
+    <url-pattern>/StartJobs</url-pattern>
+  </servlet-mapping> 
+  
+   <servlet>
+    <servlet-name>StatisticsUA</servlet-name>
+    <servlet-class>com.hunthawk.reader.timer.servlet.StatisticsUAServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>StatisticsUA</servlet-name>
+    <url-pattern>/showUA</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ShowUaDetailList</servlet-name>
+    <servlet-class>com.hunthawk.reader.timer.servlet.ShowUaDetailList</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ShowUaDetailList</servlet-name>
+    <url-pattern>/ShowUaDetailList</url-pattern>
+  </servlet-mapping>
+       
+	<jsp-config>
+	<taglib>
+	<taglib-uri>http://www.hunthawk.cn</taglib-uri>
+	<taglib-location>/WEB-INF/taglib/page.tld</taglib-location>
+	</taglib>
+	</jsp-config>
+
+
+	
+	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+</web-app>
