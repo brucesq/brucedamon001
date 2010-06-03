@@ -19,27 +19,29 @@ import com.hunthawk.tag.util.ParamUtil;
 
 /**
  * @author BruceSun
- *
+ * 
  */
 public class VersionSetTag extends BaseTag {
-	
+
 	@Override
 	public Map parseTag(HttpServletRequest request, String tagName) {
-		String versionType = request.getParameter(ParameterConstants.VERSION_TYPE);
-		if(versionType != null && StringUtils.isNumeric(versionType)){
+		String versionType = request
+				.getParameter(ParameterConstants.VERSION_TYPE);
+		if (versionType != null && StringUtils.isNumeric(versionType)) {
 			RequestUtil.addCookie(ParameterConstants.VERSION_SET, versionType);
-			RequestUtil.addJoyCookie(ParameterConstants.VERSION_SET, versionType);
+			// RequestUtil.addJoyCookie(ParameterConstants.VERSION_SET,
+			// versionType);
 		}
 		String url = getJumpUrl(request);
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put(ParameterConstants.CHANNEL_ID, versionType);
-		url = URLUtil.urlChangeParam(url,map,null);
+		url = URLUtil.urlChangeParam(url, map, null);
 		Redirect.sendRedirect(url);
 		return new HashMap();
 	}
 
-	private String getJumpUrl(HttpServletRequest request){
-		
+	private String getJumpUrl(HttpServletRequest request) {
+
 		int td = ParamUtil.getIntParameter(request,
 				ParameterConstants.TEMPLATE_ID, -1);
 		String fn = request.getParameter(ParameterConstants.COMMON_PAGE);
@@ -49,7 +51,13 @@ public class VersionSetTag extends BaseTag {
 			sb.append(ParameterConstants.PORTAL_PATH);
 			sb.append("?");
 			sb.append(URLUtil.removeParameter(request.getQueryString(),
-					ParameterConstants.TEMPLATE_ID,ParameterConstants.COMMON_PAGE,ParameterConstants.AUTHOR_ID,ParameterConstants.VOTE_CONTENT_ID,ParameterConstants.VOTE_ITEM_ID,ParameterConstants.VOTE_VOTE_TYPE,ParameterConstants.VERSION_TYPE));
+					ParameterConstants.TEMPLATE_ID,
+					ParameterConstants.COMMON_PAGE,
+					ParameterConstants.AUTHOR_ID,
+					ParameterConstants.VOTE_CONTENT_ID,
+					ParameterConstants.VOTE_ITEM_ID,
+					ParameterConstants.VOTE_VOTE_TYPE,
+					ParameterConstants.VERSION_TYPE));
 			return sb.toString();
 		}
 		String url = "";
@@ -112,11 +120,10 @@ public class VersionSetTag extends BaseTag {
 				back.append(1);
 				back.append("&");
 				URLUtil.append(back, ParameterConstants.FEE_ID, request);
-			} 
+			}
 			url = URLUtil.trimUrl(back).toString();
 		}
 		return url;
 	}
 
-	
 }

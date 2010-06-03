@@ -23,7 +23,6 @@ import com.hunthawk.reader.domain.device.PersonInfo;
 import com.hunthawk.reader.domain.device.UAInfo;
 import com.hunthawk.reader.pps.service.BussinessService;
 import com.hunthawk.reader.pps.service.GuestService;
-import com.hunthawk.tag.util.ParamUtil;
 
 /**
  * @author BruceSun
@@ -33,7 +32,7 @@ public class HwfRequestInfo {
 
 	private static GuestService guestService;
 	private static BussinessService bussinessService;
-	
+
 	private static String cookieDomain = "";
 
 	private static String cookiePath = "/";
@@ -47,16 +46,17 @@ public class HwfRequestInfo {
 	private HttpServletResponse response;
 	private List<PersonInfo> personInfos;
 
-	public HwfRequestInfo(HttpServletRequest request,HttpServletResponse response) {
+	public HwfRequestInfo(HttpServletRequest request,
+			HttpServletResponse response) {
 		this.request = request;
 		this.response = response;
 	}
-	
-	public int getMobileType(){
+
+	public int getMobileType() {
 		return 1;
 	}
-	
-	public void addCookie(String name,String value){
+
+	public void addCookie(String name, String value) {
 		Cookie mycookies = new Cookie(name, value);
 		mycookies.setMaxAge(315360000);
 		if (cookieDomain != null && cookieDomain.length() > 0) {
@@ -98,13 +98,13 @@ public class HwfRequestInfo {
 
 		}
 		if (ParameterCheck.isNullOrEmpty(mobile)) {
-			mobile = "3"+StrUtil.randomString(10);//guestService.registerNewMobile();
-			if(!mobile.equals("10000000000")){
-				addCookie("sid",mobile);
-				request.getSession().setAttribute(
-						"x-up-calling-line-id", mobile);
+			mobile = "3" + StrUtil.randomString(10);// guestService.registerNewMobile();
+			if (!mobile.equals("10000000000")) {
+				addCookie("sid", mobile);
+				request.getSession().setAttribute("x-up-calling-line-id",
+						mobile);
 			}
-			
+
 		}
 		return mobile;
 	}
@@ -156,68 +156,73 @@ public class HwfRequestInfo {
 	}
 
 	public UAInfo getUAInfo() {
-		try{
-		if (uainfo == null) {
-			uainfo = getGuestService().getUAInfo(getUa());
+		try {
 			if (uainfo == null) {
-				StatisticsUALog.logUA(getUa(), request.getHeader("user-agent")); 
-				uainfo = new UAInfo();
-				uainfo.setHeight(128);
-				uainfo.setWidth(128);
-				uainfo.setRingTypes("");
-				uainfo.setScreenType(1);
-				uainfo.setUa(getUa());
-				uainfo.setVideoTypes("");
-				uainfo.setWapType(1);
-			}
-			String vs = request.getParameter(ParameterConstants.CHANNEL_ID);
-			if(vs != null && StringUtils.isNumeric(vs)){
-				uainfo.setWapType(Integer.parseInt(vs));
-			}
-			Cookie cookies[] = request.getCookies();
-			Cookie sCookie = null;
-			if (cookies != null && cookies.length > 0) {
-				for (int i = 0; i < cookies.length; i++) {
-					sCookie = cookies[i];
-					if (sCookie.getName().equals(ParameterConstants.VERSION_SET)) {
-						uainfo.setWapType(Integer.parseInt(sCookie.getValue()));
-						break;
+				uainfo = getGuestService().getUAInfo(getUa());
+				if (uainfo == null) {
+					StatisticsUALog.logUA(getUa(), request
+							.getHeader("user-agent"));
+					uainfo = new UAInfo();
+					uainfo.setHeight(128);
+					uainfo.setWidth(128);
+					uainfo.setRingTypes("");
+					uainfo.setScreenType(1);
+					uainfo.setUa(getUa());
+					uainfo.setVideoTypes("");
+					uainfo.setWapType(1);
+				}
+				String vs = request.getParameter(ParameterConstants.CHANNEL_ID);
+				if (vs != null && StringUtils.isNumeric(vs)) {
+					uainfo.setWapType(Integer.parseInt(vs));
+				}
+				Cookie cookies[] = request.getCookies();
+				Cookie sCookie = null;
+				if (cookies != null && cookies.length > 0) {
+					for (int i = 0; i < cookies.length; i++) {
+						sCookie = cookies[i];
+						if (sCookie.getName().equals(
+								ParameterConstants.VERSION_SET)) {
+							uainfo.setWapType(Integer.parseInt(sCookie
+									.getValue()));
+							break;
+						}
 					}
 				}
 			}
+		} catch (Exception e) {
+
 		}
-		}catch(Exception e){
-			
-		}
-		Cookie cookies[] = request.getCookies();
-    Cookie sCookie = null;
-    boolean noCookie = true;
-    if(cookies != null && cookies.length > 0) {
-      for(int i = 0; i < cookies.length; i ++) {
-        sCookie = cookies[i];
-        if(sCookie.getName().equals(ParameterConstants.VERSION_SET)) {
-          noCookie = false;
-          break;
-        }
-      }
-    }
-    if(noCookie) {
-      RequestUtil.addCookie(ParameterConstants.VERSION_SET, String.valueOf(uainfo.getWapType()));
-      RequestUtil.addJoyCookie(ParameterConstants.VERSION_SET, String.valueOf(uainfo.getWapType()));
-    }
+		// Cookie cookies[] = request.getCookies();
+		// Cookie sCookie = null;
+		// boolean noCookie = true;
+		// if(cookies != null && cookies.length > 0) {
+		// for(int i = 0; i < cookies.length; i ++) {
+		// sCookie = cookies[i];
+		// if(sCookie.getName().equals(ParameterConstants.VERSION_SET)) {
+		// noCookie = false;
+		// break;
+		// }
+		// }
+		// }
+		// if(noCookie) {
+		// RequestUtil.addCookie(ParameterConstants.VERSION_SET,
+		// String.valueOf(uainfo.getWapType()));
+		// RequestUtil.addJoyCookie(ParameterConstants.VERSION_SET,
+		// String.valueOf(uainfo.getWapType()));
+		// }
 		return uainfo;
 	}
 
-//	public Product getProduct() {
-//		if (product == null) {
-//			String productId = ParamUtil.getParameter(request,
-//					ParameterConstants.PRODUCT_ID);
-//			if (StringUtils.isNotEmpty(productId)) {
-//				product = getBussinessService().getProduct(productId);
-//			}
-//		}
-//		return product;
-//	}
+	// public Product getProduct() {
+	// if (product == null) {
+	// String productId = ParamUtil.getParameter(request,
+	// ParameterConstants.PRODUCT_ID);
+	// if (StringUtils.isNotEmpty(productId)) {
+	// product = getBussinessService().getProduct(productId);
+	// }
+	// }
+	// return product;
+	// }
 
 	public HttpServletRequest getRequest() {
 		return request;
@@ -228,14 +233,14 @@ public class HwfRequestInfo {
 	}
 
 	public HttpServletResponse getResponse() {
-    return response;
-  }
+		return response;
+	}
 
-  public void setResponse(HttpServletResponse response) {
-    this.response = response;
-  }
+	public void setResponse(HttpServletResponse response) {
+		this.response = response;
+	}
 
-  private GuestService getGuestService() {
+	private GuestService getGuestService() {
 		if (guestService == null) {
 			ServletContext servletContext = request.getSession()
 					.getServletContext();
@@ -300,13 +305,13 @@ public class HwfRequestInfo {
 				.println(getUserAgent("Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; zh-cn) "));
 
 		System.out
-		.println(getUserAgent("SAMSUNG-SGH-U108_CMCC/1.0 Release/1.24.2007 Browser/NetFront3.2 Profile/MIDP-2.0 Configuration/CLDC-1.1/*MzU2OTQ5MDEwMjA5OTc5"));
+				.println(getUserAgent("SAMSUNG-SGH-U108_CMCC/1.0 Release/1.24.2007 Browser/NetFront3.2 Profile/MIDP-2.0 Configuration/CLDC-1.1/*MzU2OTQ5MDEwMjA5OTc5"));
 
 		System.out
-		.println(getUserAgent("Palm680/RC1 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; zh-cn)"));
+				.println(getUserAgent("Palm680/RC1 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; zh-cn)"));
 
 		System.out
-		.println(getUserAgent("MOT-ROKR E2/1.0 R564_G_12.01.46P/12.28.2005 Mozilla/4.0 (compatible; MSIE 6.0; Linux; Motorola ROKR E2; 2445) Profile/MIDP-2.0"));
+				.println(getUserAgent("MOT-ROKR E2/1.0 R564_G_12.01.46P/12.28.2005 Mozilla/4.0 (compatible; MSIE 6.0; Linux; Motorola ROKR E2; 2445) Profile/MIDP-2.0"));
 	}
 
 	public static String getUserAgent(String s) {
@@ -328,8 +333,9 @@ public class HwfRequestInfo {
 			}
 		} else if (s.startsWith("Mozilla")
 				&& (s.indexOf("MOT") != -1 || s.indexOf("Nokia") != -1
-						|| s.indexOf("Samsung") != -1 || s.indexOf("iPhone") != -1 
-						|| s.indexOf("HTC") != -1 || s.indexOf("Android") != -1)) {
+						|| s.indexOf("Samsung") != -1
+						|| s.indexOf("iPhone") != -1 || s.indexOf("HTC") != -1 || s
+						.indexOf("Android") != -1)) {
 
 			int end = 0;
 			int start = 0;
@@ -359,9 +365,9 @@ public class HwfRequestInfo {
 				stringbuffer.append(temp);
 			} else if (s.indexOf("iPhone") != -1) {
 				stringbuffer.append("iPhone");
-			}else if (s.indexOf("HTC") != -1) {
+			} else if (s.indexOf("HTC") != -1) {
 				stringbuffer.append("HTC");
-			}else if (s.indexOf("Android") != -1) {
+			} else if (s.indexOf("Android") != -1) {
 				stringbuffer.append("Android");
 			}
 		} else if (s.startsWith("Philips") || s.startsWith("CECT")
