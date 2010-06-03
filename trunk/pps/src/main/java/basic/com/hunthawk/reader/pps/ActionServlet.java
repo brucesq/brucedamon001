@@ -112,8 +112,8 @@ public class ActionServlet extends HttpServlet {
 			Redirect redirect = RedirectUtil.getRedirect();
 			if (redirect != null) {
 				if (redirect.getMode() == 1) {
-					response.sendRedirect(redirect.getGotourl());
 					AccessLog.log(request, 0, RequestUtil.getNeedWapType());
+					response.sendRedirect(redirect.getGotourl());
 					VersionHolder.clear();
 					RedirectUtil.clear();
 					RequestUtil.clear();
