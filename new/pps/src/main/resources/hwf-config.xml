@@ -528,36 +528,5 @@
 		<desc>倒计时</desc>
 	</tag>
 	
-	<!-- joy tags add by jiaoyz 2010-04-16 -->
-	<tag>
-		<name>joy_favorite_link</name>
-		<classname>cn.joy.ggg.tags.favorite.JoyFavoriteLinkTag</classname>
-		<desc>激动收藏链接</desc>
-	</tag>
-	<tag>
-		<name>joy_favorite</name>
-		<classname>cn.joy.ggg.tags.favorite.JoyViewFavoriteTag</classname>
-		<desc>激动收藏功能</desc>
-	</tag>
-	<tag>
-		<name>joy_comment_link</name>
-		<classname>cn.joy.ggg.tags.comment.JoyCommentLinkTag</classname>
-		<desc>激动留言链接</desc>
-	</tag>
-	<tag>
-		<name>joy_comment_view</name>
-		<classname>cn.joy.ggg.tags.comment.JoyViewCommentMsgTag</classname>
-		<desc>激动留言功能</desc>
-	</tag>
-	<tag>
-		<name>joy_comment_list</name>
-		<classname>cn.joy.ggg.tags.comment.JoyCommentListTag</classname>
-		<desc>激动留言列表</desc>
-	</tag>
-	<tag>
-		<name>joy_see_comment</name>
-		<classname>cn.joy.ggg.tags.comment.JoySeeCommentLinkTag</classname>
-		<desc>激动查看评论链接</desc>
-	</tag>
-	<!-- joy tags add by jiaoyz 2010-04-16 -->
+	
 </configs>
