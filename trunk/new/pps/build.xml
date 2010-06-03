@@ -60,9 +60,7 @@
   				<fileset dir="${srcDir}/main/java/iphone">
   		  		  					<include name="vm/**" />
   		  		 </fileset>
-		<fileset dir="${srcDir}/main/java/ice">
-			<include name="vm/**" />
-		</fileset>
+		
   	</copy>
   </target>
 

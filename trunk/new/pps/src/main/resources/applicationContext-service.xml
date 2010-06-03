@@ -35,11 +35,5 @@
 	   
 	   <bean name="adapterService" class="com.hunthawk.reader.pps.service.impl.AdapterServiceImpl" />
 	   
-    <!-- ice service begin -->
-    <bean name="commentService" class="cn.joy.ggg.api.service.impl.CommentServiceImpl" />
-    <bean name="communityService" class="cn.joy.ggg.api.service.impl.CommunityServiceImpl" />
-    <bean name="messageService" class="cn.joy.ggg.api.service.impl.MessageServiceImpl" />
-    <bean name="relationService" class="cn.joy.ggg.api.service.impl.RelationServiceImpl" />
-    <bean name="UACService" class="cn.joy.ggg.api.service.impl.UACServiceImpl" />
-    <!-- ice service end -->
+  
 </beans>

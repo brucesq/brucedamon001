@@ -19,16 +19,6 @@
 		</listener-class>
 	</listener>
 
-  <servlet>
-    <servlet-name>IceServlet</servlet-name>
-    <servlet-class>cn.joy.ggg.commons.IceServlet</servlet-class>
-    <load-on-startup>1000</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>IceServlet</servlet-name>
-    <url-pattern>/iceInit</url-pattern>
-  </servlet-mapping>
-
 
 	<servlet>
 		<servlet-name>reader</servlet-name>
@@ -97,13 +87,6 @@
 		<url-pattern>/unfee</url-pattern>
 	</servlet-mapping>
 
-    <filter>
-      <filter-name>loginFilter</filter-name>
-      <filter-class>cn.joy.ggg.commons.LoginFilter</filter-class>
-    </filter>
-    <filter-mapping>
-      <filter-name>loginFilter</filter-name>
-      <url-pattern>/joy/*</url-pattern>
-    </filter-mapping>
+    
 
 </web-app>
