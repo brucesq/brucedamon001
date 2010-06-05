@@ -183,7 +183,7 @@ public class GuestServiceImpl implements GuestService {
 		return 20000000000L;
 	}
 	
-	public String registerNewMobile(){
+	public String registerNewMobile(String name,String passwd){
 		String mobile = "10000000000";
 		String key = Utility.getMemcachedKey(UserInfo.class, "newmobile");
 		Long count = 0L;
@@ -200,13 +200,105 @@ public class GuestServiceImpl implements GuestService {
 			mobile = count.toString();
 			UserInfo info = new UserInfo();
 			info.setMobile(mobile);
-			info.setNickname("游客"+mobile.substring(mobile.length()-4));
+			info.setLoginname(name);
+			info.setPassword(passwd);
+			info.setNickname("用户"+mobile.substring(mobile.length()-4));
 			info.setSex(2);
 			info.setRegistered(0);
 			controller.save(info);
 		}
 		return mobile;
 	}
+	public void registerNewMobile(String mobile,String name,String passwd){
+		UserInfo info = controller.get(UserInfo.class, mobile);
+		if(info == null){
+			info = new UserInfo();
+			info.setMobile(mobile);
+			info.setLoginname(name);
+			info.setPassword(passwd);
+			info.setNickname("用户"+mobile.substring(mobile.length()-4));
+			info.setSex(2);
+			info.setRegistered(0);
+			controller.save(info);
+		}else{
+			info.setLoginname(name);
+			info.setPassword(passwd);
+			controller.update(info);
+		}
+		
+	}
+	
+	public UserInfo getUserInfo(String mobile){
+		String key = Utility.getMemcachedKey(UserInfo.class, mobile);
+		Object info = null;
+		try {
+			info = memcached.getAndSaveLocal(key);
+		} catch (Exception e) {
+			logger.error("从缓存中获取用户信息出错", e);
+		}
+		if (info == null) {
+			info = controller.get(UserInfo.class, mobile);
+			if (info == null) {
+				info = new NullObject();
+			}
+			memcached.setAndSaveLocal(key, info,
+					48 * MemCachedClientWrapper.HOUR);
+		}
+		if (info instanceof NullObject) {
+			return null;
+		}
+		return (UserInfo) info;
+	}
+	
+	public UserInfo getUserInfoByName(String name){
+		String key = Utility.getMemcachedKey(UserInfo.class,"name", name);
+		Object info = null;
+		try {
+			info = memcached.getAndSaveLocal(key);
+		} catch (Exception e) {
+			logger.error("从缓存中获取用户信息出错", e);
+		}
+		if (info == null) {
+			
+			List<UserInfo> infos = controller.findBy(UserInfo.class,"loginname", name);
+			if(infos.size()>0){
+				info = infos.get(0);
+			}
+			if (info == null) {
+				info = new NullObject();
+			}
+			memcached.setAndSaveLocal(key, info,
+					48 * MemCachedClientWrapper.HOUR);
+		}
+		if (info instanceof NullObject) {
+			return null;
+		}
+		return (UserInfo) info;
+	}
+	
+	private void crearUserCache(UserInfo info){
+		String namekey = Utility.getMemcachedKey(UserInfo.class,"name", info.getLoginname());
+		String mobilekey = Utility.getMemcachedKey(UserInfo.class, info.getMobile());
+		memcached.deleteForLocal(namekey);
+		memcached.deleteForLocal(mobilekey);
+	}
+	
+	public void updateUserInfo(UserInfo info){
+		controller.update(info);
+		crearUserCache(info);
+	}
+	
+	public boolean isNameExists(String name){
+		UserInfo info = getUserInfoByName(name);
+		if(info != null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+
+
 	
 	public static void main(String[] args){
 		String mobile = "13322321432";

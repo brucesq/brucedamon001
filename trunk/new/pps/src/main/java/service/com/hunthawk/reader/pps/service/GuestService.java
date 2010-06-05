@@ -6,6 +6,7 @@ package com.hunthawk.reader.pps.service;
 import java.io.Serializable;
 import java.util.List;
 
+import com.hunthawk.reader.domain.custom.UserInfo;
 import com.hunthawk.reader.domain.device.MobileInfo;
 import com.hunthawk.reader.domain.device.PersonInfo;
 import com.hunthawk.reader.domain.device.UAInfo;
@@ -45,5 +46,20 @@ public interface GuestService {
 	 * ×¢²áÐÂÓÃ»§
 	 * @return
 	 */
-	public String registerNewMobile();
+	public String registerNewMobile(String name,String passwd);
+	
+	public void registerNewMobile(String mobile,String name,String passwd);
+	
+	public UserInfo getUserInfo(String mobile);
+	
+	public UserInfo getUserInfoByName(String name);
+	
+	public void updateUserInfo(UserInfo info);
+	
+	public boolean isNameExists(String name);
+	
+
+	
+	
+	
 }

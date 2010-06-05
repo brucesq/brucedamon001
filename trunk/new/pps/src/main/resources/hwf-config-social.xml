@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+	<tag>
+		<name>uclogin_form</name>
+		<classname>com.bruce.pps.social.uc.UCLoginTag</classname>
+		<desc>个人中心用户登陆链接标签</desc>
+	</tag>
+	
+	<tag>
+		<name>uclogin_result</name>
+		<classname>com.bruce.pps.social.uc.UCLoginResultTag</classname>
+		<desc>个人中心用户登陆结果标签</desc>
+	</tag>
+		
+	<tag>
+		<name>ucregist_form</name>
+		<classname>com.bruce.pps.social.uc.UCRegistTag</classname>
+		<desc>个人中心用户注册表单提交标签</desc>
+	</tag>
+	
+	<tag>
+		<name>ucregist_result</name>
+		<classname>com.bruce.pps.social.uc.UCRegistResultTag</classname>
+		<desc>个人中心用户注册结果标签</desc>
+	</tag>
+	
+	<tag>
+		<name>uc_info</name>
+		<classname>com.bruce.pps.social.uc.UCInfoTag</classname>
+		<desc>个人中心用户详细资料显示标签</desc>
+	</tag>
+	
+		<tag>
+		<name>uc_info_eidt</name>
+		<classname>com.bruce.pps.social.uc.UCInfoEditTag</classname>
+		<desc>个人中心用户详细资料修改标签</desc>
+	</tag>
+	
+		<tag>
+		<name>uc_info_eidt_result</name>
+		<classname>com.bruce.pps.social.uc.UCInfoEditResultTag</classname>
+		<desc>个人中心用户详细资料修改结果标签</desc>
+	</tag>
+
+</configs>

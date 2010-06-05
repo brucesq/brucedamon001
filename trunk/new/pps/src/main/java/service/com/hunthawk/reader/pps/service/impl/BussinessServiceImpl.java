@@ -5,7 +5,9 @@ package com.hunthawk.reader.pps.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +18,6 @@ import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.framework.memcached.MemCachedClientWrapper;
 import com.hunthawk.framework.memcached.NullObject;
 import com.hunthawk.framework.util.Utility;
-import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.bussiness.Columns;
 import com.hunthawk.reader.domain.bussiness.DefaultTemplateSet;
 import com.hunthawk.reader.domain.bussiness.DefaultTemplateSetPK;
@@ -27,7 +28,6 @@ import com.hunthawk.reader.domain.bussiness.TagTemplate;
 import com.hunthawk.reader.domain.bussiness.Template;
 import com.hunthawk.reader.domain.bussiness.UserDefTag;
 import com.hunthawk.reader.domain.resource.Material;
-import com.hunthawk.reader.domain.resource.ResourcePackReleation;
 import com.hunthawk.reader.domain.system.Variables;
 import com.hunthawk.reader.pps.service.BussinessService;
 
@@ -426,5 +426,27 @@ public class BussinessServiceImpl implements BussinessService {
 		start = start > list.size() - 1 ? list.size() - 1 : start;
 		end = end > list.size() ? list.size() : end;
 		return list.subList(start, end);
+	}
+	public Map<String, String> getBrandNames() {
+		String key = Utility.getMemcachedKey(Object.class, "brand_names");
+		Object var = null;
+		try {
+			var = memcached.getAndSaveLocalLong(key);
+			if (var != null)
+				return (Map<String, String>) var;
+		} catch (Exception e) {
+			logger.error("从Memcached中获取厂商信息时出错!", e);
+		}
+
+		String brandNames = getVariables("brand_names").getValue();
+		String[] brands = brandNames.split(";");
+		Map<String, String> map = new HashMap<String, String>();
+		for (String brand : brands) {
+			String[] kv = brand.split(":");
+			map.put(kv[0], kv[1]);
+		}
+		memcached.setAndSaveLong(key, map, 1 * MemCachedClientWrapper.HOUR);
+		return map;
+
 	}
 }

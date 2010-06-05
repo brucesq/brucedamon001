@@ -1,0 +1,45 @@
+<style type="text/css" id="internalStyle">
+body{width:100%; margin:0px auto; font-family:Helvetica,sans-serif;}
+a{color:#36c;}
+a:hover{color:#33669b;}.a1{color:#36c;text-decoration:underline}.a2{color:#d01e3b}.c9{color:#666;}.c6{color:#666;}.cg{color:#64B118;}.num{color:#008080;}.tdno{text-decoration:none;}.red{color:#f00;}a.red{color:#f00; text-decoration:none;}td a{color:#36c;text-decoration:none;}td a.udl{color:#36c;text-decoration:underline;}.msg{border: solid 1px #fdfdfd; background:#f8f8f8; line-height:150%; margin:2px; padding:0 3px; }#logo{padding:2px;}#logobg{background:url(http://image1.3g.joy.cn/material/0/84.gif) repeat-x top #F66; height:24px; width:100%;}#info{padding:0px 2px 2px 2px; line-height:150%;}#nav{line-height:24px; padding:3px 2px 3px; border-bottom:solid 1px #bbb;}#login_area{padding:5px 2px;}#login_area span{color:#666;}#login_area p{padding:2px 0px 4px 0px; margin:0px;}#bottom{padding:3px 0 2px 2px; border-top:solid 1px #FFcc99; line-height:150%; margin-top:6px;}.cont{padding:8px 2px;margin-top:8px;border-bottom:solid 1px #bbb;}.icont{padding:6px 2px 0px 0px;}.icont p{padding:2px 0px 4px 0px; margin:0px;}.list{padding:4px 2px 4px 2px;border-bottom:solid 1px #ddd;}.list1{padding:4px 2px 4px 2px;}.list2{padding:4px 2px 4px 2px;border-top:solid 1px #ddd;}.midcont{padding:2px 0px 0px 0px;}.midcont1{padding:6px 2px 0px 6px;}.midcont2{padding:6px 2px 0px 6px;border-top:solid 1px #ddd;}.ipt{width:170px; height:18px; border:solid 1px #000; margin:0px; padding:0px;}.ipt1{width:100px; height:18px; border:solid 1px #000; margin:0px; padding:0px;}.rb{color:#fff; background:#D32C47; padding:3px 5px; border-left:1px solid #fff; border-top:1px solid #fff; border-right:1px solid #6a6a6a; border-bottom:1px solid #6a6a6a; cursor:pointer;}.rb2-12{background:#C71E3A;}.rb2-13{background:#fff;color:#36c;border-left:1px solid #fff; border-top:1px solid #fff; border-right:1px solid #fff; border-bottom:1px solid #fff;}.rb2-14{background:#fff;color:#36c;border-left:1px solid #fff; border-top:1px solid #fff; border-right:1px solid #fff; border-bottom:1px solid #36c;}.tips{border:solid 1px #f02222; background:#fedfdf; line-height:150%; margin:5px 2px; padding:0 3px; }.tips1{border:solid 1px #E2C822; background:#FFF9D7; line-height:150%; margin:5px 2px; padding:0 3px; }.tips2{border:solid 1px #F60; background:#FFFF99; line-height:150%; margin:5px 2px; padding:0 3px; }.tips3{border:solid 1px #eeeeee; background:#fafafa; line-height:150%; margin:5px 2px; padding:0 3px;}.tips4{border:solid 1px #66CC66; background:#CCFFCC; line-height:150%; margin:5px 2px; padding:0 3px;}.tips5{border:solid 1px #804A03; background:#F0EDE4; line-height:150%; margin:5px 2px; padding:0 3px;}.tips6{border:solid 1px #AAD05B; background:#E9FAC5; line-height:150%; margin:5px 2px; padding:0 3px;}.ctitle{padding:2px 2px 0px 0px;background:#D8DFEA;}.cbottom{padding:2px 2px 0px 0px;background:#eeeeee;}.picbg{border:solid 1px #DDDDDD; background:#EEEEEE; margin:2px 2px; padding:2px 2px; }.dl{border-bottom : 1px solid #ddd;padding:2px 0 2px 0;margin-left:0px;margin-right:0px;}.pf_pic{float:left; width:65px; padding:0px 5px 2px 2px; line-height:150%; text-align:center;}.pf_pic .upic{padding-bottom:2px;}.pf_info{float:left; line-height:150%;}.pf_info h5{font-size:14px; font-weight:normal; margin:0; padding:2px 0 1px 0;}.cb{clear:both; height:5px; width:100%; border-bottom:solid 1px #bbb;}.pf_list{width:100px; float:left; line-height:150%;}
+</style>
+
+<div id="usercheck" align="center" >&nbsp;
+${msg}
+</div>
+<div id="login_area">
+<form name="userForm" method="post" action="${url}" >
+#if(${step}==1)
+<p>请输入注册账号:</p>
+<p></font><input name="name" type="text" size="10" value="" class="ipt" maxlength="200" /></p>
+<p>请输入注册密码:</p>
+<p></font><input name="passwd" type="password" value="" class="ipt" maxlength="200" size="10" /></p>
+<p>重新输入注册密码:</p>		
+<p></font><input name="passwd2" type="password" value="" class="ipt" maxlength="200" size="10" /></p>
+<p><input name="register1" type="submit" value="下一步" class="rb" />
+</p>
+#else
+<p>
+帐号&nbsp;<input name="name" type="text" size="10" value='${name}' class="ipt" maxlength="50" readonly="readonly"/>
+</p>
+<p>
+昵称&nbsp;<input name="nickname" type="text" size="10" value="" class="ipt" maxlength="50" />
+</p>
+<p>性别
+					<select name="gender">
+					<option value="0">男</option>
+					<option value="1">女</option>
+					<option value="2">保密</option>
+					</select>
+</p>
+<p>
+生日&nbsp;<input name="birthday" type="text" size="10" value="" class="ipt" maxlength="50" />
+</p>
+<p>城市
+<input name="city" size="24" maxlength="200" value="" />
+</p>
+<p><input name="register1" type="submit" value="完成注册" class="rb" />
+</p>
+#end
+</form>
+</div>

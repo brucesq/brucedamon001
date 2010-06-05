@@ -26,6 +26,8 @@ import com.hunthawk.framework.util.Utility;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.bussiness.Columns;
 import com.hunthawk.reader.domain.partner.Provider;
+import com.hunthawk.reader.domain.resource.Application;
+import com.hunthawk.reader.domain.resource.ApplicationSuite;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
@@ -1819,6 +1821,8 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "video";
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		url.append(key);
 		url.append("/");
@@ -1847,6 +1851,8 @@ public class ResourceServiceImpl implements ResourceService {
 			key = "video";
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		url.append(key);
 		url.append("/");
@@ -1884,6 +1890,8 @@ public class ResourceServiceImpl implements ResourceService {
 			return controller.get(Video.class, resourceId);
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			return controller.get(Infomation.class, resourceId);
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			return controller.get(Application.class, resourceId);
 		}
 		return controller.get(ResourceAll.class, resourceId);
 	}
@@ -2765,5 +2773,40 @@ public class ResourceServiceImpl implements ResourceService {
 
 	public int getVideoSuiteListCount(String resourceId) {
 		return getVideoSuiteList(resourceId).size();
+	}
+	
+	public List<ApplicationSuite> getApplicationSuiteList(String resourceId) {
+		String key = Utility
+				.getMemcachedKey(ResourceAll.class, resourceId, "chapters");
+		List<ApplicationSuite> chapters = null;
+		try {
+			chapters = (List<ApplicationSuite>) memcached
+					.getAndSaveLocalLong(key);
+			if (chapters != null) {
+				return chapters;
+			}
+		} catch (Exception e) {
+			logger.error("从Memcached中获取资源章节信息出错!", e);
+		}
+		chapters = controller.findBy(ApplicationSuite.class, "resourceId", resourceId,
+				"chapterIndex", true);
+		memcached.setAndSaveLong(key, chapters,
+				72 * MemCachedClientWrapper.HOUR);
+		return chapters;
+	}
+
+	public int getApplicationSuiteListCount(String resourceId) {
+		return getVideoSuiteList(resourceId).size();
+	}
+
+	public List<String> getApplicationBrand(String resourceId){
+		List<ApplicationSuite> as = getApplicationSuiteList(resourceId);
+		List<String> brands = new ArrayList<String>();
+		for(ApplicationSuite app : as){
+			if(!brands.contains(app.getBrand()))
+						brands.add(app.getBrand());
+			
+		}
+		return brands;
 	}
 }

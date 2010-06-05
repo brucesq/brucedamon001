@@ -4,6 +4,7 @@
 package com.hunthawk.reader.pps.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hunthawk.reader.domain.bussiness.Columns;
 import com.hunthawk.reader.domain.bussiness.PackGroupProvinceRelation;
@@ -109,4 +110,6 @@ public interface BussinessService {
 	public TagTemplate getTagTemplate(int id);
 	/**add by liuxh 09-12-24*/
 	public Material getMaterial(Integer id);
+	
+	public Map<String,String> getBrandNames();
 }

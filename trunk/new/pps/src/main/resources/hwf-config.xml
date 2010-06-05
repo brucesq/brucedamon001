@@ -528,5 +528,16 @@
 		<desc>倒计时</desc>
 	</tag>
 	
+	<tag>
+		<name>application_suite_list</name>
+		<classname>com.hunthawk.reader.pps.resource.ApplicationSuiteTag</classname>
+		<desc>软件下载列表</desc>
+	</tag>
 	
+	
+	<tag>
+		<name>application_brand_list</name>
+		<classname>com.hunthawk.reader.pps.resource.ApplicationBrandListTag</classname>
+		<desc>软件下载列表</desc>
+	</tag>
 </configs>

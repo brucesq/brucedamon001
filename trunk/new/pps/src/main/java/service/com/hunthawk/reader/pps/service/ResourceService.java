@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.hunthawk.reader.domain.resource.ApplicationSuite;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.EbookChapterDesc;
 import com.hunthawk.reader.domain.resource.EbookTome;
@@ -658,4 +659,16 @@ public interface ResourceService {
 	public String getResourceDirectory(String resourceId);
 	
 	public String getVideoResourceDirectory(String resourceId);
+	
+	/**
+	 * 获取资源下载的品牌
+	 * @param resourceId
+	 * @return
+	 */
+	public List<String> getApplicationBrand(String resourceId);
+	
+	public int getApplicationSuiteListCount(String resourceId);
+	
+	public List<ApplicationSuite> getApplicationSuiteList(String resourceId) ;
+
 }

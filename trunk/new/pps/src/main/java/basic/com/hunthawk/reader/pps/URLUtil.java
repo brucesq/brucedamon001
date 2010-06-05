@@ -329,6 +329,27 @@ public class URLUtil {
 		url.append(sb.toString());
 		return url.toString();
 	}
+	/**
+	 * 处理URL中包含&转义符的情况
+	 * @param request
+	 * @return
+	 */
+	public static Map<String,String> getParameters(String queryString){
+		Map<String,String> parameters = new HashMap<String,String>();
+		queryString = queryString.replaceAll("\\?", "&");
+		queryString = queryString.replaceAll("%26", "&");
+		String[] params =  queryString.split("&");
+		for(String str : params){
+			int index = str.indexOf("=");
+			if(index > 0){
+				String name = str.substring(0,index);
+				String value = str.substring(index+1);
+				parameters.put(name, value);
+			}
+		}
+		return parameters;
+	}
+
 
 	public static void main(String[] args) {
 		String query = "a=2&s=1&as=4&fr=as";

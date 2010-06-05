@@ -196,6 +196,9 @@
 			<value>com.hunthawk.reader.domain.resource.VideoSuite</value>
 				<value>com.hunthawk.reader.domain.resource.Video</value>
 	       		 <value>com.hunthawk.reader.domain.resource.Infomation</value>
+	       		  <value>com.hunthawk.reader.domain.resource.ApplicationSuite</value>
+				<value>com.hunthawk.reader.domain.resource.Application</value>
+	       		
 	     </list>
 	   </property>
 	   <property name="hibernateProperties">
