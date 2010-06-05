@@ -100,6 +100,7 @@ public abstract class EditPageGroupPage extends EditPage implements
 				createDefaultColumns(pg,0,"搜索");
 				createDefaultColumns(pg,6,"视频分类");
 				createDefaultColumns(pg,7,"新闻分类");
+				createDefaultColumns(pg,8,"软件分类");
 					//------------------------------------------------
 			} else {
 				pg.setDeleteStatus(1);// 页面组删除状态 1.使用 2.隐藏

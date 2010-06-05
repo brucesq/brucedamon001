@@ -54,6 +54,7 @@ import com.hunthawk.framework.util.ParameterCheck;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.partner.Fee;
 import com.hunthawk.reader.domain.partner.Provider;
+import com.hunthawk.reader.domain.resource.Application;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
@@ -116,6 +117,9 @@ public abstract class ShowEbookPage extends SearchPage implements
 	
 	@InjectPage("resource/EditInfoPage")
 	public abstract EditInfoPage getEditInfoPage();
+	
+	@InjectPage("resource/EditApplicationPage")
+	public abstract EditApplicationPage getEditApplicationPage();
 
 	@InjectPage("resource/ShowEbookChapterPage")
 	public abstract ShowEbookChapterPage getShowEbookChapterPage();
@@ -211,6 +215,12 @@ public abstract class ShowEbookPage extends SearchPage implements
 //			getEditInfoPage().setResourceAll(resource);
 			return getEditInfoPage();
 		}
+		if (resource instanceof Application) { // Video
+			getEditApplicationPage().setModel(resource);
+			getEditApplicationPage().setResourceAll(resource);
+			return getEditApplicationPage();
+		}
+		
 		
 		return this;
 	}
@@ -387,6 +397,12 @@ public abstract class ShowEbookPage extends SearchPage implements
 	
 	public String getInfoTypeUrl() {
 		Object[] params = new Object[] { ResourceType.TYPE_INFO };
+		return PageHelper.getExternalURL(getExternalService(),
+				"resource/ShowEbookPage", params);
+	}
+	
+	public String getApplicationTypeUrl() {
+		Object[] params = new Object[] { ResourceType.TYPE_APPLICATION };
 		return PageHelper.getExternalURL(getExternalService(),
 				"resource/ShowEbookPage", params);
 	}
@@ -952,7 +968,8 @@ public abstract class ShowEbookPage extends SearchPage implements
 				page.setResourceType(ResourceAll.RESOURCE_TYPE_VIDEO);
 			if (resource instanceof Infomation)
 				page.setResourceType(ResourceAll.RESOURCE_TYPE_INFO);
-
+			if (resource instanceof Application)
+				page.setResourceType(ResourceAll.RESOURCE_TYPE_APPLICATION);
 			setSelectedEbook(new HashSet());
 			return page;
 		}
@@ -1056,6 +1073,11 @@ public abstract class ShowEbookPage extends SearchPage implements
 			imgPath = getResourceService().getPreviewCoverImg(resource.getId(),
 					infomation.getImage());
 		}
+		if (resource instanceof Application) { // video
+			Application app = (Application) resource;
+			imgPath = getResourceService().getPreviewCoverImg(resource.getId(),
+					app.getImage());
+		}
 		return imgPath;
 	}
 
@@ -1119,6 +1141,7 @@ public abstract class ShowEbookPage extends SearchPage implements
 		types.put("漫画", ResourceType.TYPE_COMICS);
 		types.put("视频", ResourceType.TYPE_VIDEO);
 		types.put("资讯", ResourceType.TYPE_INFO);
+		types.put("软件", ResourceType.TYPE_APPLICATION);
 		return new MapPropertySelectModel(types, false, "");
 	}
 

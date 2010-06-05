@@ -60,7 +60,7 @@
 			<li class="gam"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="5">铃声</a></li>
 			<li class="mus"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="6">视频</a></li>
 			<li class="inf"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="7">新闻</a></li>
-			
+			<li class="app"><a href="#"  jwcid="@DirectLink" listener="listener:searchByType" parameters="8">软件</a></li>
 	</ul>
 </div>
 								<table id="box1" width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#d5d9dc"  style="border-collapse:collapse;">
@@ -119,6 +119,7 @@ jQuery(document).ready(function() {
 		jQuery("#text").attr("id","video");
 		jQuery("#music").attr("id","video");
 		jQuery("#info").attr("id","video");
+		jQuery("#appl").attr("id","video");
 		jQuery("#tid").val("3");
 		
 	}
@@ -129,6 +130,7 @@ jQuery(document).ready(function() {
 		jQuery("#text").attr("id","audio");
 		jQuery("#music").attr("id","audio");
 		jQuery("#info").attr("id","audio");
+		jQuery("#appl").attr("id","picture");
 		jQuery("#tid").val("2");
 	}
 	if(val==3){
@@ -138,6 +140,7 @@ jQuery(document).ready(function() {
 		jQuery("#text").attr("id","picture");
 		jQuery("#music").attr("id","picture");
 		jQuery("#info").attr("id","picture");
+		jQuery("#appl").attr("id","picture");
 		jQuery("#tid").val("1");
 	}
 	if(val==4){
@@ -147,6 +150,7 @@ jQuery(document).ready(function() {
 		jQuery("#video").attr("id","text");
 		jQuery("#music").attr("id","text");
 		jQuery("#info").attr("id","text");
+		jQuery("#appl").attr("id","text");
 		jQuery("#tid").val("4");
 	}
 	if(val==5){
@@ -156,6 +160,7 @@ jQuery(document).ready(function() {
 		jQuery("#text").attr("id","game");
 		jQuery("#music").attr("id","game");
 		jQuery("#info").attr("id","game");
+		jQuery("#appl").attr("id","game");
 		jQuery("#tid").val("5");
 	}
 	if(val==6){
@@ -165,6 +170,7 @@ jQuery(document).ready(function() {
 		jQuery("#video").attr("id","music");
 		jQuery("#text").attr("id","music");
 		jQuery("#info").attr("id","music");
+		jQuery("#appl").attr("id","music");
 		jQuery("#tid").val("6");
 	}
 	
@@ -175,8 +181,20 @@ jQuery(document).ready(function() {
 		jQuery("#video").attr("id","info");
 		jQuery("#text").attr("id","info");
 		jQuery("#music").attr("id","info");
+		jQuery("#appl").attr("id","info");
 		jQuery("#tid").val("7");
 	}
+	if(val==8){
+		jQuery("#audio").attr("id","appl");
+		jQuery("#picture").attr("id","appl");
+		jQuery("#game").attr("id","appl");
+		jQuery("#video").attr("id","appl");
+		jQuery("#text").attr("id","appl");
+		jQuery("#music").attr("id","appl");
+		jQuery("#info").attr("id","appl");
+		jQuery("#tid").val("8");
+	}
+});  
 });  
 //-->
 </script>

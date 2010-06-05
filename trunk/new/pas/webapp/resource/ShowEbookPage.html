@@ -38,7 +38,7 @@ function openEditauthor(url)
 					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditResourcePage">批量上传</a></td>
 					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditInfoPage">添加新闻</a></td>
 					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditVideoPage">添加视频</a></td>
-					
+					<td class="ToolbarLine"><img src="../img/icon_Add.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#" jwcid="@PageLink" page="resource/EditApplicationPage">添加软件</a></td>
 					<span jwcid="@If" condition="ognl:!user.roleProvider">
 					<td class="ToolbarLine"><img src="../img/icon_del.png" width="11" height="11" align="absmiddle">&nbsp;<a href="#"  jwcid="@bayeux:LinkSubmitOnce" action="listener:onBatchDelete" onclick="return showConfirmation('删除');" >删除选中</a></td>
 					<span jwcid="@If" condition="ognl:hasRole('auditpause')">
@@ -227,6 +227,7 @@ function openEditauthor(url)
  <span jwcid="newsurl@Any" value="ognl:newsPagersTypeUrl" />
   <span jwcid="videourl@Any" value="ognl:videoTypeUrl" />
    <span jwcid="infourl@Any" value="ognl:infoTypeUrl" />
+    <span jwcid="applicationurl@Any" value="ognl:applicationTypeUrl" />
  <div id="enlarge_images"></div>
 </body>
 
@@ -264,6 +265,8 @@ function changeShowType(typeId){
 		urlId = 'videourl';
 	}else if(typeId == 5){
 	    urlId='infourl';
+	}else if(typeId == 6){
+		urlId = 'applicationurl';
 	}
 	var url = document.getElementById(urlId).getAttributeNode('value').value;
 	window.location.href=url;

@@ -30,7 +30,8 @@ import com.hunthawk.framework.hibernate.CompareType;
 import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.framework.util.BeanUtils;
 import com.hunthawk.framework.util.ImageTool;
-import com.hunthawk.reader.domain.partner.Provider;
+import com.hunthawk.reader.domain.resource.Application;
+import com.hunthawk.reader.domain.resource.ApplicationSuite;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
@@ -632,6 +633,8 @@ public class UploadServiceImpl implements UploadService {
 					// 视频处理文件
 					if (ResourceType.TYPE_VIDEO.equals(resourceType)) {
 						parseVideo(resDir, resource.getId(), resourceType);
+					}else if(ResourceType.TYPE_APPLICATION.equals(resourceType)){
+						parseApplication(resDir,resource.getId(),resourceType);
 					} else {
 						parseDirectory(resDir, "directory.txt", resource
 								.getId(), resourceType, resInfo);
@@ -822,7 +825,7 @@ public class UploadServiceImpl implements UploadService {
 			}
 		}
 
-		if (!ResourceType.TYPE_VIDEO.equals(resourceType)) {
+		if (!ResourceType.TYPE_VIDEO.equals(resourceType)&& !ResourceType.TYPE_APPLICATION.equals(resourceType)) {
 			int words = checkChapter(dir, resourceType, prefixInfo);
 			resource.setWords(words);
 		}
@@ -973,6 +976,8 @@ public class UploadServiceImpl implements UploadService {
 			key = "newspaper_format";
 		} else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			key = "video_format";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application_format";
 		}
 		Variables var = systemService.getVariables(key);
 		return var.getValue();
@@ -990,6 +995,8 @@ public class UploadServiceImpl implements UploadService {
 			key = "newspaper";
 		} else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			key = "video";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		return getUploadResourceDir(key, id);
 	}
@@ -1098,6 +1105,125 @@ public class UploadServiceImpl implements UploadService {
 		return unzipDir;
 	}
 
+	private void parseApplication(String fileDir,String resourceId,Integer type){
+		String appDir = fileDir+File.separator+"application";
+		File file = new File(appDir);
+		int i = 1 ;
+		if (file.exists() && file.isDirectory()) {
+			File[] files = file.listFiles();
+			for (File vf : files) {
+				if (vf.isDirectory()) {
+					String brand = vf.getName();
+					File[] apps = vf.listFiles();
+					Map<String, Long> sizes = new HashMap<String, Long>();
+					for (File app : apps) {
+						if (app.getName().endsWith(".jar")) {
+							sizes.put(app.getName(), app.length());
+						}
+					}
+					for (File app : apps) {
+						if (app.getName().endsWith(".jar"))
+							continue;
+						if (app.getName().endsWith(".jad")) {
+							Long size = sizes.get(app.getName().replaceAll(
+									"jad", "jar"));
+							if (size == null) {
+								System.out
+										.println("ERROR:can't found jar file for "
+												+ app.getName());
+							}
+							ApplicationSuite suite = new ApplicationSuite();
+							suite.setBrand(brand);
+							suite.setChapterIndex(i++);
+							suite.setResourceId(resourceId);
+							suite.setSize(size.intValue());
+							suite.setFilename(brand + "/" + app.getName());
+							int index = app.getName().lastIndexOf("_");
+							if (index > 0) {
+								String filedesc = app.getName().substring(
+										index + 1);
+								index = filedesc.indexOf(".");
+								filedesc = filedesc.substring(0, index);
+								suite.setUa(filedesc);
+							} else {
+								suite.setUa("");
+							}
+							suite.setType(UploadServiceImpl
+									.getFileExtName(suite.getFilename()));
+							
+							try {
+								resourceService.addResourceChapter(suite,
+										ResourceType.TYPE_APPLICATION);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							changeJad(app,suite);
+
+						} else {
+							ApplicationSuite suite = new ApplicationSuite();
+							suite.setBrand(brand);
+							suite.setChapterIndex(i++);
+							suite.setResourceId(resourceId);
+							suite.setSize(((Long) app.length()).intValue());
+							suite.setFilename(brand + "/" + app.getName());
+							int index = app.getName().lastIndexOf("_");
+							if (index > 0) {
+								String filedesc = app.getName().substring(
+										index + 1);
+								index = filedesc.indexOf(".");
+								filedesc = filedesc.substring(0, index);
+								suite.setUa(filedesc);
+							} else {
+								suite.setUa("");
+							}
+							suite.setType(UploadServiceImpl
+									.getFileExtName(suite.getFilename()));
+							try {
+								resourceService.addResourceChapter(suite,
+										ResourceType.TYPE_APPLICATION);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+
+						}
+					}
+				}
+
+			}
+			try {
+				FileUtils.copyDirectory(file, new File(resourceService
+						.getChapterAddress(resourceId)));
+				rsyncDirectry(
+						new File(resourceService.getChapterAddress(
+								resourceId)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+	
+	public void changeJad(File jad, ApplicationSuite suite) {
+		String url = resourceService.getChapterImg(suite.getResourceId(),
+				suite.getFilename());
+		System.out.println("JAD:" + url);
+		try {
+			List<String> content = FileUtils.readLines(jad);
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < content.size(); i++) {
+				String str = content.get(i);
+				if (str.startsWith("MIDlet-Jar-URL")) {
+					str = "MIDlet-Jar-URL:" + url.substring(0, url.lastIndexOf("."))+".jar";
+				}
+				builder.append(str);
+				builder.append("\r\n");
+			}
+			FileUtils.writeStringToFile(jad, builder.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	/**
 	 * 处理在线观看
 	 * 
@@ -1225,6 +1351,8 @@ public class UploadServiceImpl implements UploadService {
 			key = "video";
 		} else if (ResourceAll.RESOURCE_TYPE_INFO.equals(resourceType)) {
 			key = "infomation";
+		}else if (ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			key = "application";
 		}
 		url.append(key);
 		url.append("/");
@@ -1846,6 +1974,8 @@ public class UploadServiceImpl implements UploadService {
 			return new NewsPapers();
 		} else if (ResourceAll.RESOURCE_TYPE_VIDEO.equals(resourceType)) {
 			return new Video();
+		}else if(ResourceAll.RESOURCE_TYPE_APPLICATION.equals(resourceType)) {
+			return new Application();
 		}
 		return null;
 	}

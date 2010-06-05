@@ -630,6 +630,7 @@ public abstract class EditColumnPage extends EditPage implements
 		totals.put("铃声", 5);
 		totals.put("视频", 6);
 		totals.put("资讯", 7);
+		totals.put("软件", 8);
 		return new MapPropertySelectModel(totals);
 	}
 
