@@ -99,6 +99,10 @@ public class ParameterConstants {
 	//版本信息
 	public static final String VERSION_TYPE = "vt";
 	
+	//软件品牌名称
+	public static final String BRAND_NAME="brd";
+	
+	
 	//卷ID
 	public static final String TOME_ID="tid";
 

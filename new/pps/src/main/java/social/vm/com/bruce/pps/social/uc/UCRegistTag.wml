@@ -1,0 +1,30 @@
+${msg}<br/>
+#if(${step}==1)
+	请输入注册账号:<input type="text" name="name" value="" emptyok="true"/><br/>
+	请输入注册密码:<input type="text" name="passwd" value="" size="20" emptyok="true"/><br/>
+	请重新输入注册密码:<input type="text" name="passwd2" value="" size="20" emptyok="true"/><br/>
+	[<anchor title="下一步">下一步
+	<go href="${url}" method="post">
+		<postfield name="name" value="$(name)"/>
+		<postfield name="passwd" value="$(passwd)"/>
+		<postfield name="passwd2" value="$(passwd2)"/>
+	</go></anchor>]<br/>
+#else
+	用户名：${name}<br/>
+	昵  称:<input type="text" name="nickname" size="15" value="" maxlength="50"/><br/>
+	性  别:<select name="gender">
+		<option value="0">帅哥</option>
+		<option value="1">美女</option>
+		<option value="2">保密</option>
+		</select><br/>
+	生日:<input name="birthday" type="text" size="15" value="" maxlength="20" /><br/>
+	城  市:<input name="city" size="20" maxlength="200" value="" /><br/>
+	
+	[<anchor title="下一步">确认提交完成注册
+	<go href="${url}" method="post">
+		<postfield name="nickname" value="$(nickname)"/>
+		<postfield name="gender" value="$(gender)"/>
+		<postfield name="birthday" value="$(birthday)"/>
+		<postfield name="city" value="$(city)"/>
+	</go></anchor>]<br/>
+#end

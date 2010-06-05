@@ -4,6 +4,7 @@
 package com.hunthawk.reader.pps;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,6 @@ import com.hunthawk.reader.pps.service.BussinessService;
 import com.hunthawk.reader.pps.service.CustomService;
 import com.hunthawk.reader.pps.service.ResourceService;
 import com.hunthawk.tag.process.Redirect;
-import com.hunthawk.tag.util.ParamUtil;
 
 /**
  * @author BruceSun
@@ -39,89 +39,178 @@ public class FeeProcess {
 		String uri = request.getRequestURI();
 		uri = uri.substring(request.getContextPath().length() + "/".length());
 		int index = uri.indexOf("/");
-
+//System.out.println("LLL:"+uri+":"+index);
 		if (index > 0) {
 			String feeUrl = uri.substring(0, index);
+			
+//System.out.println("LLL:"+feeUrl+":"+index);
+
 			if (feeUrl.length() == 4) {
-				//判断是否是正常用户
-				if(!isNormalUser(request)){
-					return ;
-				}
-				String isNeedPreix = request.getParameter("isprefix");
-				if("1".equals(isNeedPreix)){
-					String local = "http://local.iuni.com.cn?spurl="+"http://"
-					+ PageUtil.getDomainName(request.getRequestURL()
-							.toString()) ;
-					String url = local + request.getContextPath() + "/a/" + uri + "?"
-							+ request.getQueryString();
-					System.out.println("FEE1="+url);
-					Redirect.sendRedirect(url);
-				}else{
-					String local = "http://local.iuni.com.cn?spurl="+"http://"
-					+ PageUtil.getDomainName(request.getRequestURL()
-							.toString()) ;
-					String url = local + request.getContextPath() + "/" + uri + "?"
-							+ request.getQueryString()+"&isprefix=1";
-					System.out.println("FEE2="+url);
-					Redirect.sendRedirect(url);
+				// 判断是否是正常用户
+				if (!isNormalUser(request)) {
+					return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				}
 				// processFee(feeUrl,request);
-				
+				String local = "http://local.iuni.com.cn?spurl="
+						+ "http://"
+						+ PageUtil.getDomainName(request.getRequestURL()
+								.toString());
+				String url = local + request.getContextPath() + "/a/" + uri
+						+ "&" + request.getQueryString();
+				System.out.println("FEE=" + url);
+				Redirect.sendRedirect(url);
+				// String isNeedPreix = request.getParameter("isprefix");
+				// if("1".equals(isNeedPreix)){
+				// String local = "http://local.iuni.com.cn?spurl="+"http://"
+				// + PageUtil.getDomainName(request.getRequestURL()
+				// .toString()) ;
+				// String url = local + request.getContextPath() + "/a/" + uri +
+				// "?"
+				// + request.getQueryString();
+				// System.out.println("FEE1="+url);
+				// Redirect.sendRedirect(url);
+				// Redirect.sendForward(url, "跳转中....", "");
+				// }else{
+				// String local = "http://local.iuni.com.cn?spurl="+"http://"
+				// + PageUtil.getDomainName(request.getRequestURL()
+				// .toString()) ;
+				// String url = local + request.getContextPath() + "/" + uri +
+				// "?"
+				// + request.getQueryString()+"&isprefix=1";
+				// System.out.println("FEE2="+url);
+				// // Redirect.sendRedirect(url);
+				// Redirect.sendForward(url, "跳转中....", "");
+				// }
 			} else if (feeUrl.length() == 1 && feeUrl.equals("a")) {
 				uri = uri.substring(index + 1);
 				index = uri.indexOf("/");
 				feeUrl = uri.substring(0, index);
 				if (feeUrl.length() == 4) {
 					processFee(feeUrl, request);
-					String url = request.getContextPath()
-							+ uri.substring(index) + "?"
-							+ request.getQueryString();
+					
+					
+					
+					
+					String startQuery = uri.substring(uri.indexOf("s.do")+4);
+					startQuery = startQuery.replaceAll("\\?", "&");
+					startQuery = startQuery.replaceAll("%26", "&");
+					if(startQuery.startsWith("&")){
+						startQuery = startQuery.substring(1);
+					}
+					
+					String queryString = request.getQueryString();
+//					queryString = queryString.replaceAll("\\?", "&");
+//					queryString = queryString.replaceAll("%26", "&");
+					
+					String url = request.getContextPath()+
+					ParameterConstants.PORTAL_PATH+"?"
+							+ startQuery + "&" + queryString;
+					
+//					System.out.println("go:"+url);
 					Redirect.sendRedirect(url);
 				}
 			}
 
 		}
 	}
+
 	/**
 	 * 判断用户是否是正常用户
+	 * 
 	 * @return
 	 */
-	private static boolean isNormalUser( HttpServletRequest request){
+	protected static boolean isNormalUser(HttpServletRequest request) {
 		String mobile = RequestUtil.getMobile();
-		if(mobile.equals("10000000000")){
+		if (mobile.equals("10000000000")) {
 			int type = RequestUtil.getMobileType();
-			String key = "anonymous_login_"+type;
-			String url = getBussinessService(request).getVariables(key).getValue();
+			String key = "anonymous_login_" + type;
+			String url = getBussinessService(request).getVariables(key)
+					.getValue();
 			Redirect.sendRedirect(url);
 			return false;
 		}
 		return true;
 	}
 
-	private static void processFee(String feeUrl, HttpServletRequest request) {
+	private static int getIntParameter(Map<String, String> params, String key,
+			int defaultId) {
+
+		int value = defaultId;
+		try {
+			value = Integer.parseInt(params.get(key));
+		} catch (Exception e) {
+
+		}
+		return value;
+	}
+
+	private static String getResourceId(Map<String, String> params) {
+		String rid = params.get(ParameterConstants.RESOURCE_ID);
+		if (StringUtils.isEmpty(rid)) {
+			rid = params.get(ParameterConstants.CHAPTER_ID);
+			if (StringUtils.isNotEmpty(rid)) {
+				rid = rid.substring(0, rid.length() - 3);
+			}
+		}
+		return rid;
+	}
+
+	protected static void processFee(String feeUrl, HttpServletRequest request) {
 		Fee fee = getCustomService(request).getFeeByUrl(feeUrl);
 		if (fee == null)
 			return;
+		
+		String uri = request.getRequestURI();
+		String startQuery = uri.substring(uri.indexOf("s.do")+4);
+		startQuery = startQuery.replaceAll("\\?", "&");
+		startQuery = startQuery.replaceAll("%26", "&");
+		if(startQuery.startsWith("&")){
+			startQuery = startQuery.substring(1);
+		}
+		
+		String queryString = startQuery +"&"+ request.getQueryString();
+		
+//		System.out.println("queryString:"+queryString);
 
+		Map<String, String> parameters = URLUtil.getParameters(queryString);
+		
 		// 包月计费时所使用的批价包ID参数名优先于正常的批价包ID
-		int packId = ParamUtil.getIntParameter(request,
+		int packId = getIntParameter(parameters,
 				ParameterConstants.MONTH_FEE_BAG_ID, -1);
 		if (packId == -1) {
-			packId = ParamUtil.getIntParameter(request,
-					ParameterConstants.FEE_BAG_ID, -1);
+			packId = getIntParameter(parameters, ParameterConstants.FEE_BAG_ID,
+					-1);
 		}
 		String mobile = RequestUtil.getMobile();
 		UserOrderList list = new UserOrderList();
-		String channelId = ParamUtil.getParameter(request,
-				ParameterConstants.CHANNEL_ID);
-		String productId = ParamUtil.getParameter(request,
-				ParameterConstants.PRODUCT_ID);
+		String channelId = parameters.get(ParameterConstants.CHANNEL_ID);
+		String productId = parameters.get(ParameterConstants.PRODUCT_ID);
+
+
 		if (StringUtils.isEmpty(channelId) || "null".equals(channelId)) {
 			channelId = getBussinessService(request).getDefaultChannelId(
 					productId);
 		}
 		list.setChannelId(channelId);
-		String contentId = URLUtil.getResourceId(request);
+		String contentId = getResourceId(parameters);
 		list.setContentId(contentId);
 		list.setCreateTime(new Date());
 		list.setFeeId(fee.getId());

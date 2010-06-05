@@ -12,6 +12,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.hunthawk.reader.domain.bussiness.TagTemplate;
+import com.hunthawk.reader.domain.resource.Application;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.ComicsChapter;
 import com.hunthawk.reader.domain.resource.Ebook;
@@ -128,7 +129,7 @@ public class ResourceTag extends BaseTag {
 		// 得到资源ID
 		String resID = URLUtil.getResourceId(request);// request.getParameter(ParameterConstants.RESOURCE_ID);
 	
-		if(resID.startsWith(""+ResourceType.TYPE_VIDEO)){
+		if(resID.startsWith(""+ResourceType.TYPE_VIDEO) || resID.startsWith("" + ResourceType.TYPE_APPLICATION)){
 			Object isSet = request.getAttribute("SET_HISTORY");
 			if(isSet == null){
 				// 当前的URL
@@ -619,6 +620,22 @@ public class ResourceTag extends BaseTag {
 
 				imgurl = url;
 				name = info.getName();
+			}
+		}else if (resource.getId().startsWith(
+				"" + ResourceType.TYPE_APPLICATION)) {// APPLICATION
+
+			Application app = (Application) resource;
+			if (StringUtils.isNotEmpty(app.getImage())
+					&& app.getImage().toLowerCase().matches(
+							"[^.]+\\.(png|jpg|gif|jpeg)")) {
+				String url = getResourceService(request).getPreviewCoverImg(
+						app.getId(), app.getImage(), size);
+				// System.out.println("url--->"+url);
+				sb.append("<img src=\"").append(url).append(
+						"\" alt=\"" + app.getName() + "\"  />");
+
+				imgurl = url;
+				name = app.getName();
 			}
 		}
 		if(tagTem != null){
