@@ -165,6 +165,14 @@ public abstract class EditResourcePage extends SecurityPage {
 				} catch (Exception e) {
 					errInfo += e.getMessage();
 				}
+				try {
+					processResourceUpload(unUploadFileDir, copyMap,
+							ResourceAll.RESOURCE_TYPE_APPLICATION,
+							"application.csv");
+				} catch (Exception e) {
+					e.printStackTrace();
+					errInfo += e.getMessage();
+				}
 				if(StringUtils.isNotEmpty(errInfo)){
 					throw new Exception(errInfo);
 				}

@@ -104,6 +104,8 @@ public abstract class ShowResourceTypePage extends SearchPage{
 			name="มๅษ๙";
 		}else if(type==ResourceType.TYPE_VIDEO){
 			name="สำฦต";
+		}else if(type==ResourceType.TYPE_APPLICATION){
+			name="ศํผþ";
 		}else{
 			name=getResourceService().getResourceType(resourcetype.getId()).getName();
 		}

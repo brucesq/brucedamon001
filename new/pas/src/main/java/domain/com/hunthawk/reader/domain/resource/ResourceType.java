@@ -39,6 +39,7 @@ public class ResourceType extends PersistentObject {
 	public static final Integer TYPE_SOUND = 5;
 	public static final Integer TYPE_VIDEO = 6;
 	public static final Integer TYPE_INFO = 7;
+	public static final Integer TYPE_APPLICATION = 8;
 
 	private Integer id;
 
