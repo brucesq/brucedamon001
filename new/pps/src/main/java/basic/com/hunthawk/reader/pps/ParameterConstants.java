@@ -111,6 +111,8 @@ public class ParameterConstants {
 	public static final String TIMER="T";
 	//漫画是否自动播放
 	public static final String AUTO_PLAY="auto";
+	//用户ID
+	public static final String USER_ID = "uid";
 	
 //	// 标签操作标识 (add or delete)
 //	public static final String OPERATE_ACTION = "operate";

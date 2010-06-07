@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -27,6 +28,7 @@ import com.hunthawk.reader.pps.service.BussinessService;
 import com.hunthawk.reader.pps.service.GuestService;
 import com.hunthawk.tag.BaseTag;
 import com.hunthawk.tag.TagUtil;
+import com.hunthawk.tag.util.ParamUtil;
 
 /**
  * @author liuxh
@@ -59,11 +61,19 @@ public class UCInfoTag extends BaseTag {
 			return new HashMap();
 		}
 
-		String mobile = RequestUtil.getMobile();
-		UserInfo info = getGuestService(request).getUserInfo(mobile);
+		String uid = ParamUtil.getParameter(request, ParameterConstants.USER_ID);
+		Boolean isEdit = true;
+		UserInfo info = null;
+		if(StringUtils.isNotEmpty(uid)){
+			isEdit = false;
+			info = getGuestService(request).getUserInfo(uid);
+		}else{
+			String mobile = RequestUtil.getMobile();
+			info = getGuestService(request).getUserInfo(mobile);
+		}
+		
 
 		if (info != null) {
-
 			Map<String, Object> velocityMap = new HashMap<String, Object>();
 
 			Map<String, String> values = new HashMap<String, String>();
@@ -73,14 +83,14 @@ public class UCInfoTag extends BaseTag {
 			String editUrl = URLUtil.getUrl(values, request);
 			velocityMap.put("editUrl", editUrl);
 			velocityMap.put("indexMap", new Constants());
-
+			velocityMap.put("isEdit", isEdit);
 			velocityMap.put("resource", info);
 			velocityMap.put("truename", info.getNickname());
 			velocityMap.put("nickname", info.getNickname());
 			velocityMap.put("question", "");
 			velocityMap.put("answer", "");
 			velocityMap.put("level", "");
-			velocityMap.put("gender", info.getSex());
+			velocityMap.put("gender", info.getSexName());
 			velocityMap.put("birthday", info.getBirthday());
 			velocityMap.put("constellation", "");
 			velocityMap.put("address", info.getAddress());
@@ -114,7 +124,10 @@ public class UCInfoTag extends BaseTag {
 					.parseVM(velocityMap, this, tagTem));
 			return resultMap;
 		} else {
-			return new HashMap();
+			
+			Map resultMap = new HashMap();
+			resultMap.put(TagUtil.makeTag(tagName),"没有该用户相关信息");
+			return resultMap;
 		}
 	}
 

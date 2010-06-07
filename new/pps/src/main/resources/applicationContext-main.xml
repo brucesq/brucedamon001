@@ -133,6 +133,11 @@
 	       <value>com.hunthawk.reader.domain.custom.UserOrderList</value>
 	       <value>com.hunthawk.reader.domain.custom.UserFootprint</value>
 	       <value>com.hunthawk.reader.domain.custom.UserInfo</value>
+	       <value>com.hunthawk.reader.domain.social.UserFriend</value>
+			<value>com.hunthawk.reader.domain.social.UserMessage</value>	   
+		    <value>com.hunthawk.reader.domain.social.UserEvent</value>	 
+			<value>com.hunthawk.reader.domain.social.FriendEvent</value>	 
+			
 	       
 	       <value>com.hunthawk.reader.domain.resource.Ebook</value>
 	        <value>com.hunthawk.reader.domain.resource.EbookTome</value>

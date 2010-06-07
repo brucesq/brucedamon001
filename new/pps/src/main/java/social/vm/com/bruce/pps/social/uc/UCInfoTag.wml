@@ -1,269 +1,32 @@
 #set($publicstr = "未填")
-
 1.$!{resource.nickname}<br/>
-昵称:${nickname}[<a href="${editUrl}&item_index=$!{indexMap.index('nickname')}">修改</a>]
-
+昵称:${nickname}#if(${isEdit})[<a href="${editUrl}&item_index=$!{indexMap.index('nickname')}">修改</a>]#end
 <br/>
-=帐户信息=
+性别:${gender}#if(${isEdit})[<a href="${editUrl}&item_index=$!{indexMap.index('gender')}">修改</a>]#end
 <br/>
-
-真实姓名:#if(${truename}=="")
-$publicstr
+生日:${birthday}#if(${isEdit})[<a href="${editUrl}&item_index=$!{indexMap.index('birthday')}">修改</a>]#end
+<br/>
+城市:${address}#if(${isEdit})[<a href="${editUrl}&item_index=$!{indexMap.index('address')}">修改</a>]#end
+<br/>
+签名:#if($!{sign}=="")
+这家伙真烂,什么都没留下.
 #else
-${truename}
+$!{sign}
 #end
-[<a href="${editUrl}&item_index=$!{indexMap.index('truename')}">修改</a>]
-
-<br/>
-问题:#if(${question}=="")
-$publicstr
-#else
-${question}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('question')}">修改</a>]
-
-<br/>
-答案:#if(${answer}=="")
-$publicstr
-#else
-${answer}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('answer')}">修改</a>]
-
-<br/>
-=个人资料=
-<br/>
-用户等级:#if(${level}=="0")
-$publicstr
-#else
-${level}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('level')}">修改</a>]
-
-<br/>
-性别:#if(${gender}=="0")
-$publicstr
-#else
-${gender}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('gender')}">修改</a>]
-
-<br/>
-生日:#if(${birthday}=="")
-$publicstr
-#else
-${birthday}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('birthday')}">修改</a>]
-
-<br/>
-星座:#if(${constellation}=="0")
-$publicstr
-#else
-${constellation}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('constellation')}">修改</a>]
-
-<br/>
-居住地:#if(${address}=="")
-$publicstr
-#else
-${address}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('address')}">修改</a>]
-
-<br/>
-签名:#if(${sign}=="")
-$publicstr
-#else
-${sign}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('sign')}">修改</a>]
-
-<br/>
-头像:#if(${headPic}=="")
-$publicstr
-#else
-${headPic}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('headPic')}">修改</a>]
-
-<br/>
-=关于我=
-<br/>
-故乡:#if(${home}=="")
-$publicstr
-#else
-${home}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('home')}">修改</a>]
-
-<br/>
-身高:#if(${height}=="0")
-$publicstr
-#else
-${height}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('height')}">修改</a>]
-
-<br/>
-体重:#if(${weight}=="0")
-$publicstr
-#else
-${weight}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('weight')}">修改</a>]
-
-<br/>
-体型:#if(${bodytype}=="0")
-$publicstr
-#else
-${bodytype}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('bodytype')}">修改</a>]
-
-<br/>
-血型:#if(${bloodtype}=="0")
-$publicstr
-#else
-${bloodtype}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('bloodtype')}">修改</a>]
-
-<br/>
-喜欢的书类:#if(${enjoyBooktype}=="0")
-$publicstr
-#else
-${enjoyBooktype}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('enjoyBooktype')}">修改</a>]
-
-<br/>
-性格:#if(${personallty}=="")
-$publicstr
-#else
-${personallty}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('personallty')}">修改</a>]
-
-<br/>
-籍贯:#if(${nativePlace}=="")
-$publicstr
-#else
-${nativePlace}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('nativePlace')}">修改</a>]
-
-<br/>
-学历:#if(${education}=="")
-$publicstr
-#else
-${education}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('education')}">修改</a>]
-
-<br/>
-兴趣:#if(${interest}=="")
-$publicstr
-#else
-${interest}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('interest')}">修改</a>]
-
-<br/>
-收入:#if(${income}=="0")
-$publicstr
-#else
-${income}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('income')}">修改</a>]
-
-<br/>
-职业:#if(${job}=="")
-$publicstr
-#else
-${job}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('job')}">修改</a>]
-
-<br/>
-情感:#if(${feeling}=="0")
-$publicstr
-#else
-${feeling}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('feeling')}">修改</a>]
-
-<br/>
-婚姻状况:#if(${maritalStatus}=="0")
-$publicstr
-#else
-${maritalStatus}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('maritalStatus')}">修改</a>]
-
-<br/>
-是否吸烟:#if(${isSmoking}=="0")
-$publicstr
-#else
-${isSmoking}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('isSmoking')}">修改</a>]
-
-<br/>
-是否喝酒:#if(${isDrinking}=="0")
-$publicstr
-#else
-${isDrinking}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('isDrinking')}">修改</a>]
-
-<br/>
-自我介绍:#if(${introduction}=="")
-$publicstr
-#else
-${introduction}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('introduction')}">修改</a>]
-
-<br/>
-最满意的地方:#if(${enjoyBody}=="0")
-$publicstr
-#else
-${enjoyBody}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('enjoyBody')}">修改</a>]
-
-<br/>
-最喜欢的书:#if(${enjoyBook}=="")
-$publicstr
-#else
-${enjoyBook}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('enjoyBook')}">修改</a>]
-
+#if(${isEdit})[<a href="${editUrl}&item_index=$!{indexMap.index('sign')}">修改</a>]#end
 <br/>
 =联系方式=
 <br/>
-email:#if(${email}=="")
+email:#if($!{email}=="")
 $publicstr
 #else
-${email}
+$!{email}
 #end
-[<a href="${editUrl}&item_index=$!{indexMap.index('email')}">修改</a>]
-
+#if(${isEdit})[<a href="${editUrl}&item_index=$!{indexMap.index('email')}">修改</a>]#end
 <br/>
-QQ:#if(${qq}=="")
+QQ:#if($!{qq}=="")
 $publicstr
 #else
-${qq}
+$!{qq}
 #end
-[<a href="${editUrl}&item_index=$!{indexMap.index('qq')}">修改</a>]
-
-<br/>
-MSN:#if(${msn}=="")
-$publicstr
-#else
-${msn}
-#end
-[<a href="${editUrl}&item_index=$!{indexMap.index('msn')}">修改</a>]
+#if(${isEdit})[<a href="${editUrl}&item_index=$!{indexMap.index('qq')}">修改</a>]#end
