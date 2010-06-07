@@ -222,6 +222,13 @@
 				<value>
 					com.hunthawk.reader.domain.device.MobileInfo
 				</value>
+				
+				
+			<value>com.hunthawk.reader.domain.social.UserFriend</value>
+			<value>com.hunthawk.reader.domain.social.UserMessage</value>	   
+		    <value>com.hunthawk.reader.domain.social.UserEvent</value>	 
+			<value>com.hunthawk.reader.domain.social.FriendEvent</value>	 
+				   
 				<value>
 					com.hunthawk.reader.domain.device.PersonGroup
 				</value>
@@ -312,7 +319,7 @@
 					org.hibernate.cache.EhCacheProvider
 				</prop>
 				<prop key="hibernate.cache.use_query_cache">true</prop>
-		   	<!--    	 <prop key="hibernate.hbm2ddl.auto">update</prop> -->  
+		   	     <!-- 	 <prop key="hibernate.hbm2ddl.auto">update</prop> -->   
 			</props>
 		</property>
 		<property name="entityCacheStrategies">

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -39,24 +40,24 @@ public class UserInfo extends PersistentObject{
 	
 	private Integer registered;
 	
-	private String birthday;//生日
+	private String birthday = "";//生日
 	
-	private String address; //居住地
+	private String address = ""; //居住地
 	
-	private String sign;//签名
+	private String sign = "";//签名
 	
-	private String email;//  email
+	private String email = "";//  email
 	
-	private String qq;//   QQ    
+	private String qq = "";//   QQ    
 
-	private String headPic;//头像
+	private String headPic = "";//头像
 
 
-	private String interest;   //兴趣
+	private String interest = "";   //兴趣
 
-	private String job; //职业
+	private String job = ""; //职业
 	
-	private String desc;
+	private String desc = "";
 
 	@Id
 	@GeneratedValue(generator = "system-assigned")
@@ -100,7 +101,17 @@ public class UserInfo extends PersistentObject{
 	public Integer getSex() {
 		return sex;
 	}
-
+	@Transient
+	public String getSexName(){
+		switch(sex){
+		case 0:
+			return "男";
+		case 1:
+			return "女";
+		default:
+			return "未知";
+		}
+	}
 	public void setSex(Integer sex) {
 		this.sex = sex;
 	}
