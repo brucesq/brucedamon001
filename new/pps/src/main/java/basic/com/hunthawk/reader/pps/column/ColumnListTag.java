@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,17 +13,18 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.hunthawk.framework.hibernate.HibernateExpression;
 import com.hunthawk.reader.domain.Constants;
 import com.hunthawk.reader.domain.bussiness.Columns;
+import com.hunthawk.reader.domain.bussiness.TagTemplate;
 import com.hunthawk.reader.domain.resource.Comics;
 import com.hunthawk.reader.domain.resource.Ebook;
 import com.hunthawk.reader.domain.resource.Magazine;
+import com.hunthawk.reader.domain.resource.Material;
 import com.hunthawk.reader.domain.resource.NewsPapers;
 import com.hunthawk.reader.domain.resource.ResourceAll;
 import com.hunthawk.reader.domain.resource.ResourceAuthor;
 import com.hunthawk.reader.domain.resource.ResourcePackReleation;
-import com.hunthawk.reader.domain.system.Variables;
+import com.hunthawk.reader.pps.DBVmInstance;
 import com.hunthawk.reader.pps.ParameterConstants;
 import com.hunthawk.reader.pps.TagLogger;
 import com.hunthawk.reader.pps.URLUtil;
@@ -198,7 +198,13 @@ public class ColumnListTag extends BaseTag {
 				}//for end
 				map.put("objs", lsRess);
 				map.put("flag", flag);
-				result = VmInstance.getInstance().parseVM(map, this);
+				int tagTemplateId = this.getIntParameter("tmd", 0);
+				TagTemplate tagTem = null;
+				if(tagTemplateId > 0){
+					tagTem = getBussinessService(request).getTagTemplate(tagTemplateId);
+				}
+				result = DBVmInstance.getInstance().parseVM(map, this,tagTem);
+//				result = VmInstance.getInstance().parseVM(map, this);
 				resultMap.put(TagUtil.makeTag(tagName), result);
 				return resultMap;
 			}
@@ -214,16 +220,40 @@ public class ColumnListTag extends BaseTag {
 					if(c.getPricepackId()!=null){
 						count = getResourceService(request).getResourcePackReleationsCount(c.getPricepackId());
 					}
-					Variables var = getBussinessService(request).getVariables("sorticon_url");
-					String preview=var.getValue();
-					int columnType=c.getColumnType();//0 ÆÕÍ¨ 1 ·ÖÀà 2 ËÑË÷ 
-					if(columnType==0 || columnType==2){
-						//Ä¬ÈÏÔ¤ÀÀÍ¼µØÖ·
-						preview+="0.png";
+					
+					String preview="";
+					Columns column=getBussinessService(request).getColumns(c.getId());
+					if(column!=null){
+						String icon_id=column.getIcon();
+						if(icon_id==null || StringUtils.isEmpty(icon_id)){
+							//return new HashMap();
+						}else{
+							String url = getBussinessService(request).getVariables("media_url").getValue();
+							Material mater =  getBussinessService(request).getMaterial(Integer.parseInt(icon_id));
+							String imgName=mater.getFilename()+"." + mater.getExtName();
+							String imgUrl="";
+							if (imgName.toLowerCase().matches("[^.]+\\.(png|jpg|gif|jpeg)")) {
+								imgUrl=url+imgName;
+							}else{
+								//TagLogger.debug(tagName,"Í¼Æ¬¸ñÊ½´íÎó", request.getQueryString(), null);
+								//return new HashMap();
+							}
+							preview=imgUrl;
+						}
 					}else{
-						int resourceTypeId=c.getResourceTypeId();
-						preview+=resourceTypeId+".png";
+						//System.out.println("column==================null");
 					}
+					
+//					Variables var = getBussinessService(request).getVariables("sorticon_url");
+//					String preview=var.getValue();
+//					int columnType=c.getColumnType();//0 ÆÕÍ¨ 1 ·ÖÀà 2 ËÑË÷ 
+//					if(columnType==0 || columnType==2){
+//						//Ä¬ÈÏÔ¤ÀÀÍ¼µØÖ·
+//						preview+="0.png";
+//					}else{
+//						int resourceTypeId=c.getResourceTypeId();
+//						preview+=resourceTypeId+".png";
+//					}
 					StringBuilder sb = new StringBuilder();
 					sb.append(request.getContextPath());
 					sb.append(ParameterConstants.PORTAL_PATH);
@@ -254,7 +284,13 @@ public class ColumnListTag extends BaseTag {
 				}//for end		
 				map.put("objs", lsRess);
 				map.put("flag", flag);
-				result = VmInstance.getInstance().parseVM(map, this);
+				int tagTemplateId = this.getIntParameter("tmd", 0);
+				TagTemplate tagTem = null;
+				if(tagTemplateId > 0){
+					tagTem = getBussinessService(request).getTagTemplate(tagTemplateId);
+				}
+				result = DBVmInstance.getInstance().parseVM(map, this,tagTem);
+//				result = VmInstance.getInstance().parseVM(map, this);
 				resultMap.put(TagUtil.makeTag(tagName), result);
 				return resultMap;
 			}
