@@ -205,16 +205,25 @@ public class ResourcePackServiceImpl implements ResourcePackService {
 			Integer childTypeId, Integer resourceStatus, Integer cpID,
 			String feeID) {
 		List param = new ArrayList();
-		String hql = "select count(distinct rel.id) from ResourcePackReleation rel , ResourceResType restype ,ResourceAll resource  where  rel.resourceId=resource.id  and  resource.status<>2";
+		String hql = "select count(distinct rel.id) from ResourcePackReleation rel , ResourceAll resource ";// ,
+		// ResourceResType
+		// restype
+		// ,
+		// where
+		// rel.resourceId=resource.id
+		// and
+		// resource.status<>2";
 		/*
 		 * 查询列表反查 yuzs 2009-11-10
 		 */
 		if (tof) { // 反查
 
-			if (childTypeId != null && childTypeId > 0) {
-				hql += " and  restype.resTypeId <>? ";
-				param.add(childTypeId);
-			}
+			hql += " where  rel.resourceId=resource.id  and  resource.status<>2";
+
+			// if (childTypeId != null && childTypeId > 0) {
+			// hql += " and restype.resTypeId <>? ";
+			// param.add(childTypeId);
+			// }
 			if (name != null) {
 				hql += " and resource.name not like ? ";
 				param.add("%" + name + "%");
@@ -241,10 +250,16 @@ public class ResourcePackServiceImpl implements ResourcePackService {
 
 			// hql += " and resource.id not in(select restype.rid from restype
 			// where restype.resTypeId = "+childTypeId+")";//待修改
-			hql += "   and  not exists(select 'x' from restype where  resource.id = restype.rid and restype.resTypeId = "
+			hql += "   and  not exists(select 'x' from ResourceResType restype  where  resource.id = restype.rid and restype.resTypeId = "
 					+ childTypeId + ")";
 			// 改成 no exit
 		} else { // 不反查
+
+			if (childTypeId != null && childTypeId > 0) {
+				hql += ", ResourceResType restype ";
+			}
+
+			hql += " where  rel.resourceId=resource.id  and  resource.status<>2";
 
 			if (childTypeId != null && childTypeId > 0) {
 				hql += " and  restype.resTypeId =? ";
@@ -272,7 +287,9 @@ public class ResourcePackServiceImpl implements ResourcePackService {
 				hql += " and resource.name like ? ";
 				param.add("%" + name + "%");
 			}
-			hql += "   and  resource.id = restype.rid  ";
+			if (childTypeId != null && childTypeId > 0) {
+				hql += "   and  resource.id = restype.rid  ";
+			}
 		}
 		if (resourceType != null) {
 			hql += " and resource.id like ?  ";
@@ -300,21 +317,26 @@ public class ResourcePackServiceImpl implements ResourcePackService {
 		// String hql = "select distinct rel from ResourcePackReleation rel ,
 		// ResourceAll resource, ResourceResType restype where
 		// rel.resourceId=resource.id and resource.status<2";
-		String hql = "select distinct rel,"
-				+ "resource.rankingNum,"
-				+ "resource.rankingNumMonth,"
-				+ "resource.orderNum,"
+		String hql = "select distinct rel," + "resource.rankingNum,"
+				+ "resource.rankingNumMonth," + "resource.orderNum,"
 				+ "resource.orderNumMonth "
-				+ " from  ResourcePackReleation rel ,ResourceResType restype, ResourceAll resource  where  rel.resourceId=resource.id  and  resource.status<>2 ";
+				+ " from  ResourcePackReleation rel ,ResourceAll resource ";// where
+		// rel.resourceId=resource.id
+		// and
+		// resource.status<>2
+		// ";
 
 		/*
 		 * 查询列表反查 yuzs 2009-11-10
 		 */
 		if (tof) { // 反查
-			if (childTypeId != null && childTypeId > 0) {
-				hql += " and  restype.resTypeId <>? ";
-				param.add(childTypeId);
-			}
+
+			hql += " where  rel.resourceId=resource.id  and  resource.status<>2 ";
+
+//			if (childTypeId != null && childTypeId > 0) {
+//				hql += " and  restype.resTypeId <>? ";
+//				param.add(childTypeId);
+//			}
 			if (name != null) {
 				hql += " and resource.name not like ? ";
 				param.add("%" + name + "%");
@@ -340,9 +362,14 @@ public class ResourcePackServiceImpl implements ResourcePackService {
 			}
 			// hql += " and resource.id not in(select restype.rid from restype
 			// where restype.resTypeId = "+childTypeId+") "; //这句不行，数据库查询耗时忒多
-			hql += "   and  not exists(select 'x' from restype where  resource.id = restype.rid and restype.resTypeId = "
+			hql += "   and  not exists(select 'x' from ResourceResType restype  where  resource.id = restype.rid and restype.resTypeId = "
 					+ childTypeId + ")";
 		} else { // 不反查（不需要优化）
+
+			if (childTypeId != null && childTypeId > 0) {
+				hql += ",ResourceResType restype ";
+			}
+			hql += " where  rel.resourceId=resource.id  and  resource.status<>2 ";
 
 			if (childTypeId != null && childTypeId > 0) {
 				hql += " and  restype.resTypeId =? ";
@@ -372,7 +399,9 @@ public class ResourcePackServiceImpl implements ResourcePackService {
 			}
 			// hql += " and resource.id = restype.rid and resource.id =
 			// rel.resourceId";
-			hql += "    and  resource.id = restype.rid ";
+			if (childTypeId != null && childTypeId > 0) {
+				hql += "    and  resource.id = restype.rid ";
+			}
 		}
 		if (resourceType != null) {
 			hql += " and resource.id like ?  ";

@@ -38,6 +38,7 @@ public class UserInfo extends PersistentObject{
 	//0男1女2未知
 	private Integer sex = 2;
 	
+	//是否在线
 	private Integer registered;
 	
 	private String birthday = "";//生日
