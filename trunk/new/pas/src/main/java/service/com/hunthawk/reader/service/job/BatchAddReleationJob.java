@@ -21,6 +21,7 @@ import com.hunthawk.reader.service.resource.ResourcePackService;
 import com.hunthawk.reader.service.system.SystemService;
 
 /**
+ * 批量加入系统批价包
  * @author sunquanzhi
  * 
  */
@@ -115,8 +116,8 @@ public class BatchAddReleationJob {
 					"all_resource_pack_id").getValue());
 			String lastResourceId = getLastResourceId(false);
 			String lastRelId = getLasrReleationId(packId);
-			System.out.println("DO:::::::::::" + lastResourceId + "REL:"
-					+ lastRelId);
+//			System.out.println("DO:::::::::::" + lastResourceId + "REL:"
+//					+ lastRelId);
 			if (lastRelId.compareTo(lastResourceId) < 0) {
 				addResourceRel(lastRelId, packId, false);
 			}
@@ -157,8 +158,8 @@ public class BatchAddReleationJob {
 					"all_resource_pack_id_normal").getValue());
 			String lastResourceId = getLastResourceId(true);
 			String lastRelId = getLasrReleationId(packId);
-			System.out.println("DO NORMAL:::::::::::" + lastResourceId + "REL:"
-					+ lastRelId);
+//			System.out.println("DO NORMAL:::::::::::" + lastResourceId + "REL:"
+//					+ lastRelId);
 			if (lastRelId.compareTo(lastResourceId) < 0) {
 				addResourceRel(lastRelId, packId, true);
 			}
@@ -178,7 +179,7 @@ public class BatchAddReleationJob {
 		sql += " and rel.resourceId = v.id and v.name  like '%(%' ";
 		Object[] arr = (Object[]) param.toArray(new Object[param.size()]);
 		List<ResourcePackReleation> rels = controller.findBy(sql, arr);
-		System.out.println("aaaa:" + rels.size());
+//		System.out.println("aaaa:" + rels.size());
 		for (ResourcePackReleation rel : rels) {
 			controller.delete(rel);
 		}
